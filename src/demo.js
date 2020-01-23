@@ -26,17 +26,28 @@ export default class Demo extends Component {
         let {dynamicValidateForm} =this.state;
         return (
           <View style={{marginHorizontal:10}}>
-                <Form.elForm  model={dynamicValidateForm} ref="dynamicValidateForm" labelWidth={100} inline={false} >
+                <Form.elForm 
+                 model={dynamicValidateForm}
+                 scope={this}
+                  ref="dynamicValidateForm"
+                  labelWidth={100}
+                  inline={false} >
                     <Form.elFormItem 
                     label="姓名:"
                      prop="name"
+                     propVal={dynamicValidateForm.name}
                      rules={[
                         { required: true, message: '请输入姓名', trigger: 'change' }
                       ]}
                     >
-                        <Form.elInput  
+                        {/* <Form.elInput  
                             style={{ height: 40, borderColor: 'blue', borderWidth: 1 }}
-                        />
+                        /> */}
+                         <TextInput
+                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                            value={dynamicValidateForm.name}
+                            onChangeText={text => this.changeText('name',text)}
+                          />
                     </Form.elFormItem>
                     <Form.elFormItem 
                     label="手机号:"
@@ -45,9 +56,14 @@ export default class Demo extends Component {
                         { required: true, message: '请输入手机号', trigger: 'change' }
                       ]}
                      >
-                        <Form.elInput  
+                        {/* <Form.elInput  
                             style={{ height: 40, borderColor: 'blue', borderWidth: 1 }}
-                        />
+                        /> */}
+                         <TextInput
+                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                            value={dynamicValidateForm.phone}
+                            onChangeText={text => this.changeText('phone',text)}
+                          />
                     </Form.elFormItem>
                     <View>
                         <TouchableOpacity onPress={((()=>this.submit()))}>
@@ -60,7 +76,11 @@ export default class Demo extends Component {
           </View>
         )
   }
- 
+  changeText(type,text){
+    let obj=this.state.dynamicValidateForm;
+    obj[type]=text;
+    this.setState({dynamicValidateForm:obj})
+}
   submit(){
     this.refs['dynamicValidateForm'].validate(res=>{
         console.log("校验",res)

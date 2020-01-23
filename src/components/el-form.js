@@ -12,6 +12,7 @@ import {
 import PubSub from 'pubsub-js'
 import schema from 'async-validator';
 import PropTypes from 'prop-types'; // ES6
+import ENUM from "./enum"
 import ThemeContext from "./context"
  class elForm extends Component {
   constructor(props) {
@@ -24,11 +25,12 @@ import ThemeContext from "./context"
     this.validator={};
     this.addFieldSubScriber=this.addFieldSubScriber.bind(this);
     this.removeFieldSubScriber=this.removeFieldSubScriber.bind(this);
+    this.acceptCheckField=this.acceptCheckField.bind(this);
     //确保子节点添加事件时候能准确添加到本表单
     this.CusRefName="form"+new Date().getTime();
-    console.log("this.CusRefName",this.CusRefName)
     PubSub.subscribe(`${this.CusRefName}addFieldSubScriber`, this.addFieldSubScriber);
     PubSub.subscribe(`${this.CusRefName}removeFieldSubScriber`, this.removeFieldSubScriber);
+    PubSub.subscribe(`${this.CusRefName}${ENUM.notifyFormToCheck}`, this.acceptCheckField);
   }
   componentDidMount() {}
   componentWillUnmount(){
@@ -111,6 +113,11 @@ import ThemeContext from "./context"
   modelContain(key){
     return this.props.model.hasOwnProperty(key); 
   }
+  /**
+   * 校验单个表单
+   * @param {*} field 
+   * @param {*} callBack 
+   */
   validateField(field,callBack){
     return new Promise((resolve)=>{
       if(!this.modelContain(field)){
@@ -118,7 +125,11 @@ import ThemeContext from "./context"
         resolve(`model不存在key${field}`);
         return;
       }
-      this.validator.validate({[field]:this.props.model[field]}, (errors, fields) => {
+      let target={
+        [field]:this.state.descriptor[field]
+      };
+      let valider = new schema(target);
+      valider.validate({[field]:this.props.model[field]}, (errors, fields) => {
         callBack(errors, fields)
       });
     })
@@ -128,6 +139,36 @@ import ThemeContext from "./context"
      return this.validator.validate(this.props.model, (errors, fields) => {
          callBack(errors, fields)
       });
+    
+  }
+  /**
+   * 接收到[单个]表单请求校验后，开始校验并反馈结果
+   * @param {*} msg  key
+   * @param {*} obj 
+   * obj.prop
+   */
+  acceptCheckField(msg,obj){
+    console.log("接收到表单的请求，开始校验",obj)
+    this.validateField(obj.prop,(errors, fields)=>{
+      console.log("单个校验结果",errors, fields)
+      PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
+        prop:obj.prop,
+        errors,
+        fields
+      });
+    })
+  }
+  /**
+   * 通知所有表单校验结果
+   * @param {*} errorsArr 
+   */
+  notifyAllFields(errorsArr){
+    errorsArr.forEach(item=>{
+      PubSub.publish(`${CusRefName}${ENUM.notifyFieldsErr}`,{
+        prop:item.prop,
+        desc:item
+      });
+    })
     
   }
   
