@@ -1,5 +1,13 @@
 # react-native-async-validator
 
+## 说明
+
+* 这是一个类型jQuery.validator的表单校验工具
+* [点击查看demo](https://github.com/MTTTM/react-native-async-validator/blob/master/src/demo.js,"demo")
+* 提供两种常用的校验方式（1.点击校验所有表单元素通过就提交，2.在输入表单过程中自动验证，如果所有表单验证通过按钮高亮可点击提交）
+* 未来支持(动态表单元素)
+* 目前校验规则是写在elFormItem里面的，暂时不考虑在elForm上加
+
 ## 校验规则常考 [async-validator](https://www.npmjs.com/package/async-validator "async-validator")
 
 ## elForm Attributes
