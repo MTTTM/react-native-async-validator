@@ -134,9 +134,18 @@ import ThemeContext from "./context"
       });
     })
   }
+  /**
+   *  校验所有表单
+   * @param {*} callBack 
+   */
   validate(callBack){
 
      return this.validator.validate(this.props.model, (errors, fields) => {
+        try{
+          this.notifyAllFields(errors);
+        }catch(e){
+          console.log("异常",e)
+        }
          callBack(errors, fields)
       });
     
@@ -158,17 +167,37 @@ import ThemeContext from "./context"
       });
     })
   }
+ /**
+  * 通过数组里面的对象的key来获取指定数组元素
+  * @param {*} arr 
+  * @param {*} key 
+  * @param {*} val
+  */
+  getArrayItemByKey(arr,key,val){
+    if(!arr){
+      return null;
+    }
+    return arr.filter(item=>item[key]==val)[0];
+  }
   /**
    * 通知所有表单校验结果
    * @param {*} errorsArr 
    */
   notifyAllFields(errorsArr){
-    errorsArr.forEach(item=>{
-      PubSub.publish(`${CusRefName}${ENUM.notifyFieldsErr}`,{
-        prop:item.prop,
-        desc:item
-      });
-    })
+    console.log("errorsArr",errorsArr)
+    /*
+    *  错误信息会如此:
+    * 未通过格式:[{"message":"请输入姓名","field":"name"}],"fields":{"name":[{"message":"请输入姓名","field":"name"}]
+    */
+    for(let k in this.state.descriptor){
+        let item=this.getArrayItemByKey(errorsArr,"field",k);
+        console.log("赛选到的错误对象",item)
+        PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
+          prop:k,
+          errors:item?[item]:item
+        });
+    }
+    
     
   }
   

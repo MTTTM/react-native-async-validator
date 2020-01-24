@@ -52,8 +52,10 @@ export default class Demo extends Component {
                     <Form.elFormItem 
                     label="手机号:"
                      prop="phone"
+                     propVal={dynamicValidateForm.phone}
                      rules={[
-                        { required: true, message: '请输入手机号', trigger: 'change' }
+                        { required: true, message: '请输入手机号', trigger: 'change' },
+                        { pattern: /^\d{6}$/, message: '请输入6位阿拉伯数字', trigger: 'blur' }
                       ]}
                      >
                         {/* <Form.elInput  
@@ -84,6 +86,9 @@ export default class Demo extends Component {
   submit(){
     this.refs['dynamicValidateForm'].validate(res=>{
         console.log("校验",res)
+        if(!res){
+          alert("提交成功")
+        }
     })
   }
 }
