@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types'; // ES6
 import ThemeContext from "./context"
+import FormItemContext from "./contextFormItem"
 import ENUM from "./enum"
 import PubSub from 'pubsub-js'
 import STYLES from "./styles"
@@ -27,6 +28,7 @@ import STYLES from "./styles"
   componentDidMount() {
     //  console.log("formProps",this.context)
       let {CusRefName}=this.context;
+      //通知Form添加校验规则
       PubSub.publish(`${CusRefName}addFieldSubScriber`,this.props);
       //接收错误信息
       PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
@@ -34,10 +36,14 @@ import STYLES from "./styles"
   }
   componentWillUnmount(){}
   componentWillReceiveProps(nextProps,nextState){
-    if(nextProps.propVal!=this.props.propVal){
+    if(nextProps.value!=this.props.value){
      // console.log("before:",this.props.propVal,"next:",nextProps.propVal)
-      let {CusRefName}=this.context;
-      PubSub.publish(`${CusRefName}${ENUM.notifyFormToCheck}`,this.props);
+     //子节点非自定义表单才执行校验
+      if(!this.props.customInput){
+        let {CusRefName}=this.context;
+        PubSub.publish(`${CusRefName}${ENUM.notifyFormToCheck}`,this.props);
+      }
+      
       return true;
     }else{
       return false;
@@ -72,22 +78,24 @@ import STYLES from "./styles"
   errorTxt(){
     let {labelWidth}=this.context;
      return (
-       <View style={{...styles.formItemErrWrap,paddingLeft:labelWidth}}>
+       <View style={styles.formItemErrWrap}>
           <Text style={styles.formItemErrorTxt}>{this.state.errTxt}</Text>
        </View>
      )
   }
   render() {
       let {label}=this.props;
-      let {labelWidth,labelPosition}=this.context;
         return (
             <View style={styles.formItemWrap}>
                 <View style={styles.formItemInnerWrap} {...this.props}>
-                    <View style={{width:labelWidth}}>
-                            <Text style={{textAlign:labelPosition?labelPosition:"right"}}>{label}</Text>
+                    <View style={styles.formItemLeftWrap}>
+                            <Text style={styles.formItemLeftText}>{label}</Text>
                     </View>
                     <View style={{flex:1}}>
-                    { this.props.children}
+                      <FormItemContext.Provider value={{...this.props}}>
+                      { this.props.children}
+                      </FormItemContext.Provider>
+                    
                     </View>
                 </View>
                 {!this.pass?this.errorTxt():null}

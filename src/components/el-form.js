@@ -32,10 +32,24 @@ import ThemeContext from "./context"
     PubSub.subscribe(`${this.CusRefName}removeFieldSubScriber`, this.removeFieldSubScriber);
     PubSub.subscribe(`${this.CusRefName}${ENUM.notifyFormToCheck}`, this.acceptCheckField);
   }
-  componentDidMount() {}
+  componentDidMount() {
+    //prop是否符合规范监测
+    this._wranCheck();
+  }
   componentWillUnmount(){
     // PubSub.unsubscribe(`${this.CusRefName}addFieldSubScriber`);
     // PubSub.unsubscribe(`${this.CusRefName}removeFieldSubScriber`);
+  }
+  _wranCheck(){
+    let canPush=this.props.canPush;
+      if(canPush){
+          if(!this.props.scope.state.hasOwnProperty(canPush)){
+            console.warn("canPush在state里面不存在");
+          }
+          else if(this.props.scope.state[canPush]==true){
+            console.warn("canPush默认应该是false，或者可以转换成false，但是现在它是true或者可以转换成true");
+          }
+      }
   }
   render() {
     return (
@@ -57,11 +71,17 @@ import ThemeContext from "./context"
    *  }
    */
   addFieldSubScriber(msg,obj){
-    console.log("进入了么",obj,msg)
+    //如果不是当前Form的子节点触发的时间不接受
     if(msg!==this.CusRefName+'addFieldSubScriber'){
       return;
     }
+    
     let fields=this.state.fields;
+    //不允许重复追加，开启开发环境热更也会重复触发追加(这行代码能避免)
+    if(fields.findIndex(item=>item.prop==obj.prop)>-1){
+      console.warn(`已禁止重复提交的fields:${obj.prop},如果是开发环境热更导致的请忽视警告`)
+      return;
+    }
     fields.push(obj);
     this.setState({fields},()=>{
       console.log("form,this.state.fields",this.state.fields)
@@ -121,8 +141,8 @@ import ThemeContext from "./context"
   validateField(field,callBack){
     return new Promise((resolve)=>{
       if(!this.modelContain(field)){
-        console.warn(`model不存在key${field}`)
-        resolve(`model不存在key${field}`);
+        console.warn(`model不存在key:${field}`)
+        resolve(`model不存在key:${field}`);
         return;
       }
       let target={
@@ -132,24 +152,42 @@ import ThemeContext from "./context"
       valider.validate({[field]:this.props.model[field]}, (errors, fields) => {
         callBack(errors, fields)
       });
+      let canPush=this.props.canPush;
+      if(canPush){
+          if(this.props.scope.state.hasOwnProperty(canPush)){
+            //校验所有表单，但是不通知表单
+            this.validate((errors, fields)=>{
+               if(errors){
+                this.props.scope.setState({[canPush]:false})
+               }
+               else{
+                this.props.scope.setState({[canPush]:true})
+               }
+            },false)
+          }
+          else{
+            console.warn(`model不存在key${field}`)
+          }
+      }
+      
     })
   }
   /**
    *  校验所有表单
    * @param {*} callBack 
+   * @param {boolean} notify 是否不通知表单
    */
-  validate(callBack){
-
+  validate(callBack,notify=true){
      return this.validator.validate(this.props.model, (errors, fields) => {
         try{
-          this.notifyAllFields(errors);
+          notify?this.notifyAllFields(errors):null;
         }catch(e){
           console.log("异常",e)
         }
          callBack(errors, fields)
       });
-    
   }
+
   /**
    * 接收到[单个]表单请求校验后，开始校验并反馈结果
    * @param {*} msg  key
@@ -157,9 +195,9 @@ import ThemeContext from "./context"
    * obj.prop
    */
   acceptCheckField(msg,obj){
-    console.log("接收到表单的请求，开始校验",obj)
+  //  console.log("接收到表单的请求，开始校验",obj)
     this.validateField(obj.prop,(errors, fields)=>{
-      console.log("单个校验结果",errors, fields)
+    //  console.log("单个校验结果",errors, fields)
       PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
         prop:obj.prop,
         errors,
@@ -197,15 +235,14 @@ import ThemeContext from "./context"
           errors:item?[item]:item
         });
     }
-    
-    
   }
   
 }
 
 elForm.propTypes={
   model:PropTypes.object.isRequired,
-  labelWidth:PropTypes.number
+  scope:PropTypes.object.isRequired,
+  canPush:PropTypes.string
 }
 
 const styles = StyleSheet.create({

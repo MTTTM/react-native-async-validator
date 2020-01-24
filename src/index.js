@@ -1,9 +1,9 @@
 import  elForm from "./components/el-form";
 import elFormItem from "./components/el-form-item"
-import elInput from "./components/el-input"
+import ContextForInput from "./components/provider-input"
 
 export default{
     elForm,
     elFormItem,
-    elInput
+    elInput:ContextForInput
 }
