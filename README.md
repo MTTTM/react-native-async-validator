@@ -9,6 +9,7 @@
 * 目前校验规则是写在elFormItem里面的，暂时不考虑在elForm上加
 
 
+
 ## 校验规则常考 [async-validator](https://www.npmjs.com/package/async-validator "async-validator")
 
 ## elForm Attributes
@@ -37,3 +38,12 @@
 | errStyle      | 成功的textInput样式  |Object|   TextInput的样式   |否|
 | succStyle      | 错误的textInput样式 |Object  |  TextInput的样式        |   --   | 否      |
 | 其他      | 和TextInput一样的属性   |--  |   --   |   --   | --      |
+
+##  elForm  Methods
+
+|  参数       | 说明                                   |  参数   |
+| --------   | -----                                | -----  |
+| validate      | 校验所有表单 | Function(Array|null)  |
+| validateField  | 校验指定表单 | Function(Array|null)  |  
+| resetField    | 对该表单项进行重置，将其值重置为初始值并移除校验结果（尚未实现）  |--|
+| clearValidate | 移除该表单项的校验结果（尚未实现） |  |  --        |
