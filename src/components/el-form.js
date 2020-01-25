@@ -37,7 +37,7 @@ import ThemeContext from "./context"
     this._wranCheck();
   }
   componentWillUnmount(){
-    PubSub.unsubscribe(`${this.CusRefName}${ENUM.addFieldSubScriber}`);
+     PubSub.unsubscribe(`${this.CusRefName}${ENUM.addFieldSubScriber}`);
      PubSub.unsubscribe(`${this.CusRefName}${ENUM.removeFieldSubScriber}`);
      PubSub.unsubscribe(`${this.CusRefName}${ENUM.notifyFormToCheck}`);
   }
@@ -72,7 +72,7 @@ import ThemeContext from "./context"
    *  }
    */
   addFieldSubScriber(msg,obj){
-    console.log("新增",msg,obj)
+    console.log("新增",msg,"目标key",`${this.CusRefName}${ENUM.addFieldSubScriber}`,obj)
     //如果不是当前Form的子节点触发的时间不接受
     if(msg!==`${this.CusRefName}${ENUM.addFieldSubScriber}`){
       return;
@@ -139,13 +139,78 @@ import ThemeContext from "./context"
   }
   /**
    * model里面是否包含指定的key
+   * 需要做数组和对象的区分
    */
   modelContain(key){
-    return this.props.model.hasOwnProperty(key); 
+    let keys=key.split(".");
+    if(keys.length>0){
+      let obj=this.props.model;
+      for(let v=0;v<keys.length;v++){
+          if(this.hasOwnPropertyFuc(obj,keys[v])){
+            obj=obj[keys[v]];
+          }
+          else{
+            return false;
+          }
+      }
+      return true;
+    }
+    else{
+       return this.hasOwnPropertyFuc(obj,key);
+    }
+   // return this.props.model.hasOwnProperty(key); 
+  }
+  /**
+   * 判定obj是否包括key这个【key】
+   * @param {*} obj 
+   * @param {*} key 
+   */
+  hasOwnPropertyFuc(obj,key){
+    return obj.hasOwnProperty(key);
+  }
+  /**
+   * 获取Fied的值
+   * @param {string}
+   * 调用前请使用this.modelContain判定是否存在改值，避免报错
+   */
+  getFiedValue(key){
+    let keys=key.split(".");
+    if(keys.length>0){
+      let result=this.props.model;
+      for(let v=0;v<keys.length;v++){
+        result=result[keys[v]];
+      }
+      return result;
+    }
+    else{
+      return this.props.model[key];
+    }
+  }
+  /**
+   * 因为model可能是包含数组的对象，所以需要特别处理
+   */
+  getModel(){
+    let model=this.props.model;
+    console.log("his.state.fields[0]",this.state.fields[0])
+    //针对
+    let fieldsKeys=[];
+    try{
+      fieldsKeys=this.state.fields[0].prop.split(".");
+    }catch(e){}
+
+    if(fieldsKeys.length){
+       model={};
+       for(let v=0;v<this.state.fields.length;v++){
+         let field=this.state.fields[v].prop;
+        let fieldValue=this.getFiedValue(field);//获取表单的值(field可能是“xx.xx”的格式)
+          model[field]=fieldValue;
+       }
+    }
+    return model;
   }
   /**
    * 校验单个表单
-   * @param {*} field 
+   * @param {string} field 
    * @param {*} callBack 
    */
   validateField(field,callBack){
@@ -159,7 +224,9 @@ import ThemeContext from "./context"
         [field]:this.state.descriptor[field]
       };
       let valider = new schema(target);
-      valider.validate({[field]:this.props.model[field]}, (errors, fields) => {
+      let fieldValue=this.getFiedValue(field);//获取表单的值(field可能是“xx.xx”的格式)
+      console.log("单个校验key",field,"值",fieldValue)
+      valider.validate({[field]:fieldValue}, (errors, fields) => {
         callBack(errors, fields)
       });
       
@@ -175,6 +242,7 @@ import ThemeContext from "./context"
         if(this.props.scope.state.hasOwnProperty(canPush)){
           //校验所有表单，但是不通知表单
           this.validate((errors, fields)=>{
+            console.log("是否可以提交",errors)
              if(errors){
               this.props.scope.setState({[canPush]:false})
              }
@@ -194,7 +262,8 @@ import ThemeContext from "./context"
    * @param {boolean} notify 是否不通知表单
    */
   validate(callBack,notify=true){
-     return this.validator.validate(this.props.model, (errors, fields) => {
+      let model=this.getModel();
+     return this.validator.validate(model, (errors, fields) => {
         try{
           notify?this.notifyAllFields(errors):null;
         }catch(e){

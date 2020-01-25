@@ -29,15 +29,17 @@ import {
 import Demo from "./src/demo"
 import Demo2 from "./src/demo2"
 import Demo3 from "./src/demo3"
+import Demo4 from "./src/demo4"
 class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-        type:"demo1",
+        type:"demo4",
         list:[
            "demo1",
            "demo2",
-           "demo3"
+           "demo3",
+           "demo4"
         ]
     };
   }
@@ -56,7 +58,7 @@ class App extends Component {
                        return (
                         <TouchableOpacity key={item} style={{marginLeft:5}} onPress={()=>this.setState({type:item})}>
                             <View style={styles.normalBtn}>
-                                    <Text style={styles.normalBtnTxt}>demo1</Text>
+                              <Text style={styles.normalBtnTxt}>{item}</Text>
                             </View>
                         </TouchableOpacity>
                        )
@@ -70,6 +72,7 @@ class App extends Component {
             {this.state.type=="demo1"?<Demo/>:null}
             {this.state.type=="demo2"?<Demo2/>:null}
             {this.state.type=="demo3"?<Demo3/>:null}
+            {this.state.type=="demo4"?<Demo4/>:null}
           </ScrollView>
         </SafeAreaView>
         </View>

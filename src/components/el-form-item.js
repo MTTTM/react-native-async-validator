@@ -39,6 +39,8 @@ import STYLES from "./styles"
     let {CusRefName}=this.context;
     console.log("开始卸载",this.props)
     PubSub.publish(`${CusRefName}${ENUM.removeFieldSubScriber}`, this.props);
+    //不在接收结果
+    PubSub.unsubscribe(`${CusRefName}${ENUM.accetpCheckedResult}`);
   }
   componentWillReceiveProps(nextProps,nextState){
     if(nextProps.value!=this.props.value){
@@ -68,7 +70,7 @@ import STYLES from "./styles"
    * @description 未通过格式:{"prop":"name","errors":[{"message":"请输入姓名","field":"name"}],"fields":{"name":[{"message":"请输入姓名","field":"name"}]}}
    */
   accetpCheckedResult(msg,data){
-   console.log("表单接收校验结果",JSON.stringify(data))
+   console.log("表单接收校验结果",JSON.stringify(data),data.prop==this.props.prop,data.prop,this.props.prop)
 
     if(data.prop==this.props.prop){
       if(!data.errors){
@@ -76,34 +78,50 @@ import STYLES from "./styles"
       }
       else{
         let txt=data.errors[0].message;
+        console.log("没通过的错误文字",txt)
         this.setState({pass:false,errTxt:txt})
       }
     }
   }
+  getLabelWidth(){
+    let labelWidthStyle='';
+    try{
+      if(this.props.hasOwnProperty("labelWidth")&&!isNaN(Number(this.props.labelWidth))){
+        labelWidthStyle=this.props.labelWidth
+      }
+      else if(this.context.hasOwnProperty("labelWidth")&&!isNaN(Number(this.context.labelWidth))){
+        labelWidthStyle=this.context.labelWidth
+      }
+    }catch(e){}
+    return  labelWidthStyle;
+  }
   errorTxt(){
-    let {labelWidth}=this.context;
+     let labelWidth=this.getLabelWidth();
+     let lablePaddingLeftStyle=labelWidth?{paddingLeft:labelWidth}:{};
      return (
-       <View style={styles.formItemErrWrap}>
+       <View style={{...styles.formItemErrWrap,...lablePaddingLeftStyle}}>
           <Text style={styles.formItemErrorTxt}>{this.state.errTxt}</Text>
        </View>
      )
   }
   render() {
-      let {label}=this.props;
+    let labelWidth=this.getLabelWidth();
+    let lableWidthLeftStyle=labelWidth?{width:labelWidth}:{};
+    let {label}=this.props;
         return (
             <View style={styles.formItemWrap}>
                 <View style={styles.formItemInnerWrap} {...this.props}>
-                    <View style={styles.formItemLeftWrap}>
+                    <View style={{...styles.formItemLeftWrap,...lableWidthLeftStyle}}>
                             <Text style={styles.formItemLeftText}>{label}</Text>
                     </View>
                     <View style={{flex:1}}>
                       <FormItemContext.Provider value={{...this.props}}>
                       { this.props.children}
                       </FormItemContext.Provider>
-                    
                     </View>
                 </View>
-                {!this.pass?this.errorTxt():null}
+                {!this.state.pass?this.errorTxt():null}
+       
             </View>
         )
   }
