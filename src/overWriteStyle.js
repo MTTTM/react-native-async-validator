@@ -1,6 +1,7 @@
 const LabelWidth=100;//表单左侧文字的宽度
 const ErrorTxtWrapHeight=25;//错误提示文字容器的高度
 const labelPaddingRight=10;
+
 export default{
     //formItem相关样式====================
     formItemWrap:{
@@ -22,7 +23,7 @@ export default{
         paddingLeft:LabelWidth+labelPaddingRight
     },
     formItemErrorTxt:{
-        color:"red"
+        color:"orange"
     },
     formItemLeftWrap:{
         width:LabelWidth,
@@ -34,17 +35,17 @@ export default{
     //封装的input标签样式
     elInput:{
         height: 40,
-        borderColor: 'gray',
+        borderColor: '#000',
         borderWidth: 1,
         borderRadius:5,
         paddingHorizontal:5
     },
     elInputError:{
-        borderColor:'red',
-        color:"red"
+        borderColor:'orange',
+        color:"orange"
     },
     elInputPass:{
-        borderColor:'green',
+        borderColor:'blue',
     }
    
 }

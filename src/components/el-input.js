@@ -21,6 +21,10 @@ class ElInput extends Component {
         pass:true,
         afterValid:false,//是否对当前表单实施过校验的动作
     };
+    this.endStyles={};
+    try{
+      this.endStyles=this.props.form.styles?StyleSheet.create(this.props.form.styles):styles;
+    }catch(e){}
      this.accetpCheckedResult=this.accetpCheckedResult.bind(this);
   }
   componentDidMount() {
@@ -60,6 +64,7 @@ class ElInput extends Component {
     let style=props.style?props.style:{};//普通样式覆盖
     let errStyle=props.errStyle?props.errStyle:{};//成功样式覆盖
     let succStyle=props.succStyle?props.succStyle:{};//失败样式覆盖
+    console.log("成功的样式",succStyle)
     let otherProps={};
     for(let k in props){
       //这三个特殊处理
@@ -67,14 +72,14 @@ class ElInput extends Component {
           otherProps[k]=props[k];
       }
     }
-    let elInputPass=this.state.afterValid?styles.elInputPass:{};
-    console.log("this.state.afterValid",this.state.afterValid)
+    //执行过校验的样式(不一定校验通过)
+    let elInputPass=this.state.afterValid?this.endStyles.elInputPass:{};
     return (
        
         this.state.pass?(
           <TextInput
              {...otherProps}
-            style={{...styles.elInput,...style,...elInputPass,...succStyle}}
+            style={{...this.endStyles.elInput,...style,...elInputPass,...succStyle}}
             onChangeText={text => this.changeText(text)}
             onBlur={()=>this.onBlurFunc()}
             value={this.state.value}
@@ -82,7 +87,7 @@ class ElInput extends Component {
         ):(
           <TextInput
              {...otherProps}
-            style={{...styles.elInput,...style,...styles.elInputError,...errStyle}}
+            style={{...this.endStyles.elInput,...style,...this.endStyles.elInputError,...errStyle}}
             onChangeText={text => this.changeText(text)}
             onBlur={()=>this.onBlurFunc()}
             value={this.state.value}

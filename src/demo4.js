@@ -41,7 +41,7 @@ export default class Demo extends Component {
                    model={dynamicValidateForm}
                    scope={this}
                    canPush="canPush"
-                   labelWidth={50}
+                   labelWidth={80}
                    ref="dynamicValidateForm">
 
                     {

@@ -11,15 +11,14 @@ import {
   Picker
 } from 'react-native';
 import Form from "./index"
-console.log("Form.elInput",Form.elInput)
+import STYLES from "./overWriteStyle"
 export default class Demo extends Component {
   constructor(props) {
     super(props);
     this.state = {
         dynamicValidateForm:{
-            name:'dfdfff',
+            name:'',
             phone:"",
-            picker:"",
             nickname:""
         }
     };
@@ -28,13 +27,15 @@ export default class Demo extends Component {
   render() {
         let {dynamicValidateForm} =this.state;
         return (
-          <View style={{marginHorizontal:10}}>
+            <View style={{marginHorizontal:10}}>
                <View style={{paddingVertical:10,marginBottom:10,borderBottomColor:"#ccc",borderBottomWidth:1}}>
-                  <Text>点击提交去校验</Text>
+                  <Text>在From标签覆盖所有表单的样式</Text>
                </View>
                 <Form.elForm 
                    model={dynamicValidateForm}
                    scope={this}
+                   styles={STYLES}
+                   labelWidth={60}
                    ref="dynamicValidateForm">
                     <Form.elFormItem 
                     label="姓名:"
@@ -47,7 +48,7 @@ export default class Demo extends Component {
                          <TextInput
                             style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                             value={dynamicValidateForm.name}
-                            placeholder="请输入姓名"
+                            placeholder="原生标签无法通过导入Form导入的样式覆盖"
                             onChangeText={text => this.changeText('name',text)}
                           />
                     </Form.elFormItem>
@@ -55,15 +56,15 @@ export default class Demo extends Component {
                     label="手机号:"
                      prop="phone"
                      value={dynamicValidateForm.phone}
+                     customInput={true}
                      rules={[
                         { required: true, message: '请输入手机号' },
                         { pattern: /^\d{6}$/, message: '请输入6位阿拉伯数字' }
                       ]}
                      >
-                         <TextInput
-                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                           <Form.elInput
                             value={dynamicValidateForm.phone}
-                            placeholder="这请输入手机号"
+                            placeholder="自定义标签一般都是改变就触发校验"
                             onChangeText={text => this.changeText('phone',text)}
                           />
                     </Form.elFormItem>
@@ -78,11 +79,6 @@ export default class Demo extends Component {
                         { required: true, message: '请输入昵称' },
                       ]}
                      >
-                         {/* <TextInput
-                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                            value={dynamicValidateForm.phone}
-                            onChangeText={text => this.changeText('phone',text)}
-                          /> */}
                           <Form.elInput
                             value={dynamicValidateForm.nickname}
                             placeholder="失去焦点时候校验，自定义输入框才有效"
@@ -90,26 +86,6 @@ export default class Demo extends Component {
                           />
                     </Form.elFormItem>
 
-                    <Form.elFormItem 
-                    label="选择:"
-                     prop="picker"
-                     value={dynamicValidateForm.picker}
-                     rules={[
-                        { required: true, message: '请输入选择' }
-                      ]}
-                    >
-                         <Picker
-                          selectedValue={this.state.dynamicValidateForm.picker}
-                          style={{height: 200, width: 100,borderColor: 'gray', borderWidth: 1 }}
-                          onValueChange={(itemValue, itemIndex) =>
-                            this.changeText('picker',itemValue)
-                          }>
-                          <Picker.Item label="请选择" value="" />
-                          <Picker.Item label="Java" value="java" />
-                          <Picker.Item label="JavaScript" value="js" />
-                          <Picker.Item label="css" value="css" />
-                        </Picker>
-                    </Form.elFormItem>
                     <View>
                         <TouchableOpacity onPress={((()=>this.submit()))}>
                             <View style={styles.normalBtn}>

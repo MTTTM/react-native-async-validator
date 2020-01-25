@@ -15,18 +15,23 @@ import FormItemContext from "./contextFormItem"
 import ENUM from "./enum"
 import PubSub from 'pubsub-js'
 import STYLES from "./styles"
- class elFormItem extends Component {
+const styles = StyleSheet.create(STYLES);
+class elFormItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
         pass:true,//是否校验通过
         errTxt:"",//错误提示
     };
+    this.endStyles={};
     this.accetpCheckedResult=this.accetpCheckedResult.bind(this);
     
   }
   componentDidMount() {
     //  console.log("formProps",this.context)
+    console.log("this.context",this.context)
+    //最终匹配到的样式
+    this.endStyles=this.context.styles?StyleSheet.create(this.context.styles):styles;
       let {CusRefName}=this.context;
       //通知Form添加校验规则
       console.log("`${CusRefName}${ENUM.addFieldSubScriber}`",`${CusRefName}${ENUM.addFieldSubScriber}`)
@@ -99,8 +104,8 @@ import STYLES from "./styles"
      let labelWidth=this.getLabelWidth();
      let lablePaddingLeftStyle=labelWidth?{paddingLeft:labelWidth}:{};
      return (
-       <View style={{...styles.formItemErrWrap,...lablePaddingLeftStyle}}>
-          <Text style={styles.formItemErrorTxt}>{this.state.errTxt}</Text>
+       <View style={{...this.endStyles.formItemErrWrap,...lablePaddingLeftStyle}}>
+          <Text style={this.endStyles.formItemErrorTxt}>{this.state.errTxt}</Text>
        </View>
      )
   }
@@ -109,10 +114,10 @@ import STYLES from "./styles"
     let lableWidthLeftStyle=labelWidth?{width:labelWidth}:{};
     let {label}=this.props;
         return (
-            <View style={styles.formItemWrap}>
-                <View style={styles.formItemInnerWrap} {...this.props}>
-                    <View style={{...styles.formItemLeftWrap,...lableWidthLeftStyle}}>
-                            <Text style={styles.formItemLeftText}>{label}</Text>
+            <View style={this.endStyles.formItemWrap}>
+                <View style={this.endStyles.formItemInnerWrap} {...this.props}>
+                    <View style={{...this.endStyles.formItemLeftWrap,...lableWidthLeftStyle}}>
+                            <Text style={this.endStyles.formItemLeftText}>{label}</Text>
                     </View>
                     <View style={{flex:1}}>
                       <FormItemContext.Provider value={{...this.props}}>
@@ -131,6 +136,6 @@ elFormItem.propTypes={
     prop:PropTypes.string
   }
   elFormItem.contextType = ThemeContext;  
-const styles = StyleSheet.create(STYLES);
+
 
 export default elFormItem;
