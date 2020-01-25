@@ -29,7 +29,8 @@ import STYLES from "./styles"
     //  console.log("formProps",this.context)
       let {CusRefName}=this.context;
       //通知Form添加校验规则
-      PubSub.publish(`${CusRefName}addFieldSubScriber`,this.props);
+      console.log("`${CusRefName}${ENUM.addFieldSubScriber}`",`${CusRefName}${ENUM.addFieldSubScriber}`)
+      PubSub.publish(`${CusRefName}${ENUM.addFieldSubScriber}`,this.props);
       //接收错误信息
       PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
 

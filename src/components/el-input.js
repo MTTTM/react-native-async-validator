@@ -91,9 +91,9 @@ class ElInput extends Component {
     )
   }
   onBlurFunc(){
-    console.log("失去焦点",checkOnBlur)
+    
     let {checkOnBlur}=this.props.formItem;
-   
+    console.log("失去焦点",checkOnBlur)
     //如果外层有传递onBlur函数
     if(typeof this.props.props.onBlur=="function"){
       this.props.props.onBlur();

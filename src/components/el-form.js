@@ -28,7 +28,7 @@ import ThemeContext from "./context"
     this.acceptCheckField=this.acceptCheckField.bind(this);
     //确保子节点添加事件时候能准确添加到本表单
     this.CusRefName="form"+new Date().getTime();
-    PubSub.subscribe(`${this.CusRefName}addFieldSubScriber`, this.addFieldSubScriber);
+    PubSub.subscribe(`${this.CusRefName}${ENUM.addFieldSubScriber}`, this.addFieldSubScriber);
     PubSub.subscribe(`${this.CusRefName}${ENUM.removeFieldSubScriber}`, this.removeFieldSubScriber);
     PubSub.subscribe(`${this.CusRefName}${ENUM.notifyFormToCheck}`, this.acceptCheckField);
   }
@@ -37,8 +37,9 @@ import ThemeContext from "./context"
     this._wranCheck();
   }
   componentWillUnmount(){
-    // PubSub.unsubscribe(`${this.CusRefName}addFieldSubScriber`);
-    // PubSub.unsubscribe(`${this.CusRefName}removeFieldSubScriber`);
+    PubSub.unsubscribe(`${this.CusRefName}${ENUM.addFieldSubScriber}`);
+     PubSub.unsubscribe(`${this.CusRefName}${ENUM.removeFieldSubScriber}`);
+     PubSub.unsubscribe(`${this.CusRefName}${ENUM.notifyFormToCheck}`);
   }
   _wranCheck(){
     let canPush=this.props.canPush;
@@ -71,8 +72,9 @@ import ThemeContext from "./context"
    *  }
    */
   addFieldSubScriber(msg,obj){
+    console.log("新增",msg,obj)
     //如果不是当前Form的子节点触发的时间不接受
-    if(msg!==this.CusRefName+'addFieldSubScriber'){
+    if(msg!==`${this.CusRefName}${ENUM.addFieldSubScriber}`){
       return;
     }
     
