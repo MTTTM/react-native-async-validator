@@ -34,7 +34,11 @@ import STYLES from "./styles"
       PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
 
   }
-  componentWillUnmount(){}
+  componentWillUnmount(){
+    let {CusRefName}=this.context;
+    console.log("开始卸载",this.props)
+    PubSub.publish(`${CusRefName}${ENUM.removeFieldSubScriber}`, this.props);
+  }
   componentWillReceiveProps(nextProps,nextState){
     if(nextProps.value!=this.props.value){
      // console.log("before:",this.props.propVal,"next:",nextProps.propVal)

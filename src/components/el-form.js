@@ -29,7 +29,7 @@ import ThemeContext from "./context"
     //确保子节点添加事件时候能准确添加到本表单
     this.CusRefName="form"+new Date().getTime();
     PubSub.subscribe(`${this.CusRefName}addFieldSubScriber`, this.addFieldSubScriber);
-    PubSub.subscribe(`${this.CusRefName}removeFieldSubScriber`, this.removeFieldSubScriber);
+    PubSub.subscribe(`${this.CusRefName}${ENUM.removeFieldSubScriber}`, this.removeFieldSubScriber);
     PubSub.subscribe(`${this.CusRefName}${ENUM.notifyFormToCheck}`, this.acceptCheckField);
   }
   componentDidMount() {
@@ -85,7 +85,7 @@ import ThemeContext from "./context"
     fields.push(obj);
     this.setState({fields},()=>{
       console.log("form,this.state.fields",this.state.fields)
-      this.updateDescriptor();
+      this.updateDescriptor(()=>this.updateCanPush());
     });
 
   }
@@ -100,18 +100,25 @@ import ThemeContext from "./context"
    *  ]"
    *  }
    */
-  removeFieldSubScriber(obj){
-    let fields=this.state.fields.map(item=>{
+  removeFieldSubScriber(msg,obj){
+     //如果不是当前Form的子节点触发的时间不接受
+     if(msg!==`${this.CusRefName}${ENUM.removeFieldSubScriber}`){
+      return;
+    }
+    console.log("删除的Fied",obj)
+    let fields=this.state.fields.filter(item=>{
       return item.prop!==obj.prop;
     });
     this.setState({fields},()=>{
-      this.updateDescriptor();
+      console.log("卸载后的剩余的fields",fields)
+      this.updateDescriptor(()=>this.updateCanPush());
     });
   }
   /**
    * 更新‘async-validator’的校验数据
+   * @param {function} func  更新数据后的回调
    */
-  updateDescriptor(){
+  updateDescriptor(func){
     let descriptor={};
     this.state.fields.forEach(item=>{
        if(item.rules){
@@ -125,6 +132,7 @@ import ThemeContext from "./context"
     })
     this.setState({descriptor},()=>{
       this.validator = new schema(this.state.descriptor);
+      typeof func =="function"?func():null;
     });
   }
   /**
@@ -152,25 +160,31 @@ import ThemeContext from "./context"
       valider.validate({[field]:this.props.model[field]}, (errors, fields) => {
         callBack(errors, fields)
       });
-      let canPush=this.props.canPush;
-      if(canPush){
-          if(this.props.scope.state.hasOwnProperty(canPush)){
-            //校验所有表单，但是不通知表单
-            this.validate((errors, fields)=>{
-               if(errors){
-                this.props.scope.setState({[canPush]:false})
-               }
-               else{
-                this.props.scope.setState({[canPush]:true})
-               }
-            },false)
-          }
-          else{
-            console.warn(`model不存在key${field}`)
-          }
-      }
       
+      this.updateCanPush();
     })
+  }
+ /**
+  * 更新是提价按钮是否可以提交
+  */
+  updateCanPush(){
+    let canPush=this.props.canPush;
+    if(canPush){
+        if(this.props.scope.state.hasOwnProperty(canPush)){
+          //校验所有表单，但是不通知表单
+          this.validate((errors, fields)=>{
+             if(errors){
+              this.props.scope.setState({[canPush]:false})
+             }
+             else{
+              this.props.scope.setState({[canPush]:true})
+             }
+          },false)
+        }
+        else{
+          console.warn(`model不存在key${field}`)
+        }
+    }
   }
   /**
    *  校验所有表单

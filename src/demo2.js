@@ -16,6 +16,7 @@ export default class Demo extends Component {
   constructor(props) {
     super(props);
     this.state = {
+        canPush:false,
         dynamicValidateForm:{
             name:'dfdfff',
             phone:"",
@@ -28,13 +29,14 @@ export default class Demo extends Component {
   render() {
         let {dynamicValidateForm} =this.state;
         return (
-          <View >
+          <View style={{marginHorizontal:10}}>
                <View style={{paddingVertical:10,marginBottom:10,borderBottomColor:"#ccc",borderBottomWidth:1}}>
-                  <Text>点击提交去校验</Text>
+                  <Text>提交按钮自动响应</Text>
                </View>
                 <Form.elForm 
                    model={dynamicValidateForm}
                    scope={this}
+                   canPush="canPush"
                    ref="dynamicValidateForm">
                     <Form.elFormItem 
                     label="姓名:"
@@ -72,7 +74,6 @@ export default class Demo extends Component {
                     label="昵称:"
                      prop="nickname"
                      value={dynamicValidateForm.nickname}
-                     checkOnBlur={true}
                      customInput={true}
                      rules={[
                         { required: true, message: '请输入昵称' },
@@ -85,7 +86,7 @@ export default class Demo extends Component {
                           /> */}
                           <Form.elInput
                             value={dynamicValidateForm.nickname}
-                            placeholder="失去焦点时候校验，自定义输入框才有效"
+                            placeholder="这是个自定义的输入框，prop和原生的一致"
                             onChangeText={text => this.changeText('nickname',text)}
                           />
                     </Form.elFormItem>
@@ -110,12 +111,22 @@ export default class Demo extends Component {
                           <Picker.Item label="css" value="css" />
                         </Picker>
                     </Form.elFormItem>
-                    <View>
-                        <TouchableOpacity onPress={((()=>this.submit()))}>
-                            <View style={styles.normalBtn}>
-                                    <Text style={styles.normalBtnTxt}>点击提交</Text>
+                    <View style={{marginTop:20}}>
+                        {
+                          this.state.canPush?(
+                            <TouchableOpacity onPress={((()=>this.submit()))}>
+                              <View style={styles.normalBtn}>
+                                      <Text style={styles.normalBtnTxt}>点击提交</Text>
+                              </View>
+                          </TouchableOpacity>
+                          ):(
+                            <TouchableOpacity activeOpacity={1}>
+                            <View style={{...styles.normalBtn,...styles.disabledBtn}}>
+                                    <Text style={{...styles.normalBtnTxt,...styles.disabledBtnTxt}}>还不能提交</Text>
                             </View>
                         </TouchableOpacity>
+                          )
+                        }
                     </View>
                 </Form.elForm>
           </View>

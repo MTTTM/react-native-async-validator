@@ -10,6 +10,7 @@
 
 
 
+
 ## 校验规则常考 [async-validator](https://www.npmjs.com/package/async-validator "async-validator")
 
 ## elForm Attributes
@@ -41,9 +42,9 @@
 
 ##  elForm  Methods
 
-|  参数       | 说明                                   |  参数   |
+|  方法名       | 说明                                   |  参数   |
 | --------   | -----                                | -----  |
-| validate      | 校验所有表单 | Function(Array|null)  |
-| validateField  | 校验指定表单 | Function(Array|null)  |  
+| validate      | 校验所有表单 | Function(Array或null)  |
+| validateField  | 校验指定表单 | Function(Array或null)  |  
 | resetField    | 对该表单项进行重置，将其值重置为初始值并移除校验结果（尚未实现）  |--|
 | clearValidate | 移除该表单项的校验结果（尚未实现） |  |  --        |

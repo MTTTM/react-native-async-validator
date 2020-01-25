@@ -50,8 +50,9 @@ class ElInput extends Component {
          let txt=data.errors[0].message;
          this.setState({pass:false})
        }
+       this.setState({afterValid:true})
      }
-     this.setState({afterValid:true})
+    
 
    }
   render() {

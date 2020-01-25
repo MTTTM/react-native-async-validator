@@ -6,14 +6,15 @@
  * @flow
  */
 
-import React from 'react';
-import {
+import React,{ Component} from 'react';
+import  {
   SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
   Text,
   StatusBar,
+  TouchableOpacity
 } from 'react-native';
 
 import {
@@ -24,22 +25,58 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import Demo from "./src/demo"
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          <Demo/>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
+import Demo from "./src/demo"
+import Demo2 from "./src/demo2"
+import Demo3 from "./src/demo3"
+class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+        type:"demo1",
+        list:[
+           "demo1",
+           "demo2",
+           "demo3"
+        ]
+    };
+  }
+   render(){
+    return (
+      <View>
+        <StatusBar barStyle="dark-content" />
+        <SafeAreaView>
+          <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            style={styles.scrollView}>
+              <ScrollView alwaysBounceHorizontal={true} style={{marginBottom:10,paddingVertical:10,borderBottomColor:"#ccc",borderBottomWidth:1}}>
+                <View style={{flexDirection:"row"}}>
+                {
+                    this.state.list.map(item=>{
+                       return (
+                        <TouchableOpacity key={item} style={{marginLeft:5}} onPress={()=>this.setState({type:item})}>
+                            <View style={styles.normalBtn}>
+                                    <Text style={styles.normalBtnTxt}>demo1</Text>
+                            </View>
+                        </TouchableOpacity>
+                       )
+                    })
+                  }
+                </View>
+                
+            </ScrollView>
+         
+  
+            {this.state.type=="demo1"?<Demo/>:null}
+            {this.state.type=="demo2"?<Demo2/>:null}
+            {this.state.type=="demo3"?<Demo3/>:null}
+          </ScrollView>
+        </SafeAreaView>
+        </View>
+    )
+   }
+  
+  
 };
 
 const styles = StyleSheet.create({
@@ -78,7 +115,19 @@ const styles = StyleSheet.create({
     padding: 4,
     paddingRight: 12,
     textAlign: 'right',
+    
   },
+  normalBtn:{
+    backgroundColor:"#409eff",
+    justifyContent:"center",
+    alignItems:"center",
+    height:35,
+    borderRadius:5,
+    width:80
+},
+normalBtnTxt:{
+    color:'#fff'
+},
 });
 
 export default App;
