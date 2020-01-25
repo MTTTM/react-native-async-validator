@@ -33,7 +33,7 @@ export default class Demo extends Component {
         return (
           <View style={{marginHorizontal:10}}>
                <View style={{paddingVertical:10,marginBottom:10,borderBottomColor:"#ccc",borderBottomWidth:1}}>
-                  <Text>动态表单1</Text>
+                  <Text>动态表单(object)1</Text>
                </View>
                <View style={{flexDirection:"row"}}>
                     <TouchableOpacity style={{marginLeft:5}} 

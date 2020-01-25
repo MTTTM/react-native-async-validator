@@ -20,6 +20,7 @@
 | model      | 表单数据对象                             |object  |   --             |   --   |是       |
 | scope      | 表单所在作用域                           |object  |   this           |   --   | 是      |
 | canPush      | state里面的key，用来判断表单是否可提交    |boolean  |   true或false   |   --   | 否      |
+| labelWidth    | elFormItem标签label的宽度    |Number  |   ---   |   --   | 否      |
 
 ## elFormItem  Attributes
 
@@ -27,6 +28,7 @@
 | --------   | -----                                | -----  | -----          | -----  | -----  |
 | prop      | 表单域 model 字段，在使用 validate、resetFields 方法的情况下，该属性是必填的 |传入 Form 组件的 model 中的字段  |--|   --   |是|
 | label      | 标签文本                                |string  |   --             |   --   | 否      |
+| labelWidth    | elFormItem标签label的宽度    |Number  |   ---   |   --   | 否      |
 | value      | model字段   |var(model里面的变量)  |   --   |   --   | 是      |
 | customInput      | 是否使用自定义Input表单   |Boolean  |   --   |   --   | 否     |
 | checkOnBlur      | 是否在失去焦点时候才校验(customInput为true&&输入表单为自定义input”本组件提供的elFormItem“)   |Boolean  |   --   |   --   | 否     |
