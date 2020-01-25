@@ -8,7 +8,7 @@
 * 未来支持(动态表单元素)
 * 目前校验规则是写在elFormItem里面的，暂时不考虑在elForm上加
 
-* [MP4demo演示](https://github.com/MTTTM/react-native-async-validator/blob/master/src/demo.js,"demo")
+* [MP4演示需要科学上网，你也可以下载仓库里面的video.mp4](https://www.youtube.com/watch?v=smkNFiJhnF0&feature=youtu.be,"demo")
 
 
 
