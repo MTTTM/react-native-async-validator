@@ -39,14 +39,19 @@ export default class Demo extends Component {
 
                 <ScrollView horizontal={true} alwaysBounceHorizontal={true} style={{width:"100%",marginBottom:10,paddingVertical:10,borderBottomColor:"#ccc",borderBottomWidth:1}}>
                     <TouchableOpacity
-                    onPress={()=>this.setState({dynamicValidateForm:{name:"设置了值"}})}>
+                    onPress={()=>this.setState({dynamicValidateForm:{name:"设置了值", nickname:"",
+                    phone:""}})}>
                         <View style={styles.normalBtn2}>
                            <Text style={styles.normalBtnTxt}>设置值</Text>
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={{marginLeft:5}} 
-                    onPress={()=>this.setState({dynamicValidateForm:{name:""}})}>
+                    onPress={()=>{
+                      let t=this.state.dynamicValidateForm;
+                      t.name=""
+                      this.setState({dynamicValidateForm:{...t}})
+                    }}>
                         <View style={styles.normalBtn2}>
                            <Text style={styles.normalBtnTxt}>清空值</Text>
                         </View>

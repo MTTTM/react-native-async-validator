@@ -54,10 +54,11 @@ class elFormItem extends Component {
   }
   componentWillReceiveProps(nextProps,nextState){
     if(this.needCheck){
+      console.log("this.need",this.props.prop,nextProps.value)
      //绝对不等于,取反反是因为undefined!="",但是这里我们需要他们等同
-      if(nextProps.value!==this.props.value
-        &&!!nextProps.value!=!!this.props.value){
-       // console.log("form-item主动触发校验",nextProps.value,this.props.value)
+     //||(!!nextProps.value||!!this.props.value)
+      if(nextProps.value!==this.props.value){
+        console.log("form-item主动触发校验",nextProps.value,this.props.value)
         //子节点非自定义表单才执行校验
          if(!this.props.customInput){
            let {CusRefName}=this.context;
@@ -71,7 +72,7 @@ class elFormItem extends Component {
        }
     }
     else{
-      return true;
+      return false;
     }
   }
   /**
@@ -95,7 +96,7 @@ class elFormItem extends Component {
    * @description 未通过格式:{"prop":"name","errors":[{"message":"请输入姓名","field":"name"}],"fields":{"name":[{"message":"请输入姓名","field":"name"}]}}
    */
   accetpCheckedResult(msg,data){
-   console.log("表单接收校验结果",JSON.stringify(data),data.prop==this.props.prop,data.prop,this.props.prop)
+  // console.log("表单接收校验结果",JSON.stringify(data),data.prop==this.props.prop,data.prop,this.props.prop)
 
     if(data.prop==this.props.prop){
       if(!data.errors){

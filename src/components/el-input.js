@@ -50,9 +50,9 @@ class ElInput extends Component {
       //两次值不一样，且非失去焦点才校验，才会触发校验
       //这里需要使用绝对不等于，因为undefined!="" 等于false，
       //但是我们需要他们等同，所以且需要取反反做对比
-      if(nextProps.props.value!==this.props.props.value
-        &&!!nextProps.props.value!=!!this.props.props.value
-        &&!this.props.formItem.checkOnBlur){
+      //||(!!nextProps.props.value||!!this.props.props.value))
+        
+      if(nextProps.props.value!==this.props.props.value&&!this.props.formItem.checkOnBlur){
       //  console.log("表单触发的校验",this.props.formItem.prop,"nextProps.props.value",nextProps.props.value,"this.props.props.value",this.props.props.value)
           PubSub.publish(`${CusRefName}${ENUM.notifyFormToCheck}`,this.props.formItem);
         return true;
@@ -61,7 +61,7 @@ class ElInput extends Component {
       }
     }
     else{
-      return true;
+      return false;
     }
     
   }

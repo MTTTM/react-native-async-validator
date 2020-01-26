@@ -66,6 +66,7 @@ export default class Demo extends Component {
                             placeholder="这请输入手机号"
                             onChangeText={text => this.changeText('phone',text)}
                           />
+                          <Text>{this.state.dynamicValidateForm.phone}</Text>
                     </Form.elFormItem>
 
                     <Form.elFormItem 

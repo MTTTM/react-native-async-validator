@@ -136,7 +136,9 @@ import ThemeContext from "./context"
    */
   modelContain(key){
     let keys=key.split(".");
-    if(keys.length>0){
+    console.log("keys",keys,key)
+    if(keys.length>1){
+      console.log("进入多个的了?")
       let obj=this.props.model;
       for(let v=0;v<keys.length;v++){
           if(this.hasOwnPropertyFuc(obj,keys[v])){
@@ -149,7 +151,9 @@ import ThemeContext from "./context"
       return true;
     }
     else{
-       return this.hasOwnPropertyFuc(obj,key);
+      console.log("this.context",)
+      console.log("判定对象不包含key",this.props.model,key)
+       return this.hasOwnPropertyFuc(this.props.model,key);
     }
    // return this.props.model.hasOwnProperty(key); 
   }
@@ -211,6 +215,7 @@ import ThemeContext from "./context"
    // console.log("校验单个值",field)
     return new Promise((resolve)=>{
       if(!this.modelContain(field)){
+        console.log("fields",this.state.fields)
         console.warn(`model不存在key:${field}`)
         resolve(`model不存在key:${field}`);
         return;
@@ -275,9 +280,9 @@ import ThemeContext from "./context"
    * obj.prop
    */
   acceptCheckField(msg,obj){
-  //  console.log("接收到表单的请求，开始校验",obj)
+    console.log("接收到表单的请求，开始校验",obj)
     this._validateField(obj.prop,(errors, fields)=>{
-   //   console.log("单个校验结果",errors, fields)
+      console.log("单个校验结果",errors, fields)
       PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
         prop:obj.prop,
         errors,
