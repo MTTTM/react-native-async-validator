@@ -65,7 +65,7 @@ import ThemeContext from "./context"
    *  }
    */
   addFieldSubScriber(msg,obj){
-    console.log("新增",msg,"目标key",`${this.CusRefName}${ENUM.addFieldSubScriber}`,obj)
+  //  console.log("新增",msg,"目标key",`${this.CusRefName}${ENUM.addFieldSubScriber}`,obj)
     //如果不是当前Form的子节点触发的时间不接受
     if(msg!==`${this.CusRefName}${ENUM.addFieldSubScriber}`){
       return;
@@ -79,7 +79,7 @@ import ThemeContext from "./context"
     }
     fields.push(obj);
     this.setState({fields},()=>{
-      console.log("form,this.state.fields",this.state.fields)
+    //  console.log("form,this.state.fields",this.state.fields)
       this.updateDescriptor(()=>this.updateCanPush());
     });
 
@@ -100,12 +100,12 @@ import ThemeContext from "./context"
      if(msg!==`${this.CusRefName}${ENUM.removeFieldSubScriber}`){
       return;
     }
-    console.log("删除的Fied",obj)
+   // console.log("删除的Fied",obj)
     let fields=this.state.fields.filter(item=>{
       return item.prop!==obj.prop;
     });
     this.setState({fields},()=>{
-      console.log("卸载后的剩余的fields",fields)
+    //  console.log("卸载后的剩余的fields",fields)
       this.updateDescriptor(()=>this.updateCanPush());
     });
   }
@@ -208,7 +208,7 @@ import ThemeContext from "./context"
    * @param {*} callBack 
    */
   _validateField(field,callBack){
-    console.log("校验单个值",field)
+   // console.log("校验单个值",field)
     return new Promise((resolve)=>{
       if(!this.modelContain(field)){
         console.warn(`model不存在key:${field}`)
@@ -220,7 +220,7 @@ import ThemeContext from "./context"
       };
       let valider = new schema(target);
       let fieldValue=this.getFiedValue(field);//获取表单的值(field可能是“xx.xx”的格式)
-      console.log("单个校验key",field,"值",fieldValue)
+    //  console.log("单个校验key",field,"值",fieldValue)
       valider.validate({[field]:fieldValue}, (errors, fields) => {
         callBack(errors, fields)
       });
@@ -237,7 +237,7 @@ import ThemeContext from "./context"
         if(this.props.scope.state.hasOwnProperty(canPush)){
           //校验所有表单，但是不通知表单
           this.validate((errors, fields)=>{
-            console.log("是否可以提交",errors)
+         //   console.log("是否可以提交",errors)
              if(errors){
               this.props.scope.setState({[canPush]:false})
              }
@@ -262,7 +262,7 @@ import ThemeContext from "./context"
         try{
           notify?this.notifyAllFields(errors):null;
         }catch(e){
-          console.log("异常",e)
+          console.warn("校验异常",e)
         }
          callBack(errors, fields)
       });
@@ -275,9 +275,9 @@ import ThemeContext from "./context"
    * obj.prop
    */
   acceptCheckField(msg,obj){
-    console.log("接收到表单的请求，开始校验",obj)
+  //  console.log("接收到表单的请求，开始校验",obj)
     this._validateField(obj.prop,(errors, fields)=>{
-      console.log("单个校验结果",errors, fields)
+   //   console.log("单个校验结果",errors, fields)
       PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
         prop:obj.prop,
         errors,
@@ -322,7 +322,7 @@ import ThemeContext from "./context"
     */
     for(let k in this.state.descriptor){
         let item=this.getArrayItemByKey(errorsArr,"field",k);
-        console.log("赛选到的错误对象",item)
+      //  console.log("赛选到的错误对象",item)
         PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
           prop:k,
           errors:item?[item]:item

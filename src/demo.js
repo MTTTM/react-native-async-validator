@@ -11,7 +11,7 @@ import {
   Picker
 } from 'react-native';
 import Form from "./index"
-console.log("Form.elInput",Form.elInput)
+
 export default class Demo extends Component {
   constructor(props) {
     super(props);

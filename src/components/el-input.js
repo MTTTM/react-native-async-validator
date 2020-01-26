@@ -103,7 +103,7 @@ class ElInput extends Component {
     let style=props.style?props.style:{};//普通样式覆盖
     let errStyle=props.errStyle?props.errStyle:{};//成功样式覆盖
     let succStyle=props.succStyle?props.succStyle:{};//失败样式覆盖
-    console.log("成功的样式",succStyle,this.props.props.value)
+    //console.log("成功的样式",succStyle,this.props.props.value)
     let otherProps={};
     for(let k in props){
       //这三个特殊处理
@@ -137,7 +137,7 @@ class ElInput extends Component {
   onBlurFunc(){
     
     let {checkOnBlur}=this.props.formItem;
-    console.log("失去焦点",checkOnBlur)
+   // console.log("失去焦点",checkOnBlur)
     //如果外层有传递onBlur函数
     if(typeof this.props.props.onBlur=="function"){
       this.props.props.onBlur();
@@ -153,10 +153,10 @@ class ElInput extends Component {
         this.props.props.onChangeText(text);
       }
       let {checkOnBlur}=this.props.formItem;
-      console.log("checkOnBlur",checkOnBlur)
+     // console.log("checkOnBlur",checkOnBlur)
       if(!checkOnBlur){
         this.checkValid();
-        console.log("这还能校验?,",checkOnBlur)
+      //  console.log("这还能校验?,",checkOnBlur)
       }
   }
   checkValid(){
