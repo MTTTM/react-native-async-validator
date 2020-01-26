@@ -31,7 +31,7 @@
 | prop      | 表单域 model 字段，在使用 validate、resetFields 方法的情况下，该属性是必填的 |传入 Form 组件的 model 中的字段  |--|   --   |是|
 | label      | 标签文本                                |string  |   --             |   --   | 否      |
 | labelWidth    | elFormItem标签label的宽度    |Number  |   ---   |   --   | 否      |
-| value      | model字段   |var(model里面的变量)  |   --   |   --   | 是      |
+| value      | model字段   |var(model里面的变量)  |   --   |   --   | (输入框是原生时候)，否(自定义输入框)      |
 | customInput      | 是否使用自定义Input表单   |Boolean  |   --   |   --   | 否     |
 | checkOnBlur      | 是否在失去焦点时候才校验(customInput为true&&输入表单为自定义input”本组件提供的elFormItem“)   |Boolean  |   --   |   --   | 否     |
 | rules      | 表单验证规则   | Array  |   --   |   --   | 是      |
@@ -46,9 +46,9 @@
 
 ##  elForm  Methods
 
-|  方法名       | 说明                                   |  参数   |
+|  方法名       | 说明                                   |  参数   | 
 | --------   | -----                                | -----  |
 | validate      | 校验所有表单 | Function(Array或null)  |
 | validateField  | 校验指定表单 | Function(Array或null)  |  
-| resetField    | 对该表单项进行重置，将其值重置为初始值并移除校验结果（尚未实现）  |--|
-| clearValidate | 移除该表单项的校验结果（尚未实现） |  |  --        |
+| resetField    | 对该表单项进行重置，将其值重置为初始值并移除校验结果 （因为react单向数据流的设计导致不容易实现，不提供,可以参考demo8实现，并不难） |--|
+| clearValidate | 移除该表单项的校验结果 |  |  --        |

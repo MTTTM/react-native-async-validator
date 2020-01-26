@@ -3,11 +3,6 @@ import {
   Text,
   View,
   StyleSheet,
-  ImageBackground,
-  TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
-  TextInput,
 } from 'react-native';
 import PropTypes from 'prop-types'; // ES6
 import ThemeContext from "./context"
@@ -23,45 +18,70 @@ class elFormItem extends Component {
         pass:true,//是否校验通过
         errTxt:"",//错误提示
     };
+    //属于需要校验的表单
+    this.needCheck=this.props.prop&&this.props.rules&&this.props.rules[0];
     this.endStyles={};
     this.accetpCheckedResult=this.accetpCheckedResult.bind(this);
-    
+    this.clearValidate=this.clearValidate.bind(this);
   }
   componentDidMount() {
     //  console.log("formProps",this.context)
-    console.log("this.context",this.context)
     //最终匹配到的样式
     this.endStyles=this.context.styles?StyleSheet.create(this.context.styles):styles;
       let {CusRefName}=this.context;
-      //通知Form添加校验规则
-      console.log("`${CusRefName}${ENUM.addFieldSubScriber}`",`${CusRefName}${ENUM.addFieldSubScriber}`)
-      PubSub.publish(`${CusRefName}${ENUM.addFieldSubScriber}`,this.props);
-      //接收错误信息
-      PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
+      if(this.needCheck){
+          //通知Form添加校验规则
+          PubSub.publish(`${CusRefName}${ENUM.addFieldSubScriber}`,this.props);
+          //接收错误信息
+          PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
+          //清除校验UI效果
+          PubSub.subscribe(`${CusRefName}${ENUM.clearValidate}`, this.clearValidate);
+      }
+
+
 
   }
   componentWillUnmount(){
-    let {CusRefName}=this.context;
-    console.log("开始卸载",this.props)
-    PubSub.publish(`${CusRefName}${ENUM.removeFieldSubScriber}`, this.props);
-    //不在接收结果
-    PubSub.unsubscribe(`${CusRefName}${ENUM.accetpCheckedResult}`);
+    if(this.needCheck){
+      let {CusRefName}=this.context;
+      PubSub.publish(`${CusRefName}${ENUM.removeFieldSubScriber}`, this.props);
+      //不在接收结果
+      PubSub.unsubscribe(`${CusRefName}${ENUM.accetpCheckedResult}`);
+      //拒绝再处理清空UI事务
+      PubSub.unsubscribe(`${CusRefName}${ENUM.clearValidate}`);
+    }
+   
   }
   componentWillReceiveProps(nextProps,nextState){
-    if(nextProps.value!=this.props.value){
-     // console.log("before:",this.props.propVal,"next:",nextProps.propVal)
-     //子节点非自定义表单才执行校验
-      if(!this.props.customInput){
-        let {CusRefName}=this.context;
-        PubSub.publish(`${CusRefName}${ENUM.notifyFormToCheck}`,this.props);
-      }
-      
-      return true;
-    }else{
-      return false;
+    if(this.needCheck){
+     //绝对不等于,取反反是因为undefined!="",但是这里我们需要他们等同
+      if(nextProps.value!==this.props.value
+        &&!!nextProps.value!=!!this.props.value){
+       // console.log("form-item主动触发校验",nextProps.value,this.props.value)
+        //子节点非自定义表单才执行校验
+         if(!this.props.customInput){
+           let {CusRefName}=this.context;
+           PubSub.publish(`${CusRefName}${ENUM.notifyFormToCheck}`,this.props);
+         }
+         
+         return true;
+       }
+       else{
+         return false;
+       }
     }
-    console.log("this",this)
-    return true;
+    else{
+      return true;
+    }
+  }
+  /**
+   * 清楚表单效果
+   */
+  clearValidate(){
+      this.setState({
+        pass:true,//是否校验通过
+        errTxt:"",//错误提示
+     });
   }
   /**
    * 接受Form的推送的校验结果

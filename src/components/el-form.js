@@ -1,13 +1,6 @@
 import React, {Component} from 'react';
 import {
-  Text,
-  View,
   StyleSheet,
-  ImageBackground,
-  TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
-  TextInput,
 } from 'react-native';
 import PubSub from 'pubsub-js'
 import schema from 'async-validator';
@@ -183,6 +176,7 @@ import ThemeContext from "./context"
       return result;
     }
     else{
+      console.log("key",key,this.props.model,this.props.model[key])
       return this.props.model[key];
     }
   }
@@ -213,7 +207,8 @@ import ThemeContext from "./context"
    * @param {string} field 
    * @param {*} callBack 
    */
-  validateField(field,callBack){
+  _validateField(field,callBack){
+    console.log("校验单个值",field)
     return new Promise((resolve)=>{
       if(!this.modelContain(field)){
         console.warn(`model不存在key:${field}`)
@@ -280,15 +275,28 @@ import ThemeContext from "./context"
    * obj.prop
    */
   acceptCheckField(msg,obj){
-  //  console.log("接收到表单的请求，开始校验",obj)
-    this.validateField(obj.prop,(errors, fields)=>{
-    //  console.log("单个校验结果",errors, fields)
+    console.log("接收到表单的请求，开始校验",obj)
+    this._validateField(obj.prop,(errors, fields)=>{
+      console.log("单个校验结果",errors, fields)
       PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
         prop:obj.prop,
         errors,
         fields
       });
     })
+  }
+  /**
+   * 对外开放的校验单个表单接口
+   * @param {string} key
+   */
+  validateField(key){
+    this.acceptCheckField("",{prop:key});
+  }
+  /**
+   * 清空校验效果，但是不清空值
+   */
+  clearValidate(){
+    PubSub.publish(`${this.CusRefName}${ENUM.clearValidate}`);
   }
  /**
   * 通过数组里面的对象的key来获取指定数组元素

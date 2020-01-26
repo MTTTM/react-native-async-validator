@@ -33,11 +33,12 @@ import Demo4 from "./src/demo4"
 import Demo5 from "./src/demo5"
 import Demo6 from "./src/demo6"
 import Demo7 from "./src/demo7"
+import Demo8 from "./src/demo8"
 class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-        type:"demo1",
+        type:"demo8",
         list:[
            "demo1",
            "demo2",
@@ -45,7 +46,8 @@ class App extends Component {
            "demo4",
            "demo5",
            "demo6",
-           "demo7"
+           "demo7",
+           "demo8"
         ]
     };
   }
@@ -90,6 +92,7 @@ class App extends Component {
             {this.state.type=="demo5"?<Demo5/>:null}
             {this.state.type=="demo6"?<Demo6/>:null}
             {this.state.type=="demo7"?<Demo7/>:null}
+            {this.state.type=="demo8"?<Demo8/>:null}
             <Text style={{textAlign:"center",color:"green",paddingTop:20,paddingBottom:10}}>一个特别棒的RN表单校验工具</Text>
             <Text style={{textAlign:"center",paddingBottom:10}}>react-native-async-validator</Text>
             <Text style={{textAlign:"center",paddingBottom:20,color:"red"}}>今天是2020农历年初一，大家不要去串门了！！</Text>
