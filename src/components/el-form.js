@@ -280,9 +280,9 @@ import ThemeContext from "./context"
    * obj.prop
    */
   acceptCheckField(msg,obj){
-    console.log("接收到表单的请求，开始校验",obj)
+   // console.log("接收到表单的请求，开始校验",obj)
     this._validateField(obj.prop,(errors, fields)=>{
-      console.log("单个校验结果",errors, fields)
+    //  console.log("单个校验结果",errors, fields)
       PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
         prop:obj.prop,
         errors,
@@ -320,7 +320,7 @@ import ThemeContext from "./context"
    * @param {*} errorsArr 
    */
   notifyAllFields(errorsArr){
-    console.log("errorsArr",errorsArr)
+   // console.log("errorsArr",errorsArr)
     /*
     *  错误信息会如此:
     * 未通过格式:[{"message":"请输入姓名","field":"name"}],"fields":{"name":[{"message":"请输入姓名","field":"name"}]

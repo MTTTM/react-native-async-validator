@@ -54,11 +54,11 @@ class elFormItem extends Component {
   }
   componentWillReceiveProps(nextProps,nextState){
     if(this.needCheck){
-      console.log("this.need",this.props.prop,nextProps.value)
+    //  console.log("this.need",this.props.prop,nextProps.value)
      //绝对不等于,取反反是因为undefined!="",但是这里我们需要他们等同
      //||(!!nextProps.value||!!this.props.value)
       if(nextProps.value!==this.props.value){
-        console.log("form-item主动触发校验",nextProps.value,this.props.value)
+      //  console.log("form-item主动触发校验",nextProps.value,this.props.value)
         //子节点非自定义表单才执行校验
          if(!this.props.customInput){
            let {CusRefName}=this.context;
@@ -104,7 +104,7 @@ class elFormItem extends Component {
       }
       else{
         let txt=data.errors[0].message;
-        console.log("没通过的错误文字",txt)
+      //  console.log("没通过的错误文字",txt)
         this.setState({pass:false,errTxt:txt})
       }
     }
