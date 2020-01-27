@@ -58,3 +58,28 @@
 | validateField  | 校验指定表单 | Function(Array或null)  |  
 | resetField    | 对该表单项进行重置，将其值重置为初始值并移除校验结果 （因为react单向数据流的设计导致不容易实现，不提供,可以参考demo8实现，并不难） |--|
 | clearValidate | 移除该表单项的校验结果 |  |  --        |
+
+
+## 常见问题
+
+* 警告(warn) `model不存在key:${xxx}`
+
+```javaScript
+ //一般发生在如下场景
+ constructor(props) {
+    super(props);
+    this.state={
+        name:"",//必填项
+        phone:""//必填项
+    }
+ }
+ //...
+ setName(){
+     //因为把必填项phone从state里面移除了，但是没有移除phone对应的Form.formItem导致Form的校验规则集合里面没有移除phone
+     //如果需要移除某个校验字段，必须把相应的FormItem移除！！(Don't forget to remove Form.formItem element when you remove a field which is need check)
+     this.setState({name:"name"})
+ }  
+
+
+```
+
