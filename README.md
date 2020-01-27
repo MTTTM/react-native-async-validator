@@ -76,7 +76,8 @@
  //...
  setName(){
      //因为把必填项phone从state里面移除了，但是没有移除phone对应的Form.formItem导致Form的校验规则集合里面没有移除phone
-     //如果需要移除某个校验字段，必须把相应的FormItem移除！！(Don't forget to remove Form.formItem element when you remove a field which is need check)
+     //如果需要移除某个校验字段，必须把相应的FormItem移除！！
+     //(Don't forget to remove Form.formItem element when you remove a field which is need check)
      this.setState({name:"name"})
  }  
 
