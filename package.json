@@ -1,6 +1,6 @@
 {
-  "name": "reactNativeValidator",
-  "version": "0.0.1",
+  "name": "react-native-validator",
+  "version": "0.0.7",
   "private": false,
   "main": "./src/index.js",
   "repository": "https://github.com/MTTTM/react-native-async-validator",
@@ -9,9 +9,19 @@
     "reactNative",
     "form",
     "reactNativeForm",
+    "react-native-form",
     "Form",
     "reactNativeValidator",
     "validator"
+  ],
+  "files": [
+    "src/components/*",
+    "src/index.js",
+    "./yarn.lock",
+    "./README.md",
+    "./babel.config.js",
+    "./metro.config.js"
+
   ],
   "scripts": {
     "android": "react-native run-android",

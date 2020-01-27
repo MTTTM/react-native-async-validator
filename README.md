@@ -1,21 +1,23 @@
 # react-native-async-validator
 
-## 说明(Chinese description)
-* 这是一个类似jQuery.validator的表单校验工具
-* [点击查看demo](https://github.com/MTTTM/react-native-async-validator/tree/master/src,"demo")
-* 提供两种常用的校验方式（1.点击校验所有表单元素通过就提交，2.在输入表单过程中自动验证，如果所有表单验证通过按钮高亮可点击提交）
-* 支持动态表单校验(包括数组和对象)
-* 目前校验规则是写在elFormItem里面的，暂时不考虑在elForm上加
-* [MP4演示需要科学上网，你也可以下载仓库里面的video.mp4](https://www.youtube.com/watch?v=smkNFiJhnF0&feature=youtu.be,"demo")
-
-
 ## Description
 * This is a form validation tool,like jQuery.validator.I mean that it is very easy to use.
-* [demoCode](https://github.com/MTTTM/react-native-async-validator/tree/master/src,"demo")
+* [demoCode](https://github.com/MTTTM/react-native-async-validator/tree/master/src)
 * Provides two common verification methods (1. Click to verify all form elements and submit them; 2. Automatically verify during form input. If all form verification passes the button, you can click Submit)
 * It is support for dynamic forms including objects and arrays
 * At present, the verification rules are written in elFormItem, and it is not considered to be added to elForm for the time being. Because it already meets the general requirements
 * [Video Show](https://www.youtube.com/watch?v=smkNFiJhnF0&feature=youtu.be,"demo")
+
+## 说明(Chinese description)
+* 这是一个类似jQuery.validator的表单校验工具
+* [点击查看demo](https://github.com/MTTTM/react-native-async-validator/tree/master/src)
+* 提供两种常用的校验方式（1.点击校验所有表单元素通过就提交，2.在输入表单过程中自动验证，如果所有表单验证通过按钮高亮可点击提交）
+* 支持动态表单校验(包括数组和对象)
+* 目前校验规则是写在elFormItem里面的，暂时不考虑在elForm上加
+* [MP4演示需要科学上网，你也可以下载仓库里面的video.mp4](https://www.youtube.com/watch?v=smkNFiJhnF0&feature=youtu.be)
+
+
+
 
 
 
