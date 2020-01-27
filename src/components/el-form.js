@@ -136,9 +136,9 @@ import ThemeContext from "./context"
    */
   modelContain(key){
     let keys=key.split(".");
-    console.log("keys",keys,key)
+ //   console.log("keys",keys,key)
     if(keys.length>1){
-      console.log("进入多个的了?")
+   //   console.log("进入多个的了?")
       let obj=this.props.model;
       for(let v=0;v<keys.length;v++){
           if(this.hasOwnPropertyFuc(obj,keys[v])){
@@ -151,8 +151,8 @@ import ThemeContext from "./context"
       return true;
     }
     else{
-      console.log("this.context",)
-      console.log("判定对象不包含key",this.props.model,key)
+  //    console.log("this.context",)
+    //  console.log("判定对象不包含key",this.props.model,key)
        return this.hasOwnPropertyFuc(this.props.model,key);
     }
    // return this.props.model.hasOwnProperty(key); 
@@ -172,7 +172,7 @@ import ThemeContext from "./context"
    */
   getFiedValue(key){
     let keys=key.split(".");
-    if(keys.length>0){
+    if(keys.length>1){
       let result=this.props.model;
       for(let v=0;v<keys.length;v++){
         result=result[keys[v]];
@@ -180,7 +180,7 @@ import ThemeContext from "./context"
       return result;
     }
     else{
-      console.log("key",key,this.props.model,this.props.model[key])
+     // console.log("key",key,this.props.model,this.props.model[key])
       return this.props.model[key];
     }
   }
@@ -189,7 +189,7 @@ import ThemeContext from "./context"
    */
   getModel(){
     let model=this.props.model;
-    console.log("his.state.fields[0]",this.state.fields[0])
+   // console.log("his.state.fields[0]",this.state.fields[0])
     //针对
     let fieldsKeys=[];
     try{
