@@ -1,6 +1,6 @@
 {
   "name": "react-native-validator",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "private": false,
   "main": "./src/index.js",
   "repository": "https://github.com/MTTTM/react-native-async-validator",

@@ -1,23 +1,26 @@
-# react-native-validator
+# npm i react-native-validator
 
-## desc
-* This is a form validation tool,like jQuery.validator.I mean that it is very easy to use.
-* [demo](https://github.com/MTTTM/react-native-async-validator/tree/master/src)
-* Provides two common verification methods (1. Click to verify all form elements and submit them; 2. Automatically verify during form input. If all form verification passes the button, you can click Submit)
-* You can cover all styles
-* It is support for dynamic forms including objects and arrays
-* At present, the verification rules are written in elFormItem, and it is not considered to be added to elForm for the time being. Because it already meets the general requirements
-* If you get an error after downloading npm, it is recommended to copy the src file under the package to your local and use it as your local file (I cannot explain why this is the case for now).
+## 说明
+* 这是一个类似jQuery.validator的表单校验工具
+* [点击查看demo](https://github.com/MTTTM/react-native-async-validator/tree/master/src)
+* 提供两种常用的校验方式（1.点击校验所有表单元素通过就提交，2.在输入表单过程中自动验证，如果所有表单验证通过按钮高亮可点击提交）
+* 你可以覆盖所有样式
+* 支持动态表单校验(包括数组和对象)
+* 目前校验规则是写在elFormItem里面的，暂时不考虑在elForm上加
+* [MP4演示需要科学上网，你也可以下载仓库里面的video.mp4](https://www.youtube.com/watch?v=smkNFiJhnF0&feature=youtu.be)
+* 如果你npm下载后使用报错，建议拷贝包下面的src文件到你本地和你本地文件一样使用(目前我暂时无法解释为什么会如此)
+
 ## doc
 * [中文](./README_CN.md)
 * [EN](./README.md)
 
-## Installation
+## 安装
 
 ```javascript
     npm i react-native-validator
 ```
-## Usage
+
+## 基本使用
 
 ```javascript
       import Form from "react-native-validator"
@@ -121,50 +124,55 @@
 ```
 
 
-## [CheckRules](https://www.npmjs.com/package/async-validator "async-validator")
+
+
+
+
+
+
+## 校验规则常考 [CheckRules](https://www.npmjs.com/package/async-validator "async-validator")
 
 ## elForm Attributes
 
-|  parameter   | Description                 |  Type   |    Optional         |  default | required|
+|  参数       | 说明                                   |  类型   |    可选值         |  默认值 | 是否必选|
 | --------   | -----                                | -----  | -----          | -----  | -----  |
-| model      | Form data object                            |object  |   --             |   --   |Y       |
-| scope      | The scope of the form                           |object  |   this           |   --   | Y      |
-| canPush      |  key in State, used to determine whether the form can be submitted    |boolean  |   true or false   |   --   | N      |
-| labelWidth    | elFormItem label width    |Number  |   ---   |   --   | N      |
-|styles        | Style, covering all styles [content](https://github.com/MTTTM/react-native-async-validator/blob/master/src/overWriteStyle.js)  |Object   |   ---   |   --   | N      |
-
+| model      | 表单数据对象                             |object  |   --             |   --   |是       |
+| scope      | 表单所在作用域                           |object  |   this           |   --   | 是      |
+| canPush      | state里面的key，用来判断表单是否可提交    |boolean  |   true或false   |   --   | 否      |
+| labelWidth    | elFormItem标签label的宽度    |Number  |   ---   |   --   | 否      |
+|styles        | 样式，覆盖所有样式 [内容参考](https://github.com/MTTTM/react-native-async-validator/blob/master/src/overWriteStyle.js)  |Object   |   ---   |   --   | 否      |
 
 ## elFormItem  Attributes
 
-|  parameter   | Description                 |  Type   |    Optional         |  default | required|
-| --------   | -----                         | -----  | -----                | -----  | -----  |
-| prop  | Form field model field, this attribute is required when using validate, resetFields methods |Fields passed into the model of the Form component |Fields passed to the model of the Form component |--|   --   |Y|
-| label      | Label text   |string  |   --             |   --   | N      |
-| labelWidth    | elFormItem label width    |Number  |   ---   |   --   | N      |
-| value      | variable in model   |var (variable in model)  |   --   |   --   | Y      |
-| customInput      | Whether to use a custom Input form   |Boolean  |   --   |   --   | N     |
-| checkOnBlur      | Whether to check when losing focus (customInput is true && The input form is a custom input "elFormItem provided by this component")   |Boolean  |   --   |   --   | N     |
-| rules      | Form validation rules   | Array  |   --   |   --   | Y      |
+|  参数       | 说明                                   |  类型   |    可选值         |  默认值 | 是否必选|
+| --------   | -----                                | -----  | -----          | -----  | -----  |
+| prop      | 表单域 model 字段，在使用 validate、resetFields 方法的情况下，该属性是必填的 |传入 Form 组件的 model 中的字段  |--|   --   |是|
+| label      | 标签文本                                |string  |   --             |   --   | 否      |
+| labelWidth    | elFormItem标签label的宽度    |Number  |   ---   |   --   | 否      |
+| value      | model字段   |var(model里面的变量)  |   --   |   --   | (输入框是原生时候)，否(自定义输入框)      |
+| customInput      | 是否使用自定义Input表单   |Boolean  |   --   |   --   | 否     |
+| checkOnBlur      | 是否在失去焦点时候才校验(customInput为true&&输入表单为自定义input”本组件提供的elFormItem“)   |Boolean  |   --   |   --   | 否     |
+| rules      | 表单验证规则   | Array  |   --   |   --   | 是      |
 
 ## elInput
 
-|  parameter   | Description                 |  Type   |    Optional         |  default | required|
-| --------   | -----                         | -----   | -----               | -----  | -----  |
-| errStyle      | Successful textInput style  |Object|  style of successful TextInput |--  |N|
-| succStyle      | failure textInput style |Object  |  style of failure TextInput   |   --   | N      |
-| others      | Same properties as TextInput   |--  |   --   |   --   | --   |
+|  参数       | 说明                                   |  类型   |    可选值         |  默认值 | 是否必选|
+| --------   | -----                                | -----  | -----          | -----  | -----  |
+| errStyle      | 成功的textInput样式  |Object|   TextInput的样式   |否|
+| succStyle      | 错误的textInput样式 |Object  |  TextInput的样式        |   --   | 否      |
+| 其他      | 和TextInput一样的属性   |--  |   --   |   --   | --      |
 
 ##  elForm  Methods
 
-|  Methods       | Description                 |  parameter  |
+|  方法名       | 说明                                   |  参数   | 
 | --------   | -----                                | -----  |
-| validate      | Validate all forms | Function(Array或null)  |
-| validateField  | Validate the specified form | Function(Array或null)  |  
-| resetField    | Reset the form item, reset its value to the initial value, and remove the verification result (because the design of react unidirectional data flow is not easy to implement, it is not provided, you can refer to demo8 to implement, it is not difficult) |--|
-| clearValidate | Remove the verification result of this form item |  |  --        |
+| validate      | 校验所有表单 | Function(Array或null)  |
+| validateField  | 校验指定表单 | Function(Array或null)  |  
+| resetField    | 对该表单项进行重置，将其值重置为初始值并移除校验结果 （因为react单向数据流的设计导致不容易实现，不提供,可以参考demo8实现，并不难） |--|
+| clearValidate | 移除该表单项的校验结果 |  |  --        |
 
 
-## Warning
+## 常见问题
 
 * 警告(warn) `model不存在key:${xxx}`
 
@@ -173,19 +181,18 @@
  constructor(props) {
     super(props);
     this.state={
-        name:"",//required
-        phone:""//required
+        name:"",//必填项
+        phone:""//必填项
     }
  }
  //...
  setName(){
-     //Because the required item phone was removed from the state, but Y did not remove the Form.formItem corresponding to phone, which caused the phone to not be removed from the set of validation rules for Form.
-     //If you need to remove a check field, you must remove the corresponding FormItem! !!
+     //因为把必填项phone从state里面移除了，但是没有移除phone对应的Form.formItem导致Form的校验规则集合里面没有移除phone
+     //如果需要移除某个校验字段，必须把相应的FormItem移除！！
+     //(Don't forget to remove Form.formItem element when you remove a field which is need check)
      this.setState({name:"name"})
  }  
 
 
 ```
-
-##### Translated content from Google
 
