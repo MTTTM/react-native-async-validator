@@ -174,6 +174,7 @@ import elFormItem from './el-form-item';
    */
   getFiedValue(key){
     let keys=key.split(".");
+    // console.log("key",key)
     if(keys.length>1){
       let result=this.props.model;
       for(let v=0;v<keys.length;v++){
@@ -182,7 +183,7 @@ import elFormItem from './el-form-item';
       return result;
     }
     else{
-     // console.log("key",key,this.props.model,this.props.model[key])
+      console.log("key",key,this.props.model,this.props.model[key])
       return this.props.model[key];
     }
   }
@@ -214,7 +215,7 @@ import elFormItem from './el-form-item';
    * @param {*} callBack 
    */
   _validateField(field,callBack){
-   // console.log("校验单个值",field)
+    console.log("校验单个值~~",field)
     return new Promise((resolve)=>{
       if(!this.modelContain(field)){
         console.log("fields",this.state.fields)
@@ -225,11 +226,11 @@ import elFormItem from './el-form-item';
       let target={
         [field]:this.state.descriptor[field]
       };
+      console.log("tarhget",target)
       let valider = new schema(target);
       let fieldValue=this.getFiedValue(field);//获取表单的值(field可能是“xx.xx”的格式)
-    //  console.log("单个校验key",field,"值",fieldValue)
       valider.validate({[field]:fieldValue}, (errors, fields) => {
-        callBack(errors, fields)
+        callBack(errors&&errors[0]?errors[0]:null, fields)
       });
       
       this.updateCanPush();
@@ -276,23 +277,7 @@ import elFormItem from './el-form-item';
       });
   }
 
-  /**
-   * 接收到[单个]表单请求校验后，开始校验并反馈结果
-   * @param {*} msg  key
-   * @param {*} obj 
-   * obj.prop
-   */
-  acceptCheckField(msg,obj){
-   // console.log("接收到表单的请求，开始校验",obj)
-    this._validateField(obj.prop,(errors, fields)=>{
-    //  console.log("单个校验结果",errors, fields)
-      PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
-        prop:obj.prop,
-        errors,
-        fields
-      });
-    })
-  }
+
   /**
    * 对外开放的校验单个表单接口
    * @param {string} key
@@ -354,6 +339,25 @@ import elFormItem from './el-form-item';
        
     // })
   }
+    /**
+   * 接收到[单个]表单请求校验后，开始校验并反馈结果
+   * @param {*} msg  key
+   * @param {*} obj 
+   * obj.prop
+   */
+  $acceptCheckField(formItem){
+     console.log("接收到表单的请求，开始校验",formItem.props.prop)
+     this._validateField(formItem.props.prop,(errors, fields)=>{
+     //  console.log("单个校验结果",errors, fields)
+       // PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
+       //   prop:obj.prop,
+       //   errors,
+       //   fields
+       // });
+       console.log("校验单个",errors)
+       formItem.$accetpCheckedResult(errors);
+     })
+   }
   
 }
 
