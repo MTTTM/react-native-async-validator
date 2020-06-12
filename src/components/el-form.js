@@ -7,6 +7,7 @@ import schema from 'async-validator';
 import PropTypes from 'prop-types'; // ES6
 import ENUM from "./enum"
 import ThemeContext from "./context"
+import elFormItem from './el-form-item';
  class elForm extends Component {
   constructor(props) {
     super(props);
@@ -16,23 +17,23 @@ import ThemeContext from "./context"
         valided:true,//验证通过
     };
     this.validator={};
-    this.addFieldSubScriber=this.addFieldSubScriber.bind(this);
-    this.removeFieldSubScriber=this.removeFieldSubScriber.bind(this);
-    this.acceptCheckField=this.acceptCheckField.bind(this);
+    // this.addFieldSubScriber=this.addFieldSubScriber.bind(this);
+    // this.removeFieldSubScriber=this.removeFieldSubScriber.bind(this);
+    // this.acceptCheckField=this.acceptCheckField.bind(this);
     //确保子节点添加事件时候能准确添加到本表单
     this.CusRefName="form"+new Date().getTime();
-    PubSub.subscribe(`${this.CusRefName}${ENUM.addFieldSubScriber}`, this.addFieldSubScriber);
-    PubSub.subscribe(`${this.CusRefName}${ENUM.removeFieldSubScriber}`, this.removeFieldSubScriber);
-    PubSub.subscribe(`${this.CusRefName}${ENUM.notifyFormToCheck}`, this.acceptCheckField);
+    // PubSub.subscribe(`${this.CusRefName}${ENUM.addFieldSubScriber}`, this.addFieldSubScriber);
+    // PubSub.subscribe(`${this.CusRefName}${ENUM.removeFieldSubScriber}`, this.removeFieldSubScriber);
+    // PubSub.subscribe(`${this.CusRefName}${ENUM.notifyFormToCheck}`, this.acceptCheckField);
   }
   componentDidMount() {
     //prop是否符合规范监测
     this._wranCheck();
   }
   componentWillUnmount(){
-     PubSub.unsubscribe(`${this.CusRefName}${ENUM.addFieldSubScriber}`);
-     PubSub.unsubscribe(`${this.CusRefName}${ENUM.removeFieldSubScriber}`);
-     PubSub.unsubscribe(`${this.CusRefName}${ENUM.notifyFormToCheck}`);
+    //  PubSub.unsubscribe(`${this.CusRefName}${ENUM.addFieldSubScriber}`);
+    //  PubSub.unsubscribe(`${this.CusRefName}${ENUM.removeFieldSubScriber}`);
+    //  PubSub.unsubscribe(`${this.CusRefName}${ENUM.notifyFormToCheck}`);
   }
   _wranCheck(){
     let canPush=this.props.canPush;
@@ -47,14 +48,14 @@ import ThemeContext from "./context"
   }
   render() {
     return (
-      <ThemeContext.Provider value={{...this.props,CusRefName:this.CusRefName}}>
+      <ThemeContext.Provider value={{...this.props,CusRefName:this.CusRefName,elForm:this}}>
         { this.props.children}
       </ThemeContext.Provider>
     )
     
   }
   /**
-   * 新增元素
+   * 新增元素elFormItem,他的props是
    *  obj {Object}
    * {
    *   prop:"string",
@@ -64,16 +65,17 @@ import ThemeContext from "./context"
    *  ]"
    *  }
    */
-  addFieldSubScriber(msg,obj){
+  $addFieldSubScriber(obj){
   //  console.log("新增",msg,"目标key",`${this.CusRefName}${ENUM.addFieldSubScriber}`,obj)
     //如果不是当前Form的子节点触发的时间不接受
-    if(msg!==`${this.CusRefName}${ENUM.addFieldSubScriber}`){
-      return;
-    }
+    // if(msg!==`${this.CusRefName}${ENUM.addFieldSubScriber}`){
+    //   return;
+    // }
     
     let fields=this.state.fields;
     //不允许重复追加，开启开发环境热更也会重复触发追加(这行代码能避免)
-    if(fields.findIndex(item=>item.prop==obj.prop)>-1){
+    // elFormItem.props.prop
+    if(fields.findIndex(item=>item.props.prop==obj.props.prop)>-1){
       console.warn(`已禁止重复提交的fields:${obj.prop},如果是开发环境热更导致的请忽视警告`)
       return;
     }
@@ -115,13 +117,13 @@ import ThemeContext from "./context"
    */
   updateDescriptor(func){
     let descriptor={};
-    this.state.fields.forEach(item=>{
-       if(item.rules){
-         if(!item.prop){
+    this.state.fields.forEach(formItem=>{
+       if(formItem.props.rules){
+         if(!formItem.props.prop){
            console.warn("校验表单缺少prop")
          }
          else{
-          descriptor[item.prop]=item.rules;
+          descriptor[formItem.props.prop]=formItem.props.rules;
          }
        }
     })
@@ -263,6 +265,7 @@ import ThemeContext from "./context"
    */
   validate(callBack,notify=true){
       let model=this.getModel();
+      console.log("全部表单校验",model)
      return this.validator.validate(model, (errors, fields) => {
         try{
           notify?this.notifyAllFields(errors):null;
@@ -319,20 +322,37 @@ import ThemeContext from "./context"
    * 通知所有表单校验结果
    * @param {*} errorsArr 
    */
-  notifyAllFields(errorsArr){
-   // console.log("errorsArr",errorsArr)
+  notifyAllFields(errorsArr=[]){
+    console.log("errorsArr",JSON.stringify(errorsArr));
     /*
     *  错误信息会如此:
-    * 未通过格式:[{"message":"请输入姓名","field":"name"}],"fields":{"name":[{"message":"请输入姓名","field":"name"}]
+    * 未通过格式:[{"message":"请输入姓名","field":"name"}],{"name2":[{"message":"请输入姓名","field":"name"}]
     */
+    // for(let k in this.state.descriptor){
+    //     let item=this.getArrayItemByKey(errorsArr,"field",k);
+    //   //  console.log("赛选到的错误对象",item)
+    //     // PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
+    //     //   prop:k,
+    //     //   errors:item?[item]:item
+    //     // });
+    //     console.log("k",k,item)
+    //    // $accetpCheckedResult(
+
+    // }
+
+    // [{"message":"请输入姓名","field":"name"},{"message":"请输入姓名","field":"name2"}]
     for(let k in this.state.descriptor){
-        let item=this.getArrayItemByKey(errorsArr,"field",k);
-      //  console.log("赛选到的错误对象",item)
-        PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
-          prop:k,
-          errors:item?[item]:item
-        });
+      let formItem=this.state.fields.filter(formItem=>formItem.props.prop===k)
+      let errorItem=errorsArr?errorsArr.filter(item=>item.field===k):[];
+      console.log("error  form:",formItem[0],errorItem[0])
+      if(formItem[0]){
+       formItem[0].$accetpCheckedResult(errorItem[0]);
+      }
     }
+    // errorsArr.forEach(item=>{
+    //   console.log("this.state.fields",this.state.fields[0])
+       
+    // })
   }
   
 }

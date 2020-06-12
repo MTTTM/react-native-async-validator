@@ -21,35 +21,40 @@ class elFormItem extends Component {
     //属于需要校验的表单
     this.needCheck=this.props.prop&&this.props.rules&&this.props.rules[0];
     this.endStyles={};
-    this.accetpCheckedResult=this.accetpCheckedResult.bind(this);
+    this.$accetpCheckedResult=this.$accetpCheckedResult.bind(this);
     this.clearValidate=this.clearValidate.bind(this);
   }
   componentDidMount() {
-    //  console.log("formProps",this.context)
+    console.log("formProps",this.context)
     //最终匹配到的样式
     this.endStyles=this.context.styles?StyleSheet.create(this.context.styles):styles;
       let {CusRefName}=this.context;
-      if(this.needCheck){
-          //通知Form添加校验规则
-          PubSub.publish(`${CusRefName}${ENUM.addFieldSubScriber}`,this.props);
-          //接收错误信息
-          PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
-          //清除校验UI效果
-          PubSub.subscribe(`${CusRefName}${ENUM.clearValidate}`, this.clearValidate);
-      }
-
+      // if(this.needCheck){
+      //     //通知Form添加校验规则
+      //     PubSub.publish(`${CusRefName}${ENUM.addFieldSubScriber}`,this.props);
+      //     //接收错误信息
+      //     PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
+      //     //清除校验UI效果
+      //     PubSub.subscribe(`${CusRefName}${ENUM.clearValidate}`, this.clearValidate);
+      // }
+      // if(this&&this.needCheck){
+        this.context.elForm.$addFieldSubScriber(this);
+      // }
+        
+     
+      
 
 
   }
   componentWillUnmount(){
-    if(this.needCheck){
-      let {CusRefName}=this.context;
-      PubSub.publish(`${CusRefName}${ENUM.removeFieldSubScriber}`, this.props);
-      //不在接收结果
-      PubSub.unsubscribe(`${CusRefName}${ENUM.accetpCheckedResult}`);
-      //拒绝再处理清空UI事务
-      PubSub.unsubscribe(`${CusRefName}${ENUM.clearValidate}`);
-    }
+    // if(this.needCheck){
+    //   let {CusRefName}=this.context;
+    //   PubSub.publish(`${CusRefName}${ENUM.removeFieldSubScriber}`, this.props);
+    //   //不在接收结果
+    //   PubSub.unsubscribe(`${CusRefName}${ENUM.accetpCheckedResult}`);
+    //   //拒绝再处理清空UI事务
+    //   PubSub.unsubscribe(`${CusRefName}${ENUM.clearValidate}`);
+    // }
    
   }
   componentWillReceiveProps(nextProps,nextState){
@@ -93,21 +98,19 @@ class elFormItem extends Component {
    * @param {*} msg 
    * @param {*} data 
    * @description 通过格式： {"prop":"name","errors":null,"fields":null}
-   * @description 未通过格式:{"prop":"name","errors":[{"message":"请输入姓名","field":"name"}],"fields":{"name":[{"message":"请输入姓名","field":"name"}]}}
+   * @description 未通过格式:{"message":"请输入姓名","field":"name2"}
    */
-  accetpCheckedResult(msg,data){
-  // console.log("表单接收校验结果",JSON.stringify(data),data.prop==this.props.prop,data.prop,this.props.prop)
-
-    if(data.prop==this.props.prop){
-      if(!data.errors){
-        this.setState({pass:true,errTxt:null})
-      }
-      else{
-        let txt=data.errors[0].message;
-      //  console.log("没通过的错误文字",txt)
-        this.setState({pass:false,errTxt:txt})
-      }
-    }
+  $accetpCheckedResult(data){
+  console.log("表单接收校验结果",JSON.stringify(data))
+  if(data){
+    this.setState({pass:false,errTxt:data.message})
+    console.log("表单接收校验结果",JSON.stringify(data),
+    data.field==this.props.prop,
+    data.field,this.props.prop)
+  }
+  else{
+    this.setState({pass:true,errTxt:null})
+  }
   }
   getLabelWidth(){
     let labelWidthStyle='';

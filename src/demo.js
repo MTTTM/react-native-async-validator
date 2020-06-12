@@ -17,7 +17,8 @@ export default class Demo extends Component {
     super(props);
     this.state = {
         dynamicValidateForm:{
-            name:'dfdfff',
+            name:'',
+            name2:"",
             phone:"",
             picker:"",
             nickname:""
@@ -52,6 +53,21 @@ export default class Demo extends Component {
                           />
                     </Form.elFormItem>
                     <Form.elFormItem 
+                    label="姓名:"
+                     prop="name2"
+                     value={dynamicValidateForm.name2}
+                     rules={[
+                        { required: true, message: '请输入姓名', trigger: 'change' }
+                      ]}
+                    >
+                         <TextInput
+                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                            value={dynamicValidateForm.name2}
+                            placeholder="请输入姓名"
+                            onChangeText={text => this.changeText('name2',text)}
+                          />
+                    </Form.elFormItem>
+                    {/* <Form.elFormItem 
                     label="手机号:"
                      prop="phone"
                      value={dynamicValidateForm.phone}
@@ -79,11 +95,6 @@ export default class Demo extends Component {
                         { required: true, message: '请输入昵称' },
                       ]}
                      >
-                         {/* <TextInput
-                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                            value={dynamicValidateForm.phone}
-                            onChangeText={text => this.changeText('phone',text)}
-                          /> */}
                           <Form.elInput
                             value={dynamicValidateForm.nickname}
                             placeholder="失去焦点时候校验，自定义输入框才有效"
@@ -110,7 +121,7 @@ export default class Demo extends Component {
                           <Picker.Item label="JavaScript" value="js" />
                           <Picker.Item label="css" value="css" />
                         </Picker>
-                    </Form.elFormItem>
+                    </Form.elFormItem> */}
                     <View>
                         <TouchableOpacity onPress={((()=>this.submit()))}>
                             <View style={styles.normalBtn}>
@@ -133,6 +144,7 @@ export default class Demo extends Component {
         if(!res){
           alert("提交成功")
         }
+
     })
   }
 }
