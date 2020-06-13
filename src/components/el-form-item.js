@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Text,
   View,
@@ -15,40 +15,40 @@ class elFormItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        pass:true,//是否校验通过
-        errTxt:"",//错误提示
-        field:{}//子表单
+      pass: true,//是否校验通过
+      errTxt: "",//错误提示
+      field: null//子表单
     };
     //属于需要校验的表单
-    this.needCheck=this.props.prop&&this.props.rules&&this.props.rules[0];
-    this.endStyles={};
-    this.$accetpCheckedResult=this.$accetpCheckedResult.bind(this);
-    this.$setChildField=this.$setChildField.bind(this);
-    this.clearValidate=this.clearValidate.bind(this);
+    this.needCheck = this.props.prop && this.props.rules && this.props.rules[0];
+    this.endStyles = {};
+    this.$accetpCheckedResult = this.$accetpCheckedResult.bind(this);
+    this.$setChildField = this.$setChildField.bind(this);
+    this.clearValidate = this.clearValidate.bind(this);
   }
   componentDidMount() {
-    console.log("formProps",this.context)
+    console.log("formProps", this.context)
     //最终匹配到的样式
-    this.endStyles=this.context.styles?StyleSheet.create(this.context.styles):styles;
-      let {CusRefName}=this.context;
-      // if(this.needCheck){
-      //     //通知Form添加校验规则
-      //     PubSub.publish(`${CusRefName}${ENUM.addFieldSubScriber}`,this.props);
-      //     //接收错误信息
-      //     PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
-      //     //清除校验UI效果
-      //     PubSub.subscribe(`${CusRefName}${ENUM.clearValidate}`, this.clearValidate);
-      // }
-      // if(this&&this.needCheck){
-        this.context.elForm.$addFieldSubScriber(this);
-      // }
-        
-     
-      
+    this.endStyles = this.context.styles ? StyleSheet.create(this.context.styles) : styles;
+    let { CusRefName } = this.context;
+    // if(this.needCheck){
+    //     //通知Form添加校验规则
+    //     PubSub.publish(`${CusRefName}${ENUM.addFieldSubScriber}`,this.props);
+    //     //接收错误信息
+    //     PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
+    //     //清除校验UI效果
+    //     PubSub.subscribe(`${CusRefName}${ENUM.clearValidate}`, this.clearValidate);
+    // }
+    // if(this&&this.needCheck){
+    this.context.elForm.$addFieldSubScriber(this);
+    // }
+
+
+
 
 
   }
-  componentWillUnmount(){
+  componentWillUnmount() {
     // if(this.needCheck){
     //   let {CusRefName}=this.context;
     //   PubSub.publish(`${CusRefName}${ENUM.removeFieldSubScriber}`, this.props);
@@ -57,41 +57,27 @@ class elFormItem extends Component {
     //   //拒绝再处理清空UI事务
     //   PubSub.unsubscribe(`${CusRefName}${ENUM.clearValidate}`);
     // }
-   
+
   }
-  componentWillReceiveProps(nextProps,nextState){
-    if(this.needCheck){
-      console.log("this.need",this.props.prop,nextProps.value)
-     //绝对不等于,取反反是因为undefined!="",但是这里我们需要他们等同
-     //||(!!nextProps.value||!!this.props.value)
-      if(nextProps.value!==this.props.value){
-      //  console.log("form-item主动触发校验",nextProps.value,this.props.value)
-        //子节点非自定义表单才执行校验
-         if(!this.props.customInput){
-          //  let {CusRefName}=this.context;
-          //  PubSub.publish(`${CusRefName}${ENUM.notifyFormToCheck}`,this.props);
-         
-          this.context.elForm.$acceptCheckField(this);
-         }
-         
-         return true;
-       }
-       else{
-         return false;
-       }
+  componentWillReceiveProps(nextProps, nextState) {
+    if (this.needCheck) {
+      //非本插件自定义组件，只要改变就校验
+      if (!this.state.field) {
+        this.context.elForm.$acceptCheckField(this);
+      }
     }
-    else{
+    else {
       return false;
     }
   }
   /**
    * 清楚表单效果
    */
-  clearValidate(){
-      this.setState({
-        pass:true,//是否校验通过
-        errTxt:"",//错误提示
-     });
+  clearValidate() {
+    this.setState({
+      pass: true,//是否校验通过
+      errTxt: "",//错误提示
+    });
   }
   /**
    * 接受Form的推送的校验结果
@@ -104,83 +90,80 @@ class elFormItem extends Component {
    * @description 通过格式： {"prop":"name","errors":null,"fields":null}
    * @description 未通过格式:{"message":"请输入姓名","field":"name2"}
    */
-  $accetpCheckedResult(data){
-  console.log("表单接收校验结果",JSON.stringify(data))
-    if(data){
+  $accetpCheckedResult(data) {
+    console.log("表单接收校验结果", JSON.stringify(data))
+    if (data) {
       //更新当前组件的提示
-      this.setState({pass:false,errTxt:data.message})
+      this.setState({ pass: false, errTxt: data.message })
       //更新子组件的样式
       this.updateChildFieldStyle(data);
-      // console.log("表单接收校验结果",JSON.stringify(data),
-      // data.field==this.props.prop,
-      // data.field,this.props.prop)
     }
-    else{
-      this.setState({pass:true,errTxt:null})
-       //更新子组件的样式
-       this.updateChildFieldStyle(data);
+    else {
+      this.setState({ pass: true, errTxt: null })
+      //更新子组件的样式
+      this.updateChildFieldStyle(data);
     }
   }
-  updateChildFieldStyle(data){
-    if(this.state.field&&typeof this.state.field.$accetpCheckedResult==='function'){
+  updateChildFieldStyle(data) {
+    if (this.state.field && typeof this.state.field.$accetpCheckedResult === 'function') {
       this.state.field.$accetpCheckedResult(data);
     }
   }
-  $setChildField(elInput){
-    this.setState({'field':elInput},()=>{
-      console.log("input=== field",this.state.field)
+  $setChildField(elInput) {
+    this.setState({ 'field': elInput }, () => {
+      console.log("input=== field", this.state.field)
     });
   }
-  getLabelWidth(){
-    let labelWidthStyle='';
-    try{
-      if(this.props.hasOwnProperty("labelWidth")&&!isNaN(Number(this.props.labelWidth))){
-        labelWidthStyle=this.props.labelWidth
+  getLabelWidth() {
+    let labelWidthStyle = '';
+    try {
+      if (this.props.hasOwnProperty("labelWidth") && !isNaN(Number(this.props.labelWidth))) {
+        labelWidthStyle = this.props.labelWidth
       }
-      else if(this.context.hasOwnProperty("labelWidth")&&!isNaN(Number(this.context.labelWidth))){
-        labelWidthStyle=this.context.labelWidth
+      else if (this.context.hasOwnProperty("labelWidth") && !isNaN(Number(this.context.labelWidth))) {
+        labelWidthStyle = this.context.labelWidth
       }
-    }catch(e){}
-    return  labelWidthStyle;
+    } catch (e) { }
+    return labelWidthStyle;
   }
-  errorTxt(){
-     let labelWidth=this.getLabelWidth();
-     let lablePaddingLeftStyle=labelWidth?{paddingLeft:labelWidth}:{};
-     return (
-       <View style={{...this.endStyles.formItemErrWrap,...lablePaddingLeftStyle}}>
-          <Text style={this.endStyles.formItemErrorTxt}>{this.state.errTxt}</Text>
-       </View>
-     )
+  errorTxt() {
+    let labelWidth = this.getLabelWidth();
+    let lablePaddingLeftStyle = labelWidth ? { paddingLeft: labelWidth } : {};
+    return (
+      <View style={{ ...this.endStyles.formItemErrWrap, ...lablePaddingLeftStyle }}>
+        <Text style={this.endStyles.formItemErrorTxt}>{this.state.errTxt}</Text>
+      </View>
+    )
   }
   render() {
-    let labelWidth=this.getLabelWidth();
-    let lableWidthLeftStyle=labelWidth?{width:labelWidth}:{};
-    let {label}=this.props;
+    let labelWidth = this.getLabelWidth();
+    let lableWidthLeftStyle = labelWidth ? { width: labelWidth } : {};
+    let { label } = this.props;
     const childrenWithProps = React.Children.map(this.props.children, child =>
-      React.cloneElement(child, { field: this.props.prop,formItem:this })
+      React.cloneElement(child, { field: this.props.prop, formItem: this })
     );
 
-        return (
-            <View style={this.endStyles.formItemWrap}>
-                <View style={this.endStyles.formItemInnerWrap} {...this.props}>
-                    <View style={{...this.endStyles.formItemLeftWrap,...lableWidthLeftStyle}}>
-                            <Text style={this.endStyles.formItemLeftText}>{label}</Text>
-                    </View>
-                    <View style={{flex:1}}>
-                      {childrenWithProps}
-                    </View>
-                </View>
-                {!this.state.pass?this.errorTxt():null}
-       
-            </View>
-        )
+    return (
+      <View style={this.endStyles.formItemWrap}>
+        <View style={this.endStyles.formItemInnerWrap} {...this.props}>
+          <View style={{ ...this.endStyles.formItemLeftWrap, ...lableWidthLeftStyle }}>
+            <Text style={this.endStyles.formItemLeftText}>{label}</Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            {childrenWithProps}
+          </View>
+        </View>
+        {!this.state.pass ? this.errorTxt() : null}
+
+      </View>
+    )
   }
 }
-elFormItem.propTypes={
-    label:PropTypes.string,
-    prop:PropTypes.string
-  }
-  elFormItem.contextType = ThemeContext;  
+elFormItem.propTypes = {
+  label: PropTypes.string,
+  prop: PropTypes.string
+}
+elFormItem.contextType = ThemeContext;
 
 
 export default elFormItem;

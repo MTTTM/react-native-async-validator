@@ -37,10 +37,10 @@ export default class Demo extends Component {
                    model={dynamicValidateForm}
                    scope={this}
                    ref="dynamicValidateForm">
-                    {/* <Form.elFormItem 
+                    <Form.elFormItem 
                     label="姓名:"
                      prop="name"
-                     value={dynamicValidateForm.name}
+                    //  value={dynamicValidateForm.name}
                      rules={[
                         { required: true, message: '请输入姓名', trigger: 'change' }
                       ]}
@@ -51,7 +51,8 @@ export default class Demo extends Component {
                             placeholder="请输入姓名"
                             onChangeText={text => this.changeText('name',text)}
                           />
-                    </Form.elFormItem> */}
+                    <Text>{this.state.dynamicValidateForm.name}</Text>
+                    </Form.elFormItem>
                     {/* <Form.elFormItem 
                     label="姓名:"
                      prop="name2"
@@ -88,9 +89,9 @@ export default class Demo extends Component {
                     <Form.elFormItem 
                     label="昵称:"
                      prop="nickname"
-                     value={dynamicValidateForm.nickname}
+                    //  value={dynamicValidateForm.nickname}
                      checkOnBlur={true}
-                     customInput={true}
+                    //  customInput={true}
                      rules={[
                         { required: true, message: '请输入昵称' },
                       ]}
@@ -101,8 +102,8 @@ export default class Demo extends Component {
                             onChangeText={text => this.changeText('nickname',text)}
                           />
                     </Form.elFormItem>
-                  {/* 
-                    <Form.elFormItem 
+                  
+                    {/* <Form.elFormItem 
                     label="选择:"
                      prop="picker"
                      value={dynamicValidateForm.picker}
