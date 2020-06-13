@@ -37,7 +37,7 @@ export default class Demo extends Component {
                    model={dynamicValidateForm}
                    scope={this}
                    ref="dynamicValidateForm">
-                    <Form.elFormItem 
+                    {/* <Form.elFormItem 
                     label="姓名:"
                      prop="name"
                      value={dynamicValidateForm.name}
@@ -51,8 +51,8 @@ export default class Demo extends Component {
                             placeholder="请输入姓名"
                             onChangeText={text => this.changeText('name',text)}
                           />
-                    </Form.elFormItem>
-                    <Form.elFormItem 
+                    </Form.elFormItem> */}
+                    {/* <Form.elFormItem 
                     label="姓名:"
                      prop="name2"
                      value={dynamicValidateForm.name2}
@@ -66,7 +66,7 @@ export default class Demo extends Component {
                             placeholder="请输入姓名"
                             onChangeText={text => this.changeText('name2',text)}
                           />
-                    </Form.elFormItem>
+                    </Form.elFormItem> */}
                     {/* <Form.elFormItem 
                     label="手机号:"
                      prop="phone"
@@ -83,8 +83,8 @@ export default class Demo extends Component {
                             onChangeText={text => this.changeText('phone',text)}
                           />
                           <Text>{this.state.dynamicValidateForm.phone}</Text>
-                    </Form.elFormItem>
-
+                    </Form.elFormItem> */}
+                  
                     <Form.elFormItem 
                     label="昵称:"
                      prop="nickname"
@@ -101,7 +101,7 @@ export default class Demo extends Component {
                             onChangeText={text => this.changeText('nickname',text)}
                           />
                     </Form.elFormItem>
-
+                  {/* 
                     <Form.elFormItem 
                     label="选择:"
                      prop="picker"

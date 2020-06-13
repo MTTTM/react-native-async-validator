@@ -3,6 +3,7 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
+import ThemeContext from "./context"
 import STYLES from "./styles"
 import PubSub from 'pubsub-js'
 import ENUM from "./enum"
@@ -17,31 +18,34 @@ class ElInput extends Component {
     };
      //属于需要校验的表单
      this.needCheck=this.props.formItem.prop&&this.props.formItem.rules&&this.props.formItem.rules[0];
-    this.endStyles={};
-    try{
-      this.endStyles=this.props.form.styles?StyleSheet.create(this.props.form.styles):styles;
-    }catch(e){}
+    this.endStyles=STYLES;
+    console.log("this.endStyles",this.endStyles)
+    // try{
+    //   this.endStyles=this.context.elForm.styles?StyleSheet.create(this.context.elForm.styles):STYLES.elInput;
+    // }catch(e){}
      this.accetpCheckedResult=this.accetpCheckedResult.bind(this);
      this.clearValidate=this.clearValidate.bind(this);
   }
   componentDidMount() {
+    console.log("input---",this.props)
      if(this.needCheck){
-      let {CusRefName}=this.props.form;
-      //  //接收错误信息
-        PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
-         //清除校验UI效果
-         PubSub.subscribe(`${CusRefName}${ENUM.clearValidate}`, this.clearValidate);
+      
+      // let {CusRefName}=this.props.form;
+      // //  //接收错误信息
+      //   PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
+      //    //清除校验UI效果
+      //    PubSub.subscribe(`${CusRefName}${ENUM.clearValidate}`, this.clearValidate);
      }
     
   }
   componentWillUnmount(){
-    if(this.needCheck){
-      let {CusRefName}=this.props.form;
-      //不在接收结果
-      PubSub.unsubscribe(`${CusRefName}${ENUM.accetpCheckedResult}`);
-      //拒绝再处理清空UI事务
-      PubSub.unsubscribe(`${CusRefName}${ENUM.clearValidate}`);
-    }
+    // if(this.needCheck){
+    //   let {CusRefName}=this.props.form;
+    //   //不在接收结果
+    //   PubSub.unsubscribe(`${CusRefName}${ENUM.accetpCheckedResult}`);
+    //   //拒绝再处理清空UI事务
+    //   PubSub.unsubscribe(`${CusRefName}${ENUM.clearValidate}`);
+    // }
   }
   componentWillReceiveProps(nextProps,nextState){
     if(this.needCheck){
@@ -54,7 +58,7 @@ class ElInput extends Component {
         
       if(nextProps.props.value!==this.props.props.value&&!this.props.formItem.checkOnBlur){
       //  console.log("表单触发的校验",this.props.formItem.prop,"nextProps.props.value",nextProps.props.value,"this.props.props.value",this.props.props.value)
-          PubSub.publish(`${CusRefName}${ENUM.notifyFormToCheck}`,this.props.formItem);
+          // PubSub.publish(`${CusRefName}${ENUM.notifyFormToCheck}`,this.props.formItem);
         return true;
       }else{
         return false;
@@ -99,7 +103,7 @@ class ElInput extends Component {
   });
 }
   render() {
-    let props=this.props.props;
+    let props=this.props;
     let style=props.style?props.style:{};//普通样式覆盖
     let errStyle=props.errStyle?props.errStyle:{};//成功样式覆盖
     let succStyle=props.succStyle?props.succStyle:{};//失败样式覆盖
@@ -121,7 +125,7 @@ class ElInput extends Component {
             style={{...this.endStyles.elInput,...style,...elInputPass,...succStyle}}
             onChangeText={text => this.changeText(text)}
             onBlur={()=>this.onBlurFunc()}
-            value={this.props.props.value}
+            value={this.props.value}
             />
         ):(
           <TextInput
@@ -129,45 +133,42 @@ class ElInput extends Component {
             style={{...this.endStyles.elInput,...style,...this.endStyles.elInputError,...errStyle}}
             onChangeText={text => this.changeText(text)}
             onBlur={()=>this.onBlurFunc()}
-            value={this.props.props.value}
+            value={this.props.value}
             />
         )
     )
   }
   onBlurFunc(){
-    
-    let {checkOnBlur}=this.props.formItem;
-   // console.log("失去焦点",checkOnBlur)
-    //如果外层有传递onBlur函数
-    if(typeof this.props.props.onBlur=="function"){
-      this.props.props.onBlur();
+    let {checkOnBlur}=this.props.formItem.props;
+    if(typeof this.props.onBlur=="function"){
+      this.props.onBlur();
     }
-  
     if(checkOnBlur){
         this.checkValid();
     }
   }
   changeText(text){
       this.setState({value:text});
-      if(typeof this.props.props.onChangeText=="function"){
-        this.props.props.onChangeText(text);
+      if(typeof this.props.onChangeText=="function"){
+        this.props.onChangeText(text);
       }
-      let {checkOnBlur}=this.props.formItem;
-     // console.log("checkOnBlur",checkOnBlur)
+      let {checkOnBlur}=this.props.formItem.props;
       if(!checkOnBlur){
         this.checkValid();
-      //  console.log("这还能校验?,",checkOnBlur)
       }
   }
   checkValid(){
-    let {CusRefName}=this.props.form;
-    PubSub.publish(`${CusRefName}${ENUM.notifyFormToCheck}`,this.props.formItem)
+    // let {CusRefName}=this.props.form;
+    // PubSub.publish(`${CusRefName}${ENUM.notifyFormToCheck}`,this.props.formItem)
+      console.log("表单触发的  this.props.formItem",this.props.formItem)
+      this.context.elForm.$acceptCheckField(this.props.formItem);
   }
 }
 const styles = StyleSheet.create(STYLES);
-ElInput.propTypes={
-  props:PropTypes.object.isRequired,//TextInput组件的prop
-  formItem:PropTypes.object.isRequired,//formItem携带的信息
-  form:PropTypes.object.isRequired,//form携带的信息
-}
+// ElInput.propTypes={
+//   props:PropTypes.object.isRequired,//TextInput组件的prop
+//   formItem:PropTypes.object.isRequired,//formItem携带的信息
+//   form:PropTypes.object.isRequired,//form携带的信息
+// }
+ElInput.contextType = ThemeContext;  
 export default  ElInput;

@@ -139,6 +139,10 @@ class elFormItem extends Component {
     let labelWidth=this.getLabelWidth();
     let lableWidthLeftStyle=labelWidth?{width:labelWidth}:{};
     let {label}=this.props;
+    const childrenWithProps = React.Children.map(this.props.children, child =>
+      React.cloneElement(child, { field: this.props.prop,formItem:this })
+    );
+
         return (
             <View style={this.endStyles.formItemWrap}>
                 <View style={this.endStyles.formItemInnerWrap} {...this.props}>
@@ -146,9 +150,7 @@ class elFormItem extends Component {
                             <Text style={this.endStyles.formItemLeftText}>{label}</Text>
                     </View>
                     <View style={{flex:1}}>
-                      <FormItemContext.Provider value={{...this.props}}>
-                      { this.props.children}
-                      </FormItemContext.Provider>
+                      {childrenWithProps}
                     </View>
                 </View>
                 {!this.state.pass?this.errorTxt():null}
