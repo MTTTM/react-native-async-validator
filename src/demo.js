@@ -40,7 +40,6 @@ export default class Demo extends Component {
                     <Form.elFormItem 
                     label="姓名:"
                      prop="name"
-                    //  value={dynamicValidateForm.name}
                      rules={[
                         { required: true, message: '请输入姓名', trigger: 'change' }
                       ]}
@@ -51,27 +50,11 @@ export default class Demo extends Component {
                             placeholder="请输入姓名"
                             onChangeText={text => this.changeText('name',text)}
                           />
-                    <Text>{this.state.dynamicValidateForm.name}</Text>
                     </Form.elFormItem>
-                    {/* <Form.elFormItem 
-                    label="姓名:"
-                     prop="name2"
-                     value={dynamicValidateForm.name2}
-                     rules={[
-                        { required: true, message: '请输入姓名', trigger: 'change' }
-                      ]}
-                    >
-                         <TextInput
-                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                            value={dynamicValidateForm.name2}
-                            placeholder="请输入姓名"
-                            onChangeText={text => this.changeText('name2',text)}
-                          />
-                    </Form.elFormItem> */}
-                    {/* <Form.elFormItem 
+
+                    <Form.elFormItem 
                     label="手机号:"
                      prop="phone"
-                     value={dynamicValidateForm.phone}
                      rules={[
                         { required: true, message: '请输入手机号' },
                         { pattern: /^\d{6}$/, message: '请输入6位阿拉伯数字' }
@@ -83,15 +66,12 @@ export default class Demo extends Component {
                             placeholder="这请输入手机号"
                             onChangeText={text => this.changeText('phone',text)}
                           />
-                          <Text>{this.state.dynamicValidateForm.phone}</Text>
-                    </Form.elFormItem> */}
+                    </Form.elFormItem>
                   
                     <Form.elFormItem 
-                    label="昵称:"
+                     label="昵称:"
                      prop="nickname"
-                    //  value={dynamicValidateForm.nickname}
                      checkOnBlur={true}
-                    //  customInput={true}
                      rules={[
                         { required: true, message: '请输入昵称' },
                       ]}
@@ -103,10 +83,9 @@ export default class Demo extends Component {
                           />
                     </Form.elFormItem>
                   
-                    {/* <Form.elFormItem 
+                    <Form.elFormItem 
                     label="选择:"
                      prop="picker"
-                     value={dynamicValidateForm.picker}
                      rules={[
                         { required: true, message: '请输入选择' }
                       ]}
@@ -122,7 +101,7 @@ export default class Demo extends Component {
                           <Picker.Item label="JavaScript" value="js" />
                           <Picker.Item label="css" value="css" />
                         </Picker>
-                    </Form.elFormItem> */}
+                    </Form.elFormItem>
                     <View>
                         <TouchableOpacity onPress={((()=>this.submit()))}>
                             <View style={styles.normalBtn}>
