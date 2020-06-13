@@ -17,11 +17,13 @@ class elFormItem extends Component {
     this.state = {
         pass:true,//是否校验通过
         errTxt:"",//错误提示
+        field:{}//子表单
     };
     //属于需要校验的表单
     this.needCheck=this.props.prop&&this.props.rules&&this.props.rules[0];
     this.endStyles={};
     this.$accetpCheckedResult=this.$accetpCheckedResult.bind(this);
+    this.$setChildField=this.$setChildField.bind(this);
     this.clearValidate=this.clearValidate.bind(this);
   }
   componentDidMount() {
@@ -104,15 +106,30 @@ class elFormItem extends Component {
    */
   $accetpCheckedResult(data){
   console.log("表单接收校验结果",JSON.stringify(data))
-  if(data){
-    this.setState({pass:false,errTxt:data.message})
-    console.log("表单接收校验结果",JSON.stringify(data),
-    data.field==this.props.prop,
-    data.field,this.props.prop)
+    if(data){
+      //更新当前组件的提示
+      this.setState({pass:false,errTxt:data.message})
+      //更新子组件的样式
+      this.updateChildFieldStyle(data);
+      // console.log("表单接收校验结果",JSON.stringify(data),
+      // data.field==this.props.prop,
+      // data.field,this.props.prop)
+    }
+    else{
+      this.setState({pass:true,errTxt:null})
+       //更新子组件的样式
+       this.updateChildFieldStyle(data);
+    }
   }
-  else{
-    this.setState({pass:true,errTxt:null})
+  updateChildFieldStyle(data){
+    if(this.state.field&&typeof this.state.field.$accetpCheckedResult==='function'){
+      this.state.field.$accetpCheckedResult(data);
+    }
   }
+  $setChildField(elInput){
+    this.setState({'field':elInput},()=>{
+      console.log("input=== field",this.state.field)
+    });
   }
   getLabelWidth(){
     let labelWidthStyle='';
