@@ -1,4 +1,4 @@
-import React, { Component,PureComponent } from 'react';
+import React, { Component, PureComponent } from 'react';
 import {
   StyleSheet,
 } from 'react-native';
@@ -14,7 +14,7 @@ class elForm extends Component {
     this.state = {
       fields: [],
       descriptor: {},//符合‘async-validator’要求的格式
-      model:{}
+      model: {}
     };
     this.validator = {};
     //确保子节点添加事件时候能准确添加到本表单
@@ -26,27 +26,50 @@ class elForm extends Component {
     // this._wranCheck();
     // this.props.canPushChange(true);
   }
-  componentDidUpdate(prevProps){
-      console.log("will receive",this.props,prevProps,this.state.fields)
-      // console.log("form--------------###:prevProps.props",prevProps,"==","state",this.state.model)
+  componentDidUpdate(prevProps) {
+   // console.log("will receive", this.props, prevProps, this.state.fields)
+    // console.log("form--------------###:prevProps.props",prevProps,"==","state",this.state.model)
+   try{
+    for (let i in this.props) {
+      if (prevProps[i] !== this.props[i] && i !== 'children' && i !== 'canpush' && i !== 'canPushChange') {
+      //  console.log("prevProps[i]!==this.props[i]",prevProps[i]!==this.props[i],i)
 
-      for(let i in this.props){
-         if(prevProps[i]!==this.props[i]&&i!=='children'&&i!=='canpush'&&i!=='canPushChange'){
-          console.log("prevProps[i]!==this.props[i]",prevProps[i]!==this.props[i],i)
-           let formItem=this.state.fields.filter(FormItem=>FormItem.props.prop==i)[0];
-          console.log("form-map formItem",formItem,"i===",i,'fields',this.state.fields)
-           if(formItem){
-            this.$acceptCheckField(formItem);
-           }
-         }
+        let formItem;
+        //数组
+        if (Array.isArray(this.props[i])) {
+          for (let index = 0; index < this.props[i].length; index++) {
+            this.state.fields.forEach(FormItem=>{
+              if(FormItem&&FormItem.props&&FormItem.props.prop == `${i}.${index}.value`){
+                console.log("FormItem.props.prop",FormItem.props.prop,`${i}.${index}.value`,this.props[i][index],prevProps[i][index])
+                this.$acceptCheckField(FormItem);
+              }
+             
+            })
+          }
+
+
+        }
+        else {
+          formItem = this.state.fields.filter(FormItem => FormItem.props.prop == i)[0];
+          console.log("form-map formItem", formItem, "i===", i, 'fields', this.state.fields)
+
+        }
+        if (formItem) {
+          this.$acceptCheckField(formItem);
+        }
       }
-      return false;
+    }
+   }catch(e){
+     alert(JSON.stringify(e))
+   }
     
-    
+    return false;
+
+
   }
   render() {
     return (
-      <ThemeContext.Provider value={{ model:this.props, elForm: this }}>
+      <ThemeContext.Provider value={{ model: this.props, elForm: this }}>
         {this.props.children}
       </ThemeContext.Provider>
     )
@@ -89,13 +112,18 @@ class elForm extends Component {
  *  }
  */
   $removeFieldSubScriber(formItem) {
-    let fields = this.state.fields.filter(item => {
-      return item.prop !== formItem.prop;
-    });
-    this.setState({ fields }, () => {
-      //  console.log("卸载后的剩余的fields",fields)
-      this.updateDescriptor(() => this.updateCanPush());
-    });
+    try{
+      let fields = this.state.fields.filter(item => {
+        return item.prop !== formItem.prop;
+      });
+      this.setState({ fields }, () => {
+        //  console.log("卸载后的剩余的fields",fields)
+         this.updateDescriptor();
+      });
+    }catch(e){
+      alert(JSON.stringify(e))
+    }
+   
   }
   /**
    * 更新‘async-validator’的校验数据
@@ -123,7 +151,7 @@ class elForm extends Component {
    * 需要做数组和对象的区分
    */
   modelContain(key) {
-    let keys = key.split(".");
+    let keys = key?key.split("."):[];
     //   console.log("keys",keys,key)
     if (keys.length > 1) {
       //   console.log("进入多个的了?")
@@ -157,7 +185,7 @@ class elForm extends Component {
    * 调用前请使用this.modelContain判定是否存在改值，避免报错
    */
   getFiedValue(key) {
-    let keys = key.split(".");
+    let keys = key?key.split("."):[];
     if (keys.length > 1) {
       let result = this.props;
       for (let v = 0; v < keys.length; v++) {
@@ -174,18 +202,24 @@ class elForm extends Component {
    * 因为model可能是包含数组的对象，所以需要特别处理
    */
   getModel() {
-    let model = this.props;
+    let model = {};
+    for(let k in this.props){
+      if(k!=='canPushChange'&&k!=='children'&&k!=='labelWidth'){
+        model[k]=this.props[k];
+      }
+    }
     // console.log("his.state.fields[0]",this.state.fields[0])
     //针对
     let fieldsKeys = [];
-    try {
-      fieldsKeys = this.state.fields[0].prop.split(".");
-    } catch (e) { }
-
+    if(this.state.fields[0].props
+      &&this.state.fields[0].props.prop){
+        fieldsKeys = this.state.fields[0].props.prop.split(".");
+    }
+    console.log("fieldsKeys",this.state.fields[0].props.prop)
     if (fieldsKeys.length) {
       model = {};
       for (let v = 0; v < this.state.fields.length; v++) {
-        let field = this.state.fields[v].prop;
+        let field = this.state.fields[v].props.prop;
         let fieldValue = this.getFiedValue(field);//获取表单的值(field可能是“xx.xx”的格式)
         model[field] = fieldValue;
       }
@@ -199,6 +233,7 @@ class elForm extends Component {
    */
   _validateField(field, callBack) {
     console.log("校验单个值~~", field)
+    
     return new Promise((resolve) => {
       if (!this.modelContain(field)) {
         console.log("fields", this.state.fields)
@@ -217,31 +252,33 @@ class elForm extends Component {
       });
 
       this.updateCanPush();
+      
+
     })
   }
   /**
    * 更新是提价按钮是否可以提交
    */
   updateCanPush() {
-    let {canPushChange} = this.props;
+    let { canPushChange } = this.props;
     if (typeof canPushChange === "function") {
-     // 校验所有表单，但是不通知表单
-     if(typeof this.validate==="function"){
-      // alert("势函数")
-      this.validate((errors, fields) => {
-        console.log("errors==",errors)
-        try{
-          errors ? canPushChange(false) : canPushChange(true);
-        }catch(e){
-          alert(JSON.stringify(e))
-        }
-        
-      }, false)
-     }
-      
+      // 校验所有表单，但是不通知表单
+      if (typeof this.validate === "function") {
+        // alert("势函数")
+        this.validate((errors, fields) => {
+          console.log("errors==", errors)
+          try {
+            errors ? canPushChange(false) : canPushChange(true);
+          } catch (e) {
+            alert(JSON.stringify(e))
+          }
+
+        }, false)
+      }
+
 
     }
-    else if(canPushChange&&typeof canPushChange !== "function"){
+    else if (canPushChange && typeof canPushChange !== "function") {
       console.warn("prop canPush should be a function")
     }
   }
@@ -253,7 +290,7 @@ class elForm extends Component {
   validate(callBack, notify = true) {
     let model = this.getModel();
     console.log("全部表单校验", model)
-    if(!this.validator.validate){
+    if (!this.validator.validate) {
       return;
     }
     return this.validator.validate(model, (errors, fields) => {
@@ -315,12 +352,6 @@ class elForm extends Component {
   $acceptCheckField(formItem) {
     console.log("接收到表单的请求，开始校验", formItem.props.prop)
     this._validateField(formItem.props.prop, (errors, fields) => {
-      //  console.log("单个校验结果",errors, fields)
-      // PubSub.publish(`${this.CusRefName}${ENUM.accetpCheckedResult}`,{
-      //   prop:obj.prop,
-      //   errors,
-      //   fields
-      // });
       console.log("校验单个", errors)
       formItem.$accetpCheckedResult(errors);
     })

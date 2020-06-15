@@ -37,10 +37,9 @@ export default class Demo extends Component {
                   <Text>动态表单(Array)1</Text>
                </View>
                 <Form.elForm 
-                   model={dynamicValidateForm}
-                   scope={this}
-                   canPush="canPush"
+                   {...dynamicValidateForm}
                    labelWidth={80}
+                   canPushChange={pass => this.setState({ canpush: pass })}
                    ref="dynamicValidateForm">
 
                     {
@@ -50,7 +49,7 @@ export default class Demo extends Component {
                                 key={item.key}
                                 label={`姓名:${index}`}
                                  prop={`form.${index}.value`}
-                                 value={dynamicValidateForm.form[index].value}
+
                                  rules={[
                                     { required: true, message: `请输入姓名${index}` }
                                   ]}
@@ -77,7 +76,7 @@ export default class Demo extends Component {
                     </View>
                     <View style={{marginTop:20}}>
                         {
-                          this.state.canPush?(
+                          this.state.canpush?(
                             <TouchableOpacity onPress={((()=>this.submit()))}>
                               <View style={styles.normalBtn}>
                                       <Text style={styles.normalBtnTxt}>点击提交</Text>
@@ -112,7 +111,7 @@ deleteFun(key){
     this.setState({dynamicValidateForm:{...this.state.dynamicValidateForm}})
 }
 addNew(){
-    let len=this.state.dynamicValidateForm.form.length;
+    let len=new Date().getTime();
     this.state.dynamicValidateForm.form.push({
         value:'',
         key:len
