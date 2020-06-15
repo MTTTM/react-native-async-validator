@@ -48,28 +48,6 @@ class ElInput extends PureComponent {
     //   PubSub.unsubscribe(`${CusRefName}${ENUM.clearValidate}`);
     // }
   }
-  // componentWillReceiveProps(nextProps, nextState) {
-  //   if (this.needCheck) {
-
-
-  //     //两次值不一样，且非失去焦点才校验，才会触发校验
-  //     //这里需要使用绝对不等于，因为undefined!="" 等于false，
-  //     //但是我们需要他们等同，所以且需要取反反做对比
-  //     //||(!!nextProps.props.value||!!this.props.props.value))
-  //     console.log("input====nextProps.props",nextProps.props)
-  //     if (nextProps.props.value !== this.props.props.value && !this.props.formItem.checkOnBlur) {
-  //       //  console.log("表单触发的校验",this.props.formItem.prop,"nextProps.props.value",nextProps.props.value,"this.props.props.value",this.props.props.value)
-  //       // PubSub.publish(`${CusRefName}${ENUM.notifyFormToCheck}`,this.props.formItem);
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }
-  //   else {
-  //     return false;
-  //   }
-
-  // }
   /**
   * 接受Form的推送的校验结果
   * 
@@ -163,10 +141,5 @@ class ElInput extends PureComponent {
   }
 }
 const styles = StyleSheet.create(STYLES);
-// ElInput.propTypes={
-//   props:PropTypes.object.isRequired,//TextInput组件的prop
-//   formItem:PropTypes.object.isRequired,//formItem携带的信息
-//   form:PropTypes.object.isRequired,//form携带的信息
-// }
 ElInput.contextType = ThemeContext;
 export default ElInput;
