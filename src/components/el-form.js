@@ -27,42 +27,47 @@ class elForm extends Component {
     // this.props.canPushChange(true);
   }
   componentDidUpdate(prevProps) {
-   // console.log("will receive", this.props, prevProps, this.state.fields)
+    console.log("will receive", this.props, prevProps)
     // console.log("form--------------###:prevProps.props",prevProps,"==","state",this.state.model)
-   try{
-    for (let i in this.props) {
-      if (prevProps[i] !== this.props[i] && i !== 'children' && i !== 'canpush' && i !== 'canPushChange') {
-      //  console.log("prevProps[i]!==this.props[i]",prevProps[i]!==this.props[i],i)
+    try {
+      for (let i in this.props) {
+        if (prevProps[i] !== this.props[i] && i !== 'children' && i !== 'canpush' && i !== 'canPushChange') {
+          //  console.log("prevProps[i]!==this.props[i]",prevProps[i]!==this.props[i],i)
 
-        let formItem;
-        //数组
-        if (Array.isArray(this.props[i])) {
-          for (let index = 0; index < this.props[i].length; index++) {
-            this.state.fields.forEach(FormItem=>{
-              if(FormItem&&FormItem.props&&FormItem.props.prop == `${i}.${index}.value`){
-                console.log("FormItem.props.prop",FormItem.props.prop,`${i}.${index}.value`,this.props[i][index],prevProps[i][index])
-                this.$acceptCheckField(FormItem);
+          let formItem;
+          //数组
+          if (Array.isArray(this.props[i])) {
+            try {
+              for (let index = 0; index < this.props[i].length; index++) {
+                this.state.fields.forEach(FormItem => {
+                  if (FormItem && FormItem.props && FormItem.props.prop == `${i}.${index}.value` && this.props[i][index] != prevProps[i][index]) {
+                    console.log("FormItem.props.prop", FormItem.props.prop, `${i}.${index}.value`, this.props[i][index], prevProps[i][index])
+                    this.$acceptCheckField(FormItem);
+                  }
+
+                })
               }
-             
-            })
+            } catch (e) {
+              console.log("error", e)
+            }
+
+
           }
+          else if (FormItem) {
 
+            formItem = this.state.fields.filter(FormItem => FormItem.props.prop == i)[0];
+            console.log("form-map formItem", formItem, "i===", i, 'fields', this.state.fields)
 
-        }
-        else {
-          formItem = this.state.fields.filter(FormItem => FormItem.props.prop == i)[0];
-          console.log("form-map formItem", formItem, "i===", i, 'fields', this.state.fields)
-
-        }
-        if (formItem) {
-          this.$acceptCheckField(formItem);
+          }
+          if (formItem) {
+            this.$acceptCheckField(formItem);
+          }
         }
       }
+    } catch (e) {
+      alert(JSON.stringify(e))
     }
-   }catch(e){
-     alert(JSON.stringify(e))
-   }
-    
+
     return false;
 
 
@@ -112,18 +117,18 @@ class elForm extends Component {
  *  }
  */
   $removeFieldSubScriber(formItem) {
-    try{
+    try {
       let fields = this.state.fields.filter(item => {
         return item.prop !== formItem.prop;
       });
       this.setState({ fields }, () => {
         //  console.log("卸载后的剩余的fields",fields)
-         this.updateDescriptor();
+        this.updateDescriptor(() => this.updateCanPush());
       });
-    }catch(e){
+    } catch (e) {
       alert(JSON.stringify(e))
     }
-   
+
   }
   /**
    * 更新‘async-validator’的校验数据
@@ -151,7 +156,7 @@ class elForm extends Component {
    * 需要做数组和对象的区分
    */
   modelContain(key) {
-    let keys = key?key.split("."):[];
+    let keys = key ? key.split(".") : [];
     //   console.log("keys",keys,key)
     if (keys.length > 1) {
       //   console.log("进入多个的了?")
@@ -185,46 +190,54 @@ class elForm extends Component {
    * 调用前请使用this.modelContain判定是否存在改值，避免报错
    */
   getFiedValue(key) {
-    let keys = key?key.split("."):[];
-    if (keys.length > 1) {
-      let result = this.props;
-      for (let v = 0; v < keys.length; v++) {
-        result = result[keys[v]];
+    try {
+      let keys = key ? key.split(".") : [];
+      if (keys.length > 1) {
+        let result = this.props;
+        for (let v = 0; v < keys.length; v++) {
+          result = result[keys[v]];
+        }
+        return result;
       }
-      return result;
-    }
-    else {
-      console.log("key", key, this.props, this.props[key])
-      return this.props[key];
+      else {
+        console.log("key", key, this.props, this.props[key])
+        return this.props[key];
+      }
+    } catch (e) {
+      console.log("err", err)
     }
   }
   /**
    * 因为model可能是包含数组的对象，所以需要特别处理
    */
   getModel() {
-    let model = {};
-    for(let k in this.props){
-      if(k!=='canPushChange'&&k!=='children'&&k!=='labelWidth'){
-        model[k]=this.props[k];
+    try {
+      let model = {};
+      for (let k in this.props) {
+        if (k !== 'canPushChange' && k !== 'children' && k !== 'labelWidth') {
+          model[k] = this.props[k];
+        }
       }
-    }
-    // console.log("his.state.fields[0]",this.state.fields[0])
-    //针对
-    let fieldsKeys = [];
-    if(this.state.fields[0].props
-      &&this.state.fields[0].props.prop){
+      // console.log("his.state.fields[0]",this.state.fields[0])
+      //针对
+      let fieldsKeys = [];
+      if (this.state.fields[0]&&this.state.fields[0].props
+        && this.state.fields[0].props.prop) {
         fieldsKeys = this.state.fields[0].props.prop.split(".");
-    }
-    console.log("fieldsKeys",this.state.fields[0].props.prop)
-    if (fieldsKeys.length) {
-      model = {};
-      for (let v = 0; v < this.state.fields.length; v++) {
-        let field = this.state.fields[v].props.prop;
-        let fieldValue = this.getFiedValue(field);//获取表单的值(field可能是“xx.xx”的格式)
-        model[field] = fieldValue;
       }
+      if (fieldsKeys.length) {
+        model = {};
+        for (let v = 0; v < this.state.fields.length; v++) {
+          let field = this.state.fields[v].props.prop;
+          let fieldValue = this.getFiedValue(field);//获取表单的值(field可能是“xx.xx”的格式)
+          model[field] = fieldValue;
+        }
+      }
+      return model;
+    } catch (e) {
+      console.log("err", e)
     }
-    return model;
+
   }
   /**
    * 校验单个表单
@@ -233,7 +246,7 @@ class elForm extends Component {
    */
   _validateField(field, callBack) {
     console.log("校验单个值~~", field)
-    
+
     return new Promise((resolve) => {
       if (!this.modelContain(field)) {
         console.log("fields", this.state.fields)
@@ -252,7 +265,7 @@ class elForm extends Component {
       });
 
       this.updateCanPush();
-      
+
 
     })
   }
@@ -260,26 +273,30 @@ class elForm extends Component {
    * 更新是提价按钮是否可以提交
    */
   updateCanPush() {
-    let { canPushChange } = this.props;
-    if (typeof canPushChange === "function") {
-      // 校验所有表单，但是不通知表单
-      if (typeof this.validate === "function") {
-        // alert("势函数")
-        this.validate((errors, fields) => {
-          console.log("errors==", errors)
-          try {
-            errors ? canPushChange(false) : canPushChange(true);
-          } catch (e) {
-            alert(JSON.stringify(e))
-          }
+    try {
+      let { canPushChange } = this.props;
+      if (typeof canPushChange === "function") {
+        // 校验所有表单，但是不通知表单
+        if (typeof this.validate === "function") {
+          // alert("势函数")
+          this.validate((errors, fields) => {
+            console.log("errors==", errors)
+            try {
+              errors ? canPushChange(false) : canPushChange(true);
+            } catch (e) {
+              alert(JSON.stringify(e))
+            }
 
-        }, false)
+          }, false)
+        }
+
+
       }
-
-
-    }
-    else if (canPushChange && typeof canPushChange !== "function") {
-      console.warn("prop canPush should be a function")
+      else if (canPushChange && typeof canPushChange !== "function") {
+        console.warn("prop canPush should be a function")
+      }
+    } catch (e) {
+      console.log("err", e)
     }
   }
   /**
@@ -315,7 +332,7 @@ class elForm extends Component {
    * 清空校验效果，但是不清空值
    */
   clearValidate() {
-    PubSub.publish(`${this.CusRefName}${ENUM.clearValidate}`);
+    // PubSub.publish(`${this.CusRefName}${ENUM.clearValidate}`);
   }
   /**
    * 通过数组里面的对象的key来获取指定数组元素

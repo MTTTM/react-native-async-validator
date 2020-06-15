@@ -96,9 +96,12 @@ export default class Demo extends Component {
         )
   }
   changeText(index,text){
-    this.state.dynamicValidateForm.form[index].value=text;
-    this.state.dynamicValidateForm.form=[...this.state.dynamicValidateForm.form];
-    this.setState({dynamicValidateForm:{...this.state.dynamicValidateForm}})
+    let item={...this.state.dynamicValidateForm.form[index]};
+    item.value=text;
+    let arr=[...this.state.dynamicValidateForm.form];
+    arr[index]=item;
+    //最后一步才修改，这样才能在form的componentDidUpdate拿到对比值
+    this.setState({dynamicValidateForm:{form:arr}})
 }
 deleteFun(key){
     if(this.state.dynamicValidateForm.form.length==1){
