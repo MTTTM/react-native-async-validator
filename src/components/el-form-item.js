@@ -57,25 +57,25 @@ class elFormItem extends Component {
     //   //拒绝再处理清空UI事务
     //   PubSub.unsubscribe(`${CusRefName}${ENUM.clearValidate}`);
     // }
-
+    this.context.elForm.$removeFieldSubScriber(this)
   }
   //componentWillReceiveProps
   //UNSAFE_componentWillUpdate(nextProps, nextState)
-  UNSAFE_componentWillUpdate(nextProps, nextState){
-    // console.log("form-item::nextProps, nextState",nextProps,"==", nextState.elForm.props.canpush)
-    if (this.needCheck) {
-      //非本插件自定义组件，只要改变就校验
-      //只有当前组件的校验结果和上一次不一样适合时候才会触发form组件的校验，否则会死循环
-      console.log("form-item:nextState",nextState)
-      // if (!this.state.field&&nextState.pass!=this.state.pass) {
-      //   this.context.elForm.$acceptCheckField(this);
-      // }
-      return true;
-    }
-    else {
-      return false;
-    }
-  }
+  // UNSAFE_componentWillUpdate(nextProps, nextState){
+  //   // console.log("form-item::nextProps, nextState",nextProps,"==", nextState.elForm.props.canpush)
+  //   if (this.needCheck) {
+  //     //非本插件自定义组件，只要改变就校验
+  //     //只有当前组件的校验结果和上一次不一样适合时候才会触发form组件的校验，否则会死循环
+  //     console.log("form-item:nextState",nextState)
+  //     // if (!this.state.field&&nextState.pass!=this.state.pass) {
+  //     //   this.context.elForm.$acceptCheckField(this);
+  //     // }
+  //     return true;
+  //   }
+  //   else {
+  //     return false;
+  //   }
+  // }
   /**
    * 清楚表单效果
    */

@@ -26,35 +26,11 @@ class elForm extends Component {
     // this._wranCheck();
     // this.props.canPushChange(true);
   }
-  componentWillUnmount() {
-    //  PubSub.unsubscribe(`${this.CusRefName}${ENUM.addFieldSubScriber}`);
-    //  PubSub.unsubscribe(`${this.CusRefName}${ENUM.removeFieldSubScriber}`);
-    //  PubSub.unsubscribe(`${this.CusRefName}${ENUM.notifyFormToCheck}`);
-  }
-
-  // componentDidUpdate(prevProps, prevState, snapshot){
-  //   console.log("????ffkfkfk",prevProps.model,this.props.model)
-  //   if(prevProps.model.name!==this.props.model.name){
-  //     alert("为什么他们总是相对，他是个字符串，不是数字也不是对象")
-  //   }
-  //   // for(let i in prevProps.model){
-  //   //   console.log("prevProps.model[i]!==this.props.model[i]",prevProps.model[i],this.props.model[i],snapshot)
-  //   //    if(prevProps.model[i]!==this.props.model[i]){
-  //   //      let formItem=this.nextState.fields.filter(FormItem=>FormItem.props.prop==i)[0];
-  //   //      console.log("form-map formItem",formItem,i)
-  //   //      if(formItem){
-  //   //       this.$acceptCheckField(formItem);
-  //   //      }
-  //   //    }
-  //   // }
-    
-  // }
   componentDidUpdate(prevProps){
-     // console.log("will receive",this.props,prevProps,this.state.fields)
+      console.log("will receive",this.props,prevProps,this.state.fields)
       // console.log("form--------------###:prevProps.props",prevProps,"==","state",this.state.model)
 
       for(let i in this.props){
-       
          if(prevProps[i]!==this.props[i]&&i!=='children'&&i!=='canpush'&&i!=='canPushChange'){
           console.log("prevProps[i]!==this.props[i]",prevProps[i]!==this.props[i],i)
            let formItem=this.state.fields.filter(FormItem=>FormItem.props.prop==i)[0];
@@ -67,17 +43,6 @@ class elForm extends Component {
       return false;
     
     
-  }
-  _wranCheck() {
-    // let canPush = this.props.canPush;
-    // if (canPush) {
-    //   if (!this.props.scope.state.hasOwnProperty(canPush)) {
-    //     console.warn("canPush在state里面不存在");
-    //   }
-    //   else if (this.props.scope.state[canPush] == true) {
-    //     console.warn("canPush默认应该是false，或者可以转换成false，但是现在它是true或者可以转换成true");
-    //   }
-    // }
   }
   render() {
     return (
@@ -103,7 +68,7 @@ class elForm extends Component {
     //不允许重复追加，开启开发环境热更也会重复触发追加(这行代码能避免)
     // elFormItem.props.prop
     if (fields.findIndex(item => item.props.prop == obj.props.prop) > -1) {
-      console.warn(`已禁止重复提交的fields:${obj.prop},如果是开发环境热更导致的请忽视警告`)
+      // console.warn(`已禁止重复提交的fields:${obj.prop},如果是开发环境热更导致的请忽视警告`)
       return;
     }
     fields.push(obj);
@@ -123,14 +88,9 @@ class elForm extends Component {
  *  ]"
  *  }
  */
-  removeFieldSubScriber(msg, obj) {
-    //如果不是当前Form的子节点触发的时间不接受
-    if (msg !== `${this.CusRefName}${ENUM.removeFieldSubScriber}`) {
-      return;
-    }
-    // console.log("删除的Fied",obj)
+  $removeFieldSubScriber(formItem) {
     let fields = this.state.fields.filter(item => {
-      return item.prop !== obj.prop;
+      return item.prop !== formItem.prop;
     });
     this.setState({ fields }, () => {
       //  console.log("卸载后的剩余的fields",fields)
@@ -269,6 +229,7 @@ class elForm extends Component {
      if(typeof this.validate==="function"){
       // alert("势函数")
       this.validate((errors, fields) => {
+        console.log("errors==",errors)
         try{
           errors ? canPushChange(false) : canPushChange(true);
         }catch(e){
@@ -280,7 +241,7 @@ class elForm extends Component {
       
 
     }
-    else if(canPush&&typeof canPush !== "function"){
+    else if(canPushChange&&typeof canPushChange !== "function"){
       console.warn("prop canPush should be a function")
     }
   }
@@ -368,12 +329,10 @@ class elForm extends Component {
 }
 
 elForm.propTypes = {
-  // model: PropTypes.object.isRequired,
   canPushChange: PropTypes.oneOfType([
     PropTypes.function,
     undefined
   ]),
-  canpush:PropTypes.bool
 }
 
 const styles = StyleSheet.create({

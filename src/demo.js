@@ -35,8 +35,7 @@ export default class Demo extends Component {
                   <Text>点击提交去校验</Text>
                </View>
                 <Form.elForm 
-                   model={dynamicValidateForm}
-                   scope={this}
+                   {...dynamicValidateForm}
                    ref="dynamicValidateForm">
                     <Form.elFormItem 
                     label="姓名:"
