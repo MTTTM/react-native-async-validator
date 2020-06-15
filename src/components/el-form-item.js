@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component,PureComponent} from 'react';
 import {
   Text,
   View,
@@ -15,7 +15,7 @@ class elFormItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pass: true,//是否校验通过
+      pass: false,//是否校验通过
       errTxt: "",//错误提示
       field: null//子表单
     };
@@ -39,9 +39,9 @@ class elFormItem extends Component {
     //     //清除校验UI效果
     //     PubSub.subscribe(`${CusRefName}${ENUM.clearValidate}`, this.clearValidate);
     // }
-    // if(this&&this.needCheck){
-    this.context.elForm.$addFieldSubScriber(this);
-    // }
+     if(this.needCheck){
+         this.context.elForm.$addFieldSubScriber(this);
+     }
 
 
 
@@ -59,12 +59,18 @@ class elFormItem extends Component {
     // }
 
   }
-  componentWillReceiveProps(nextProps, nextState) {
+  //componentWillReceiveProps
+  //UNSAFE_componentWillUpdate(nextProps, nextState)
+  UNSAFE_componentWillUpdate(nextProps, nextState){
+    // console.log("form-item::nextProps, nextState",nextProps,"==", nextState.elForm.props.canpush)
     if (this.needCheck) {
       //非本插件自定义组件，只要改变就校验
-      if (!this.state.field) {
-        this.context.elForm.$acceptCheckField(this);
-      }
+      //只有当前组件的校验结果和上一次不一样适合时候才会触发form组件的校验，否则会死循环
+      console.log("form-item:nextState",nextState)
+      // if (!this.state.field&&nextState.pass!=this.state.pass) {
+      //   this.context.elForm.$acceptCheckField(this);
+      // }
+      return true;
     }
     else {
       return false;

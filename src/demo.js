@@ -22,12 +22,13 @@ export default class Demo extends Component {
             phone:"",
             picker:"",
             nickname:""
-        }
+        },
     };
   }
   componentDidMount() {}
   render() {
         let {dynamicValidateForm} =this.state;
+        
         return (
           <View style={{marginHorizontal:10}}>
                <View style={{paddingVertical:10,marginBottom:10,borderBottomColor:"#ccc",borderBottomWidth:1}}>
