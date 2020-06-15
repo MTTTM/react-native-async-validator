@@ -117,7 +117,7 @@ class elForm extends Component {
   $removeFieldSubScriber(formItem) {
     try {
       let fields = this.state.fields.filter(item => {
-        return item.props.prop !== formItem.prop;
+        return item.props.prop !== formItem.props.prop;
       });
       this.setState({ fields }, () => {
          console.log("卸载后的剩余的fields",fields)
