@@ -34,22 +34,22 @@ class elForm extends Component {
           let formItem;
           //数组
           if (Array.isArray(this.props[i])) {
-            //如果是删除操作，就不再校验改formItem，因为可以已销毁
-            if(this.props[i].length<prevProps[i].length){
-              console.log("删除炒作",this.props[i],prevProps[i])
-              let index='nothing';
-              let deleItem= prevProps[i].filter((FormItem,itemIndex)=>{
-                let t=this.props[i].every(el=>el.key!=FormItem.key)
-                console.log("t",t);
-                if(t){
-                  index=itemIndex;
-                }
-                return t;
-              })[0];
-               console.log("被删除的元素",deleItem,this.state.fields,index)
-               this.$removeFieldSubScriber(`${i}.${index}.value`);
-              return;
-            }
+            // //如果是删除操作，就不再校验改formItem，因为可以已销毁
+            // if(this.props[i].length<prevProps[i].length){
+            //   console.log("删除炒作",this.props[i],prevProps[i])
+            //   let index='nothing';
+            //   let deleItem= prevProps[i].filter((FormItem,itemIndex)=>{
+            //     let t=this.props[i].every(el=>el.key!=FormItem.key)
+            //     console.log("t",t);
+            //     if(t){
+            //       index=itemIndex;
+            //     }
+            //     return t;
+            //   })[0];
+            //    console.log("被删除的元素",deleItem,this.state.fields,index)
+            //    this.$removeFieldSubScriber(`${i}.${index}.value`);
+            //   return;
+            // }
             try {
               for (let index = 0; index < this.props[i].length; index++) {
                 this.state.fields.forEach(FormItem => {
@@ -127,23 +127,19 @@ class elForm extends Component {
  *  ]"
  *  }
  */
-  $removeFieldSubScriber(key) {
-     console.log("this.state.fields $",this.state.fields,key)
+  $removeFieldSubScriber(formItem) {
+    //  console.log("this.state.fields $",this.state.fields,formItem.props.prop)
     try {
-      // let fields = this.state.fields.filter(item => {
-      //   return item.props.prop !== key;
-      // });
-      
       for(let i=0;i<this.state.fields.length;i++){
         //删除第一个同名key的，后面的会自动补回来，否则会出现
-          if(this.state.fields[i].props.prop=== key){
+          if(this.state.fields[i].props.prop=== formItem.props.prop){
             this.state.fields.splice(i,1);
-            console.log("匹配到要卸载的",this.state.fields)
+            // console.log("匹配到要卸载的",this.state.fields)
             break;
           }
       }
       this.setState({ fields:[...this.state.fields] }, () => {
-         console.log("卸载后的剩余的fields",this.state.fields)
+        //  console.log("卸载后的剩余的fields",this.state.fields)
         this.updateDescriptor(() => this.updateCanPush());
       });
     } catch (e) {
