@@ -61,7 +61,7 @@ export default class Demo extends Component {
                                             placeholder={`请输入姓名${index}`}
                                             onChangeText={text => this.changeText(index,text)}
                                         />
-                                        <Text onPress={(()=>this.deleteFun(item.key))}>DELETE</Text>
+                        <Text onPress={(()=>this.deleteFun(item.key))}>DELETE {`form.${index}.value`}</Text>
                                      </View>
                                 </Form.elFormItem>
                             )
@@ -108,10 +108,10 @@ deleteFun(key){
         alert("至少保留一个")
         return;
     }
-    this.state.dynamicValidateForm.form=this.state.dynamicValidateForm.form.filter(item=>{
+    let form =this.state.dynamicValidateForm.form.filter(item=>{
         return item.key!=key;
     })
-    this.setState({dynamicValidateForm:{...this.state.dynamicValidateForm}})
+    this.setState({dynamicValidateForm:{form:form}})
 }
 addNew(){
     let len=new Date().getTime();

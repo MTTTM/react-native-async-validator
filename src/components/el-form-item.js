@@ -49,6 +49,7 @@ class elFormItem extends Component {
 
   }
   componentWillUnmount() {
+    console.log("卸载!~!!!!",this)
     this.context.elForm.$removeFieldSubScriber(this)
   }
 

@@ -117,14 +117,14 @@ class elForm extends Component {
   $removeFieldSubScriber(formItem) {
     try {
       let fields = this.state.fields.filter(item => {
-        return item.prop !== formItem.prop;
+        return item.props.prop !== formItem.prop;
       });
       this.setState({ fields }, () => {
-        //  console.log("卸载后的剩余的fields",fields)
+         console.log("卸载后的剩余的fields",fields)
         this.updateDescriptor(() => this.updateCanPush());
       });
     } catch (e) {
-      console.log("error",e)
+      console.log("$removeFieldSubScriber error",e)
     }
 
   }
@@ -304,7 +304,7 @@ class elForm extends Component {
    */
   validate(callBack, notify = true) {
     let model = this.getModel();
-    console.log("全部表单校验", model)
+    console.log("全部表单校验", model,this.state.fields)
     if (!this.validator.validate) {
       return;
     }
