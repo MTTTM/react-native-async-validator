@@ -53,19 +53,17 @@ class elForm extends Component {
 
 
           }
-          else if (FormItem) {
+          else{
 
             formItem = this.state.fields.filter(FormItem => FormItem.props.prop == i)[0];
+            this.$acceptCheckField(formItem);
             console.log("form-map formItem", formItem, "i===", i, 'fields', this.state.fields)
 
-          }
-          if (formItem) {
-            this.$acceptCheckField(formItem);
           }
         }
       }
     } catch (e) {
-      alert(JSON.stringify(e))
+     console.log("error",e)
     }
 
     return false;
@@ -126,7 +124,7 @@ class elForm extends Component {
         this.updateDescriptor(() => this.updateCanPush());
       });
     } catch (e) {
-      alert(JSON.stringify(e))
+      console.log("error",e)
     }
 
   }
@@ -284,7 +282,7 @@ class elForm extends Component {
             try {
               errors ? canPushChange(false) : canPushChange(true);
             } catch (e) {
-              alert(JSON.stringify(e))
+              console.log("err",e)
             }
 
           }, false)
