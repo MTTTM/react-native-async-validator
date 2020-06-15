@@ -49,7 +49,6 @@ export default class Demo extends Component {
                                 key={item.key}
                                 label={`姓名:${index}`}
                                  prop={`form.${index}.value`}
-
                                  rules={[
                                     { required: true, message: `请输入姓名${index}` }
                                   ]}
@@ -61,7 +60,7 @@ export default class Demo extends Component {
                                             placeholder={`请输入姓名${index}`}
                                             onChangeText={text => this.changeText(index,text)}
                                         />
-                        <Text onPress={(()=>this.deleteFun(item.key))}>DELETE {`form.${index}.value`}</Text>
+                                        <Text onPress={(()=>this.deleteFun(item.key))}>DELETE {`form.${index}.value`}</Text>
                                      </View>
                                 </Form.elFormItem>
                             )

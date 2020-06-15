@@ -48,10 +48,10 @@ class elFormItem extends Component {
 
 
   }
-  componentWillUnmount() {
-    console.log("卸载!~!!!!",this)
-    this.context.elForm.$removeFieldSubScriber(this)
-  }
+  // componentWillUnmount() {
+  //   console.log("卸载!~!!!!",this)
+  //   this.context.elForm.$removeFieldSubScriber(this)
+  // }
 
   /**
    * 清楚表单效果
