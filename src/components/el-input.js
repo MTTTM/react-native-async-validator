@@ -128,10 +128,6 @@ class ElInput extends PureComponent {
     if (typeof this.props.onChangeText == "function") {
       this.props.onChangeText(text);
     }
-    let { checkOnBlur } = this.props.formItem.props;
-    if (!checkOnBlur) {
-      this.checkValid();
-    }
   }
   checkValid() {
     // let {CusRefName}=this.props.form;

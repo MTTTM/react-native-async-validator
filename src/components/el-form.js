@@ -34,9 +34,10 @@ class elForm extends Component {
             try {
               for (let index = 0; index < model[i].length; index++) {
                 this.state.fields.forEach(FormItem => {
-                  if (FormItem.props.prop == `${i}.${index}.value` && model[i][index] != prevProps.model[i][index]) {
+                  if (FormItem.props.prop == `${i}.${index}.value` 
+                  && model[i][index] != prevProps.model[i][index]) {
                     // console.log("FormItem.props.prop", FormItem.props.prop, `${i}.${index}.value`, model[i][index], prevProps.model[i][index])
-                    this.$acceptCheckField(FormItem);
+                    !FormItem.props.checkOnBlur&&this.$acceptCheckField(FormItem);
                   }
 
                 })
@@ -52,8 +53,11 @@ class elForm extends Component {
             try{
               if(model[i] != prevProps.model[i]){
                 formItem = this.state.fields.filter(FormItem => FormItem.props.prop == i)[0];
-                console.log("this.state.fields ...",this.state.fields,formItem)
-                this.$acceptCheckField(formItem);
+                // console.log("this.state.fields ...",this.state.fields,formItem)
+                if(formItem&&!formItem.props.checkOnBlur){
+                  this.$acceptCheckField(formItem);
+                }
+                
               }
               
             }catch(e){

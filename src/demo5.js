@@ -31,7 +31,7 @@ export default class Demo extends Component {
                   <Text>只有失去焦点才校验 checkOnBlur和customInput属性配合</Text>
                </View>
                 <Form.elForm 
-                   {...dynamicValidateForm}
+                   model={dynamicValidateForm}
                    labelWidth={60}
                    ref="dynamicValidateForm">
                     <Form.elFormItem 
@@ -96,7 +96,7 @@ export default class Demo extends Component {
         )
   }
   changeText(type,text){
-    let obj=this.state.dynamicValidateForm;
+    let obj={...this.state.dynamicValidateForm};
     obj[type]=text;
     this.setState({dynamicValidateForm:obj})
 }
