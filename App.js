@@ -33,12 +33,12 @@ import Demo4 from "./src/demo4"
 import Demo5 from "./src/demo5"
 import Demo6 from "./src/demo6"
 import Demo7 from "./src/demo7"
-// import Demo8 from "./src/demo8"
+import Demo8 from "./src/demo8"
 class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-        type:"demo7",
+        type:"demo8",
         list:[
            "demo1",
            "demo2",

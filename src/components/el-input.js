@@ -81,8 +81,8 @@ class ElInput extends PureComponent {
   render() {
     let props = this.props;
     let style = props.style ? props.style : {};//普通样式覆盖
-    let errStyle = props.errStyle ? props.errStyle : {};//成功样式覆盖
-    let succStyle = props.succStyle ? props.succStyle : {};//失败样式覆盖
+    let errStyle = props.errStyle ? Object.assign({},this.endStyles.elInputError,props.errStyle) :  this.endStyles.elInputError;//成功样式覆盖
+    let succStyle = props.succStyle ? Object.assign({},this.endStyles.succStyle,props.succStyle,) :  this.endStyles.succStyle;//失败样式覆盖
     //console.log("成功的样式",succStyle,this.props.props.value)
     let otherProps = {};
     for (let k in props) {
@@ -94,6 +94,7 @@ class ElInput extends PureComponent {
     //执行过校验的样式(不一定校验通过)
     let elInputPass = this.state.afterValid ? this.endStyles.elInputPass : {};
     let statusStyle=this.state.afterValid?(this.state.pass?succStyle:errStyle):{};
+    console.log("this.state.pass",this.state.pass)
     return (
         <TextInput
           {...otherProps}
