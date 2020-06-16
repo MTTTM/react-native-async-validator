@@ -66,9 +66,12 @@ class elForm extends Component {
           else{
 
             try{
-              console.log("this.state.fields ...",this.state.fields)
-              formItem = this.state.fields.filter(FormItem => FormItem.props.prop == i)[0];
-              this.$acceptCheckField(formItem);
+              if(this.props.model[i] != prevProps.model[i]){
+                formItem = this.state.fields.filter(FormItem => FormItem.props.prop == i)[0];
+                console.log("this.state.fields ...",this.state.fields,formItem)
+                this.$acceptCheckField(formItem);
+              }
+              
             }catch(e){
               console.log("e==>",e)
             }
