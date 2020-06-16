@@ -49,7 +49,7 @@ export default class Demo extends Component {
           </TouchableOpacity>
         </View>
         <Form.elForm
-          {...dynamicValidateForm}
+          model={dynamicValidateForm}
           canPushChange={pass => this.setState({ canpush: pass })}
           ref="dynamicValidateForm">
           <Form.elFormItem
@@ -129,7 +129,7 @@ export default class Demo extends Component {
     )
   }
   changeText(type, text) {
-    let obj = this.state.dynamicValidateForm;
+    let obj = {...this.state.dynamicValidateForm};
     obj[type] = text;
     this.setState({ dynamicValidateForm: obj })
   }

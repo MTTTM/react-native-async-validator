@@ -37,7 +37,7 @@ export default class Demo extends Component {
                   <Text>动态表单(Array)1</Text>
                </View>
                 <Form.elForm 
-                   {...dynamicValidateForm}
+                   model={dynamicValidateForm}
                    labelWidth={80}
                    canPushChange={pass => this.setState({ canpush: pass })}
                    ref="dynamicValidateForm">

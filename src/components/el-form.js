@@ -25,33 +25,17 @@ class elForm extends Component {
   }
   componentDidUpdate(prevProps) {
     console.log("will receive", this.props, prevProps)
-    // console.log("form--------------###:prevProps.props",prevProps,"==","state",this.state.model)
     try {
-      for (let i in this.props.model) {
+      let model=this.props.model;
+      for (let i in model) {
           let formItem;
           //数组
-          if (Array.isArray(this.props[i])) {
-            // //如果是删除操作，就不再校验改formItem，因为可以已销毁
-            // if(this.props[i].length<prevProps[i].length){
-            //   console.log("删除炒作",this.props[i],prevProps[i])
-            //   let index='nothing';
-            //   let deleItem= prevProps[i].filter((FormItem,itemIndex)=>{
-            //     let t=this.props[i].every(el=>el.key!=FormItem.key)
-            //     console.log("t",t);
-            //     if(t){
-            //       index=itemIndex;
-            //     }
-            //     return t;
-            //   })[0];
-            //    console.log("被删除的元素",deleItem,this.state.fields,index)
-            //    this.$removeFieldSubScriber(`${i}.${index}.value`);
-            //   return;
-            // }
+          if (Array.isArray(model[i])) {
             try {
-              for (let index = 0; index < this.props[i].length; index++) {
+              for (let index = 0; index < model[i].length; index++) {
                 this.state.fields.forEach(FormItem => {
-                  if (FormItem.props.prop == `${i}.${index}.value` && this.props[i][index] != prevProps[i][index]) {
-                    console.log("FormItem.props.prop", FormItem.props.prop, `${i}.${index}.value`, this.props[i][index], prevProps[i][index])
+                  if (FormItem.props.prop == `${i}.${index}.value` && model[i][index] != prevProps.model[i][index]) {
+                    // console.log("FormItem.props.prop", FormItem.props.prop, `${i}.${index}.value`, model[i][index], prevProps.model[i][index])
                     this.$acceptCheckField(FormItem);
                   }
 
@@ -66,7 +50,7 @@ class elForm extends Component {
           else{
 
             try{
-              if(this.props.model[i] != prevProps.model[i]){
+              if(model[i] != prevProps.model[i]){
                 formItem = this.state.fields.filter(FormItem => FormItem.props.prop == i)[0];
                 console.log("this.state.fields ...",this.state.fields,formItem)
                 this.$acceptCheckField(formItem);
