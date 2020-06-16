@@ -65,7 +65,7 @@ class elFormItem extends Component {
    * @description 未通过格式:{"message":"请输入姓名","field":"name2"}
    */
   $accetpCheckedResult(data) {
-    console.log("表单接收校验结果", JSON.stringify(data))
+    // console.log("表单接收校验结果", JSON.stringify(data))
     if (data) {
       //更新当前组件的提示
       this.setState({ pass: false, errTxt: data.message })

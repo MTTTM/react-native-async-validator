@@ -137,7 +137,7 @@ class elForm extends Component {
     this.state.fields.forEach(formItem => {
       if (formItem.props.rules) {
         if (!formItem.props.prop) {
-          console.warn("校验表单缺少prop")
+          console.warn("formItem no contain attr prop")
         }
         else {
           descriptor[formItem.props.prop] = formItem.props.rules;
@@ -155,7 +155,7 @@ class elForm extends Component {
    */
   modelContain(key) {
     let keys = key ? key.split(".") : [];
-      console.log("keys",keys,key,this.props.model)
+      // console.log("keys",keys,key,this.props.model)
     if (keys.length > 1) {
       //   console.log("进入多个的了?")
       let obj = this.props.model;
@@ -198,7 +198,7 @@ class elForm extends Component {
         return result;
       }
       else {
-        console.log("key", key, this.props, this.props[key])
+        // console.log("key", key, this.props, this.props[key])
         return this.props.model[key];
       }
     } catch (e) {
@@ -307,7 +307,7 @@ class elForm extends Component {
       try {
         notify ? this.notifyAllFields(errors) : null;
       } catch (e) {
-        console.warn("校验异常", e)
+        console.warn("validate error", e)
       }
       callBack(errors, fields)
     });
