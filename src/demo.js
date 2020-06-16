@@ -3,10 +3,7 @@ import {
   Text,
   View,
   StyleSheet,
-  ImageBackground,
   TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
   TextInput,
   Picker
 } from 'react-native';
@@ -25,69 +22,62 @@ export default class Demo extends Component {
         },
     };
   }
-  componentDidMount() {}
   render() {
         let {dynamicValidateForm} =this.state;
-        
         return (
           <View style={{marginHorizontal:10}}>
-               <View style={{paddingVertical:10,marginBottom:10,borderBottomColor:"#ccc",borderBottomWidth:1}}>
-                  <Text>点击提交去校验</Text>
-               </View>
                 <Form.elForm 
                    model={dynamicValidateForm}
                    ref="dynamicValidateForm">
                     <Form.elFormItem 
-                    label="姓名:"
+                    label="name:"
                      prop="name"
                      rules={[
-                        { required: true, message: '请输入姓名', trigger: 'change' }
+                        { required: true, message: 'name' }
                       ]}
                     >
                          <TextInput
                             style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                             value={dynamicValidateForm.name}
-                            placeholder="请输入姓名"
+                            placeholder="name"
                             onChangeText={text => this.changeText('name',text)}
                           />
                     </Form.elFormItem>
 
                     <Form.elFormItem 
-                    label="手机号:"
+                    label="phonne:"
                      prop="phone"
                      rules={[
-                        { required: true, message: '请输入手机号' },
-                        { pattern: /^\d{6}$/, message: '请输入6位阿拉伯数字' }
+                        { required: true, message: 'Please enter  numerals' },
+                        { pattern: /^\d{6}$/, message: 'Please enter 6 Arabic numerals' }
                       ]}
                      >
                          <TextInput
                             style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                             value={dynamicValidateForm.phone}
-                            placeholder="这请输入手机号"
+                            placeholder="phone"
                             onChangeText={text => this.changeText('phone',text)}
                           />
                     </Form.elFormItem>
-                  
                     <Form.elFormItem 
-                     label="昵称:"
+                     label="nickname:"
                      prop="nickname"
                      checkOnBlur={true}
                      rules={[
-                        { required: true, message: '请输入昵称' },
+                        { required: true, message: 'nicknname' },
                       ]}
                      >
                           <Form.elInput
                             value={dynamicValidateForm.nickname}
-                            placeholder="失去焦点时候校验，自定义输入框才有效"
+                            placeholder="check after blur"
                             onChangeText={text => this.changeText('nickname',text)}
                           />
                     </Form.elFormItem>
-                  
                     <Form.elFormItem 
-                    label="选择:"
+                    label="picker:"
                      prop="picker"
                      rules={[
-                        { required: true, message: '请输入选择' }
+                        { required: true, message: 'picker' }
                       ]}
                     >
                          <Picker
@@ -96,7 +86,7 @@ export default class Demo extends Component {
                           onValueChange={(itemValue, itemIndex) =>
                             this.changeText('picker',itemValue)
                           }>
-                          <Picker.Item label="请选择" value="" />
+                          <Picker.Item label="picker" value="" />
                           <Picker.Item label="Java" value="java" />
                           <Picker.Item label="JavaScript" value="js" />
                           <Picker.Item label="css" value="css" />
@@ -105,7 +95,7 @@ export default class Demo extends Component {
                     <View>
                         <TouchableOpacity onPress={((()=>this.submit()))}>
                             <View style={styles.normalBtn}>
-                                    <Text style={styles.normalBtnTxt}>点击提交</Text>
+                                    <Text style={styles.normalBtnTxt}>submit</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -120,9 +110,8 @@ export default class Demo extends Component {
 }
   submit(){
     this.refs['dynamicValidateForm'].validate(res=>{
-        console.log("校验",res)
         if(!res){
-          alert("提交成功")
+          alert("submit succs")
         }
 
     })
