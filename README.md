@@ -128,8 +128,7 @@
 |  parameter   | Description                 |  Type   |    Optional         |  default | required|
 | --------   | -----                                | -----  | -----          | -----  | -----  |
 | model      | Form data object                            |object  |   --             |   --   |Y       |
-| scope      | The scope of the form                           |object  |   this           |   --   | Y      |
-| canPush      |  key in State, used to determine whether the form can be submitted    |boolean  |   true or false   |   --   | N      |
+| canPushChange      |      |Function  |   --   |   --   | N      |
 | labelWidth    | elFormItem label width    |Number  |   ---   |   --   | N      |
 |styles        | Style, covering all styles [content](https://github.com/MTTTM/react-native-async-validator/blob/master/src/overWriteStyle.js)  |Object   |   ---   |   --   | N      |
 
@@ -141,8 +140,6 @@
 | prop  | Form field model field, this attribute is required when using validate, resetFields methods |Fields passed into the model of the Form component |Fields passed to the model of the Form component |--|   --   |Y|
 | label      | Label text   |string  |   --             |   --   | N      |
 | labelWidth    | elFormItem label width    |Number  |   ---   |   --   | N      |
-| value      | variable in model   |var (variable in model)  |   --   |   --   | Y      |
-| customInput      | Whether to use a custom Input form   |Boolean  |   --   |   --   | N     |
 | checkOnBlur      | Whether to check when losing focus (customInput is true && The input form is a custom input "elFormItem provided by this component")   |Boolean  |   --   |   --   | N     |
 | rules      | Form validation rules   | Array  |   --   |   --   | Y      |
 
