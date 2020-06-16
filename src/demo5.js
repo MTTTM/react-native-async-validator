@@ -31,14 +31,12 @@ export default class Demo extends Component {
                   <Text>只有失去焦点才校验 checkOnBlur和customInput属性配合</Text>
                </View>
                 <Form.elForm 
-                   model={dynamicValidateForm}
-                   scope={this}
+                   {...dynamicValidateForm}
                    labelWidth={60}
                    ref="dynamicValidateForm">
                     <Form.elFormItem 
                     label="姓名:"
                      prop="name"
-                     value={dynamicValidateForm.name}
                      rules={[
                         { required: true, message: '请输入姓名', trigger: 'change' }
                       ]}
@@ -53,8 +51,6 @@ export default class Demo extends Component {
                     <Form.elFormItem 
                     label="手机号:"
                      prop="phone"
-                     value={dynamicValidateForm.phone}
-                     customInput={true}
                      rules={[
                         { required: true, message: '请输入手机号' },
                         { pattern: /^\d{6}$/, message: '请输入6位阿拉伯数字' }
@@ -72,7 +68,6 @@ export default class Demo extends Component {
                      prop="nickname"
                      value={dynamicValidateForm.nickname}
                      checkOnBlur={true}
-                     customInput={true}
                      rules={[
                         { required: true, message: '请输入昵称' },
                       ]}

@@ -32,15 +32,13 @@ export default class Demo extends Component {
                   <Text>在From标签覆盖所有表单的样式</Text>
                </View>
                 <Form.elForm 
-                   model={dynamicValidateForm}
-                   scope={this}
+                   {...dynamicValidateForm}
                    styles={STYLES}
                    labelWidth={60}
                    ref="dynamicValidateForm">
                     <Form.elFormItem 
                     label="姓名:"
                      prop="name"
-                     value={dynamicValidateForm.name}
                      rules={[
                         { required: true, message: '请输入姓名', trigger: 'change' }
                       ]}
@@ -55,7 +53,6 @@ export default class Demo extends Component {
                     <Form.elFormItem 
                     label="手机号:"
                      prop="phone"
-                     value={dynamicValidateForm.phone}
                      customInput={true}
                      rules={[
                         { required: true, message: '请输入手机号' },
@@ -72,9 +69,7 @@ export default class Demo extends Component {
                     <Form.elFormItem 
                     label="昵称:"
                      prop="nickname"
-                     value={dynamicValidateForm.nickname}
                      checkOnBlur={true}
-                     customInput={true}
                      rules={[
                         { required: true, message: '请输入昵称' },
                       ]}
