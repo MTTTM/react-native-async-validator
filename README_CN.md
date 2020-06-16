@@ -174,7 +174,7 @@
 
 ## 常见问题
 
-* 警告(warn) `model不存在key:${xxx}`
+* warn `model not contain key:${xxx}`
 
 ```javaScript
  //一般发生在如下场景

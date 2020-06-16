@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-} from 'react-native';
 import schema from 'async-validator';
 import PropTypes from 'prop-types'; // ES6
 import ThemeContext from "./context"
@@ -14,17 +11,9 @@ class elForm extends Component {
       model: {}
     };
     this.validator = {};
-    //确保子节点添加事件时候能准确添加到本表单
-    this.CusRefName = "form" + new Date().getTime();
-
-  }
-  componentDidMount() {
-    //prop是否符合规范监测
-    // this._wranCheck();
-    // this.props.canPushChange(true);
   }
   componentDidUpdate(prevProps) {
-    console.log("will receive", this.props, prevProps)
+    // console.log("will receive", this.props, prevProps)
     try {
       let model=this.props.model;
       for (let i in model) {
@@ -191,7 +180,6 @@ class elForm extends Component {
    * @param {*} key 
    */
   hasOwnPropertyFuc(obj, key) {
-    console.log("hasOwnPropertyFuc",obj,key)
     return obj.hasOwnProperty(key);
   }
   /**
@@ -224,11 +212,8 @@ class elForm extends Component {
     try {
       let model = {};
       for (let k in this.props.model) {
-        // if (k !== 'canPushChange' && k !== 'children' && k !== 'labelWidth') {
           model[k] = this.props[k];
-        // }
       }
-      // console.log("his.state.fields[0]",this.state.fields[0])
       //针对
       let fieldsKeys = [];
       if (this.state.fields[0]&&this.state.fields[0].props
@@ -255,19 +240,17 @@ class elForm extends Component {
    * @param {*} callBack 
    */
   _validateField(field, callBack) {
-    console.log("校验单个值~~", field)
-
+    // console.log("校验单个值~~", field)
     return new Promise((resolve) => {
       if (!this.modelContain(field)) {
-        console.log("fields", this.state.fields)
-        console.warn(`model不存在key:${field}`)
-        resolve(`model不存在key:${field}`);
+        // console.log("fields", this.state.fields)
+        // console.warn(`model不存在key:${field}`)
+        resolve(`model not contain key:${field}`);
         return;
       }
       let target = {
         [field]: this.state.descriptor[field]
       };
-      console.log("tarhget", target)
       let valider = new schema(target);
       let fieldValue = this.getFiedValue(field);//获取表单的值(field可能是“xx.xx”的格式)
       valider.validate({ [field]: fieldValue }, (errors, fields) => {
@@ -336,7 +319,6 @@ class elForm extends Component {
    * @param {string} key
    */
   validateField(key) {
-   // this.$acceptCheckField("", { prop: key });
    let formItem = this.state.fields.filter(FormItem => FormItem.props.prop == key)[0];
    this.$acceptCheckField(formItem);
   }
@@ -344,7 +326,9 @@ class elForm extends Component {
    * 清空校验效果，但是不清空值
    */
   clearValidate() {
-    // PubSub.publish(`${this.CusRefName}${ENUM.clearValidate}`);
+    this.state.fields.forEach(formItem=>{
+      formItem.$clearValidate();
+    })
   }
   /**
    * 通过数组里面的对象的key来获取指定数组元素
@@ -366,7 +350,7 @@ class elForm extends Component {
     for (let k in this.state.descriptor) {
       let formItem = this.state.fields.filter(formItem => formItem.props.prop === k)
       let errorItem = errorsArr ? errorsArr.filter(item => item.field === k) : [];
-      console.log("error  form:", formItem[0], errorItem[0])
+      // console.log("error  form:", formItem[0], errorItem[0])
       if (formItem[0]) {
         formItem[0].$accetpCheckedResult(errorItem[0]);
       }
@@ -380,9 +364,9 @@ class elForm extends Component {
  */
   $acceptCheckField(formItem) {
     try{
-      console.log("接收到表单的请求，开始校验", formItem.props.prop)
+      // console.log("接收到表单的请求，开始校验", formItem.props.prop)
     this._validateField(formItem.props.prop, (errors, fields) => {
-      console.log("校验单个", errors)
+      // console.log("校验单个", errors)
       formItem.$accetpCheckedResult(errors);
     })
     }catch(e){
@@ -398,10 +382,4 @@ elForm.propTypes = {
     undefined
   ]),
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  }
-});
 export default elForm;

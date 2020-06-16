@@ -32,7 +32,6 @@
   "dependencies": {
     "async-validator": "^3.2.3",
     "prop-types": "^15.7.2",
-    "pubsub-js": "^1.8.0",
     "react": "16.9.0",
     "react-native": "0.61.5"
   },

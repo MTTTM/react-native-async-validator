@@ -5,9 +5,6 @@ import {
 } from 'react-native';
 import ThemeContext from "./context"
 import STYLES from "./styles"
-import PubSub from 'pubsub-js'
-import ENUM from "./enum"
-import PropTypes from 'prop-types'; // ES6
 class ElInput extends PureComponent {
   constructor(props) {
     super(props);
@@ -19,34 +16,16 @@ class ElInput extends PureComponent {
     //属于需要校验的表单
     this.needCheck = this.props.formItem.prop && this.props.formItem.rules && this.props.formItem.rules[0];
     this.endStyles = STYLES;
-    console.log("this.endStyles", this.endStyles)
+    // console.log("this.endStyles", this.endStyles)
     // try{
     //   this.endStyles=this.context.elForm.styles?StyleSheet.create(this.context.elForm.styles):STYLES.elInput;
     // }catch(e){}
     this.$accetpCheckedResult = this.$accetpCheckedResult.bind(this);
-    this.clearValidate = this.clearValidate.bind(this);
+    this.$clearValidate = this.$clearValidate.bind(this);
   }
   componentDidMount() {
-    console.log("input---", this.props)
-    if (this.needCheck) {
-
-      // let {CusRefName}=this.props.form;
-      // //  //接收错误信息
-      //   PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
-      //    //清除校验UI效果
-      //    PubSub.subscribe(`${CusRefName}${ENUM.clearValidate}`, this.clearValidate);
-    }
+    //给el-form-item添加自己
     this.props.formItem.$setChildField(this)
-
-  }
-  componentWillUnmount() {
-    // if(this.needCheck){
-    //   let {CusRefName}=this.props.form;
-    //   //不在接收结果
-    //   PubSub.unsubscribe(`${CusRefName}${ENUM.accetpCheckedResult}`);
-    //   //拒绝再处理清空UI事务
-    //   PubSub.unsubscribe(`${CusRefName}${ENUM.clearValidate}`);
-    // }
   }
   /**
   * 接受Form的推送的校验结果
@@ -59,7 +38,7 @@ class ElInput extends PureComponent {
    * @description 未通过格式:{message: "请输入昵称", field: "nickname"}
    */
   $accetpCheckedResult(data) {
-    console.log("input 错误检查", data)
+    // console.log("input 错误检查", data)
     if (!data) {
       this.setState({ pass: true })
     }
@@ -71,7 +50,7 @@ class ElInput extends PureComponent {
   /**
 * 清楚表单效果
 */
-  clearValidate() {
+$clearValidate() {
     this.setState({
       value: '',
       pass: true,
@@ -94,7 +73,7 @@ class ElInput extends PureComponent {
     //执行过校验的样式(不一定校验通过)
     let elInputPass = this.state.afterValid ? this.endStyles.elInputPass : {};
     let statusStyle=this.state.afterValid?(this.state.pass?succStyle:errStyle):{};
-    console.log("this.state.pass",this.state.pass)
+    // console.log("this.state.pass",this.state.pass)
     return (
         <TextInput
           {...otherProps}
@@ -121,12 +100,8 @@ class ElInput extends PureComponent {
     }
   }
   checkValid() {
-    // let {CusRefName}=this.props.form;
-    // PubSub.publish(`${CusRefName}${ENUM.notifyFormToCheck}`,this.props.formItem)
-    console.log("表单触发的  this.props.formItem", this.props.formItem)
     this.context.elForm.$acceptCheckField(this.props.formItem);
   }
 }
-const styles = StyleSheet.create(STYLES);
 ElInput.contextType = ThemeContext;
 export default ElInput;

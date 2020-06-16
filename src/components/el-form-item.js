@@ -1,4 +1,4 @@
-import React, { Component,PureComponent} from 'react';
+import React, { Component} from 'react';
 import {
   Text,
   View,
@@ -6,9 +6,6 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types'; // ES6
 import ThemeContext from "./context"
-import FormItemContext from "./contextFormItem"
-import ENUM from "./enum"
-import PubSub from 'pubsub-js'
 import STYLES from "./styles"
 const styles = StyleSheet.create(STYLES);
 class elFormItem extends Component {
@@ -23,22 +20,13 @@ class elFormItem extends Component {
     this.needCheck = this.props.prop && this.props.rules && this.props.rules[0];
     this.endStyles = {};
     this.$accetpCheckedResult = this.$accetpCheckedResult.bind(this);
-    this.$setChildField = this.$setChildField.bind(this);
-    this.clearValidate = this.clearValidate.bind(this);
+     this.$setChildField = this.$setChildField.bind(this);
+    this.$clearValidate = this.$clearValidate.bind(this);
   }
   componentDidMount() {
-    console.log("formProps", this.context)
+  
     //最终匹配到的样式
     this.endStyles = this.context.styles ? StyleSheet.create(this.context.styles) : styles;
-    let { CusRefName } = this.context;
-    // if(this.needCheck){
-    //     //通知Form添加校验规则
-    //     PubSub.publish(`${CusRefName}${ENUM.addFieldSubScriber}`,this.props);
-    //     //接收错误信息
-    //     PubSub.subscribe(`${CusRefName}${ENUM.accetpCheckedResult}`, this.accetpCheckedResult);
-    //     //清除校验UI效果
-    //     PubSub.subscribe(`${CusRefName}${ENUM.clearValidate}`, this.clearValidate);
-    // }
      if(this.needCheck){
          this.context.elForm.$addFieldSubScriber(this);
      }
@@ -49,18 +37,21 @@ class elFormItem extends Component {
 
   }
   componentWillUnmount() {
-    console.log("卸载!~!!!!",this)
     this.context.elForm.$removeFieldSubScriber(this)
   }
 
   /**
    * 清楚表单效果
    */
-  clearValidate() {
+  $clearValidate() {
     this.setState({
       pass: true,//是否校验通过
       errTxt: "",//错误提示
     });
+    //如果子节点是el-input
+    if(this.state.field){
+      this.state.field.$clearValidate();
+    }
   }
   /**
    * 接受Form的推送的校验结果
@@ -93,9 +84,7 @@ class elFormItem extends Component {
     }
   }
   $setChildField(elInput) {
-    this.setState({ 'field': elInput }, () => {
-      console.log("input=== field", this.state.field)
-    });
+    this.setState({ 'field': elInput });
   }
   getLabelWidth() {
     let labelWidthStyle = '';
