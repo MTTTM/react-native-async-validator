@@ -27,10 +27,7 @@ class elForm extends Component {
     console.log("will receive", this.props, prevProps)
     // console.log("form--------------###:prevProps.props",prevProps,"==","state",this.state.model)
     try {
-      for (let i in this.props) {
-        if (prevProps[i] !== this.props[i] && i !== 'children' && i !== 'canpush' && i !== 'canPushChange') {
-          //  console.log("prevProps[i]!==this.props[i]",prevProps[i]!==this.props[i],i)
-
+      for (let i in this.props.model) {
           let formItem;
           //数组
           if (Array.isArray(this.props[i])) {
@@ -68,13 +65,18 @@ class elForm extends Component {
           }
           else{
 
-            formItem = this.state.fields.filter(FormItem => FormItem.props.prop == i)[0];
-            this.$acceptCheckField(formItem);
-            console.log("form-map formItem", formItem, "i===", i, 'fields', this.state.fields)
+            try{
+              console.log("this.state.fields ...",this.state.fields)
+              formItem = this.state.fields.filter(FormItem => FormItem.props.prop == i)[0];
+              this.$acceptCheckField(formItem);
+            }catch(e){
+              console.log("e==>",e)
+            }
+            // console.log("form-map formItem", formItem, "i===", i, 'fields', this.state.fields)
 
           }
         }
-      }
+      
     } catch (e) {
      console.log("error",e)
     }
@@ -173,10 +175,10 @@ class elForm extends Component {
    */
   modelContain(key) {
     let keys = key ? key.split(".") : [];
-    //   console.log("keys",keys,key)
+      console.log("keys",keys,key,this.props.model)
     if (keys.length > 1) {
       //   console.log("进入多个的了?")
-      let obj = this.props;
+      let obj = this.props.model;
       for (let v = 0; v < keys.length; v++) {
         if (this.hasOwnPropertyFuc(obj, keys[v])) {
           obj = obj[keys[v]];
@@ -188,7 +190,7 @@ class elForm extends Component {
       return true;
     }
     else {
-      return this.hasOwnPropertyFuc(this.props, key);
+      return this.hasOwnPropertyFuc(this.props.model, key);
     }
     // return this.props.model.hasOwnProperty(key); 
   }
@@ -198,6 +200,7 @@ class elForm extends Component {
    * @param {*} key 
    */
   hasOwnPropertyFuc(obj, key) {
+    console.log("hasOwnPropertyFuc",obj,key)
     return obj.hasOwnProperty(key);
   }
   /**
@@ -209,7 +212,7 @@ class elForm extends Component {
     try {
       let keys = key ? key.split(".") : [];
       if (keys.length > 1) {
-        let result = this.props;
+        let result = this.props.model;
         for (let v = 0; v < keys.length; v++) {
           result = result[keys[v]];
         }
@@ -217,7 +220,7 @@ class elForm extends Component {
       }
       else {
         console.log("key", key, this.props, this.props[key])
-        return this.props[key];
+        return this.props.model[key];
       }
     } catch (e) {
       console.log("err", e)
@@ -229,10 +232,10 @@ class elForm extends Component {
   getModel() {
     try {
       let model = {};
-      for (let k in this.props) {
-        if (k !== 'canPushChange' && k !== 'children' && k !== 'labelWidth') {
+      for (let k in this.props.model) {
+        // if (k !== 'canPushChange' && k !== 'children' && k !== 'labelWidth') {
           model[k] = this.props[k];
-        }
+        // }
       }
       // console.log("his.state.fields[0]",this.state.fields[0])
       //针对
@@ -342,7 +345,9 @@ class elForm extends Component {
    * @param {string} key
    */
   validateField(key) {
-    this.acceptCheckField("", { prop: key });
+   // this.$acceptCheckField("", { prop: key });
+   let formItem = this.state.fields.filter(FormItem => FormItem.props.prop == key)[0];
+   this.$acceptCheckField(formItem);
   }
   /**
    * 清空校验效果，但是不清空值
@@ -383,11 +388,15 @@ class elForm extends Component {
  * obj.prop
  */
   $acceptCheckField(formItem) {
-    console.log("接收到表单的请求，开始校验", formItem.props.prop)
+    try{
+      console.log("接收到表单的请求，开始校验", formItem.props.prop)
     this._validateField(formItem.props.prop, (errors, fields) => {
       console.log("校验单个", errors)
       formItem.$accetpCheckedResult(errors);
     })
+    }catch(e){
+      console.log("e",e)
+    }
   }
 
 }

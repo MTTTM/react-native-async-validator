@@ -35,7 +35,7 @@ export default class Demo extends Component {
                   <Text>点击提交去校验</Text>
                </View>
                 <Form.elForm 
-                   {...dynamicValidateForm}
+                   model={dynamicValidateForm}
                    ref="dynamicValidateForm">
                     <Form.elFormItem 
                     label="姓名:"
@@ -114,7 +114,7 @@ export default class Demo extends Component {
         )
   }
   changeText(type,text){
-    let obj=this.state.dynamicValidateForm;
+    let obj={...this.state.dynamicValidateForm};
     obj[type]=text;
     this.setState({dynamicValidateForm:obj})
 }
