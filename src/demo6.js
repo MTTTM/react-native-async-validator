@@ -32,7 +32,7 @@ export default class Demo extends Component {
                   <Text>在From标签覆盖所有表单的样式</Text>
                </View>
                 <Form.elForm 
-                   {...dynamicValidateForm}
+                   model={dynamicValidateForm}
                    styles={STYLES}
                    labelWidth={60}
                    ref="dynamicValidateForm">
@@ -53,7 +53,6 @@ export default class Demo extends Component {
                     <Form.elFormItem 
                     label="手机号:"
                      prop="phone"
-                     customInput={true}
                      rules={[
                         { required: true, message: '请输入手机号' },
                         { pattern: /^\d{6}$/, message: '请输入6位阿拉伯数字' }
@@ -93,7 +92,7 @@ export default class Demo extends Component {
         )
   }
   changeText(type,text){
-    let obj=this.state.dynamicValidateForm;
+    let obj={...this.state.dynamicValidateForm};
     obj[type]=text;
     this.setState({dynamicValidateForm:obj})
 }
