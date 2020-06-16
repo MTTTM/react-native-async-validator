@@ -32,7 +32,7 @@ export default class Demo extends Component {
                   <Text>在标签里面配置样式</Text>
                </View>
                 <Form.elForm 
-                   {...dynamicValidateForm}
+                   model={dynamicValidateForm}
                    styles={STYLES}
                    labelWidth={60}
                    ref="dynamicValidateForm">
@@ -40,7 +40,7 @@ export default class Demo extends Component {
                     label="姓名:"
                      prop="name"
                      rules={[
-                        { required: true, message: '请输入姓名', trigger: 'change' }
+                        { required: true, message: '请输入姓名' }
                       ]}
                     >
                          <TextInput
@@ -107,7 +107,7 @@ export default class Demo extends Component {
         )
   }
   changeText(type,text){
-    let obj=this.state.dynamicValidateForm;
+    let obj={...this.state.dynamicValidateForm};
     obj[type]=text;
     this.setState({dynamicValidateForm:obj})
 }

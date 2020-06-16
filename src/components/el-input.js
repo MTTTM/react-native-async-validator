@@ -93,25 +93,15 @@ class ElInput extends PureComponent {
     }
     //执行过校验的样式(不一定校验通过)
     let elInputPass = this.state.afterValid ? this.endStyles.elInputPass : {};
+    let statusStyle=this.state.afterValid?(this.state.pass?succStyle:errStyle):{};
     return (
-
-      this.state.pass ? (
         <TextInput
           {...otherProps}
-          style={{ ...this.endStyles.elInput, ...style, ...elInputPass, ...succStyle }}
+          style={{ ...this.endStyles.elInput, ...style, ...elInputPass, ...statusStyle }}
           onChangeText={text => this.changeText(text)}
           onBlur={() => this.onBlurFunc()}
           value={this.props.value}
         />
-      ) : (
-          <TextInput
-            {...otherProps}
-            style={{ ...this.endStyles.elInput, ...style, ...this.endStyles.elInputError, ...errStyle }}
-            onChangeText={text => this.changeText(text)}
-            onBlur={() => this.onBlurFunc()}
-            value={this.props.value}
-          />
-        )
     )
   }
   onBlurFunc() {
