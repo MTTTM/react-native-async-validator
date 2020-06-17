@@ -23,17 +23,23 @@ class elFormItem extends Component {
     this.$clearValidate = this.$clearValidate.bind(this);
   }
  deepObjectMerge(FirstOBJ, SecondOBJ) { // 深度合并对象
-    for (var key in SecondOBJ) {
-        FirstOBJ[key] = FirstOBJ[key] && FirstOBJ[key].toString() === "[object Object]" ?
-            this.deepObjectMerge(FirstOBJ[key], SecondOBJ[key]) : FirstOBJ[key] = SecondOBJ[key];
+    let FirstObj={};
+    try{
+      FirstObj=JSON.stringify(FirstOBJ);
+      FirstObj=JSON.parse(FirstObj);
+    }catch(e){
+      console.log("Form props styles is not a valid json")
     }
-    return FirstOBJ;
+    for (var key in SecondOBJ) {
+        FirstObj[key] = FirstObj[key] && FirstObj[key].toString() === "[object Object]" ?
+            this.deepObjectMerge(FirstObj[key], SecondOBJ[key]) : FirstObj[key] = SecondOBJ[key];
+    }
+    return FirstObj;
 }
   componentDidMount() {
     //最终匹配到的样式
     let fromStyle=this.context.elForm.props.styles;
-    let copyStyle={...STYLES};
-    this.endStyles = fromStyle ? this.deepObjectMerge(copyStyle,fromStyle) : copyStyle;
+     this.endStyles = fromStyle ? this.deepObjectMerge(STYLES,fromStyle) : STYLES;
      if(this.needCheck){
          this.context.elForm.$addFieldSubScriber(this);
      }
