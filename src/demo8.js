@@ -29,7 +29,7 @@ export default class Demo extends Component {
     return (
       <View style={{ marginHorizontal: 10 }}>
         <View style={{ paddingVertical: 10, marginBottom: 10, borderBottomColor: "#ccc", borderBottomWidth: 1 }}>
-          <Text>Form函数使用(对姓名表单做测试)</Text>
+          <Text>Function </Text>
         </View>
         <Form.elForm
           model={dynamicValidateForm}
@@ -42,12 +42,12 @@ export default class Demo extends Component {
             <TouchableOpacity
               onPress={() => this.setState({
                 dynamicValidateForm: {
-                  name: "设置了值", nickname: "",
+                  name: "lucy2", nickname: "",
                   phone: ""
                 }
               })}>
               <View style={styles.normalBtn2}>
-                <Text style={styles.normalBtnTxt}>设置值</Text>
+                <Text style={styles.normalBtnTxt}>set name</Text>
               </View>
             </TouchableOpacity>
 
@@ -58,7 +58,7 @@ export default class Demo extends Component {
                 this.setState({ dynamicValidateForm: { ...t } })
               }}>
               <View style={styles.normalBtn2}>
-                <Text style={styles.normalBtnTxt}>清空值</Text>
+                <Text style={styles.normalBtnTxt}>clear name</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={{ marginLeft: 5 }}
@@ -66,59 +66,59 @@ export default class Demo extends Component {
                 console.log("通过了不?", err)
               })}>
               <View style={styles.activityBtn}>
-                <Text style={styles.normalBtnTxt}>校验</Text>
+                <Text style={styles.normalBtnTxt}>check name</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={{ marginLeft: 5 }}
               onPress={() => this.refs.dynamicValidateForm.clearValidate()}>
               <View style={{ ...styles.activityBtn, width: 120 }}>
-                <Text style={styles.normalBtnTxt}>清除校验UI效果</Text>
+                <Text style={styles.normalBtnTxt}>Clear effect</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={{ marginLeft: 5 }}
               onPress={() => this.resetField()}>
               <View style={{ ...styles.activityBtn, width: 180, backgroundColor: "#f56c6c" }}>
-                <Text style={styles.normalBtnTxt}>清除校验UI效果和表单值</Text>
+                <Text style={styles.normalBtnTxt}>Clear effect and value</Text>
               </View>
             </TouchableOpacity>
 
           </ScrollView>
-          <View style={{ paddingVertical: 10 }}><Text>以下表单(姓名)设失去焦点才会校验，主要是方便测试效果</Text></View>
+          <View style={{ paddingVertical: 10 }}><Text>The name will be verified only if it loses focus, mainly to facilitate the test effect</Text></View>
           <Form.elFormItem
-            label="姓名:"
+            label="name:"
             prop="name"
             checkOnBlur={true}
             rules={[
-              { required: true, message: '请输入姓名' },
+              { required: true, message: 'input' },
             ]}
           >
             <Form.elInput
               value={dynamicValidateForm.name}
-              placeholder="失去焦点时候校验，自定义输入框才有效"
+              placeholder="check after blur"
               onChangeText={text => this.changeText('name', text)}
             />
           </Form.elFormItem>
           <Form.elFormItem
-            label="手机号:"
+            label="phone:"
             prop="phone"
           >
             <Form.elInput
               value={dynamicValidateForm.phone}
-              placeholder="不做校验"
+              placeholder="no check field"
               onChangeText={text => this.changeText('phone', text)}
             />
           </Form.elFormItem>
 
           <Form.elFormItem
-            label="昵称:"
+            label="nickname:"
             prop="nickname"
             rules={[
-              { required: true, message: '请输入昵称' },
+              { required: true, message: 'input nickname' },
             ]}
           >
             <Form.elInput
               value={dynamicValidateForm.nickname}
-              placeholder="失去焦点时候校验，自定义输入框才有效"
+              placeholder="input nickname"
               onChangeText={text => this.changeText('nickname', text)}
             />
           </Form.elFormItem>
@@ -128,13 +128,13 @@ export default class Demo extends Component {
               this.state.canpush ? (
                 <TouchableOpacity onPress={((() => this.submit()))}>
                   <View style={styles.normalBtn}>
-                    <Text style={styles.normalBtnTxt}>点击提交</Text>
+                    <Text style={styles.normalBtnTxt}>submit</Text>
                   </View>
                 </TouchableOpacity>
               ) : (
                   <TouchableOpacity activeOpacity={1}>
                     <View style={{ ...styles.normalBtn, ...styles.disabledBtn }}>
-                      <Text style={{ ...styles.normalBtnTxt, ...styles.disabledBtnTxt }}>还不能提交</Text>
+                      <Text style={{ ...styles.normalBtnTxt, ...styles.disabledBtnTxt }}>submit</Text>
                     </View>
                   </TouchableOpacity>
                 )

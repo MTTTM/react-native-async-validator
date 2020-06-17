@@ -29,7 +29,8 @@ export default class Demo extends Component {
         return (
             <View style={{marginHorizontal:10}}>
                <View style={{paddingVertical:10,marginBottom:10,borderBottomColor:"#ccc",borderBottomWidth:1}}>
-                  <Text>在From标签覆盖所有表单的样式</Text>
+                  <Text>
+Override the style of all fields in the From tag through the styles attribute</Text>
                </View>
                 <Form.elForm 
                    model={dynamicValidateForm}
@@ -37,45 +38,45 @@ export default class Demo extends Component {
                    labelWidth={60}
                    ref="dynamicValidateForm">
                     <Form.elFormItem 
-                    label="姓名:"
+                    label="name:"
                      prop="name"
                      rules={[
-                        { required: true, message: '请输入姓名', trigger: 'change' }
+                        { required: true, message: 'input name', trigger: 'change' }
                       ]}
                     >
                          <TextInput
                             style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                             value={dynamicValidateForm.name}
-                            placeholder="原生标签无法通过导入Form导入的样式覆盖"
+                            placeholder="I don't obey Form.elForm'styles"
                             onChangeText={text => this.changeText('name',text)}
                           />
                     </Form.elFormItem>
                     <Form.elFormItem 
-                    label="手机号:"
+                    label="phone:"
                      prop="phone"
                      rules={[
-                        { required: true, message: '请输入手机号' },
-                        { pattern: /^\d{6}$/, message: '请输入6位阿拉伯数字' }
+                        { required: true, message: 'input your phone' },
+                        { pattern: /^\d{6}$/, message: 'Please enter 6 Arabic numerals' }
                       ]}
                      >
                            <Form.elInput
                             value={dynamicValidateForm.phone}
-                            placeholder="自定义标签一般都是改变就触发校验"
+                            placeholder="input your phone"
                             onChangeText={text => this.changeText('phone',text)}
                           />
                     </Form.elFormItem>
 
                     <Form.elFormItem 
-                    label="昵称:"
+                    label="nickname:"
                      prop="nickname"
                      checkOnBlur={true}
                      rules={[
-                        { required: true, message: '请输入昵称' },
+                        { required: true, message: 'input nickname' },
                       ]}
                      >
                           <Form.elInput
                             value={dynamicValidateForm.nickname}
-                            placeholder="失去焦点时候校验，自定义输入框才有效"
+                            placeholder="check after blur"
                             onChangeText={text => this.changeText('nickname',text)}
                           />
                     </Form.elFormItem>
@@ -83,7 +84,7 @@ export default class Demo extends Component {
                     <View>
                         <TouchableOpacity onPress={((()=>this.submit()))}>
                             <View style={styles.normalBtn}>
-                                    <Text style={styles.normalBtnTxt}>点击提交</Text>
+                                    <Text style={styles.normalBtnTxt}>submit</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

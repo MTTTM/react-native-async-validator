@@ -7,7 +7,6 @@ import {
 import PropTypes from 'prop-types'; // ES6
 import ThemeContext from "./context"
 import STYLES from "./styles"
-const styles = StyleSheet.create(STYLES);
 class elFormItem extends Component {
   constructor(props) {
     super(props);
@@ -23,18 +22,21 @@ class elFormItem extends Component {
      this.$setChildField = this.$setChildField.bind(this);
     this.$clearValidate = this.$clearValidate.bind(this);
   }
+ deepObjectMerge(FirstOBJ, SecondOBJ) { // 深度合并对象
+    for (var key in SecondOBJ) {
+        FirstOBJ[key] = FirstOBJ[key] && FirstOBJ[key].toString() === "[object Object]" ?
+            this.deepObjectMerge(FirstOBJ[key], SecondOBJ[key]) : FirstOBJ[key] = SecondOBJ[key];
+    }
+    return FirstOBJ;
+}
   componentDidMount() {
-  
     //最终匹配到的样式
-    this.endStyles = this.context.styles ? StyleSheet.create(this.context.styles) : styles;
+    let fromStyle=this.context.elForm.props.styles;
+    let copyStyle={...STYLES};
+    this.endStyles = fromStyle ? this.deepObjectMerge(copyStyle,fromStyle) : copyStyle;
      if(this.needCheck){
          this.context.elForm.$addFieldSubScriber(this);
      }
-
-
-
-
-
   }
   componentWillUnmount() {
     this.context.elForm.$removeFieldSubScriber(this)
@@ -119,7 +121,11 @@ class elFormItem extends Component {
       <View style={this.endStyles.formItemWrap}>
         <View style={this.endStyles.formItemInnerWrap} {...this.props}>
           <View style={{ ...this.endStyles.formItemLeftWrap, ...lableWidthLeftStyle }}>
-            <Text style={this.endStyles.formItemLeftText}>{label}</Text>
+            
+            <Text style={this.endStyles.formItemLeftTextWrap}>
+              <Text style={this.endStyles.formItemRequired}>*</Text>
+              <Text style={this.endStyles.formItemLeftText}>{label}</Text>
+            </Text>
           </View>
           <View style={{ flex: 1 }}>
             {childrenWithProps}

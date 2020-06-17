@@ -86,7 +86,7 @@ export default class Demo extends Component {
                           onValueChange={(itemValue, itemIndex) =>
                             this.changeText('picker',itemValue)
                           }>
-                          <Picker.Item label="picker" value="" />
+                          <Picker.Item label="=picker=" value="" />
                           <Picker.Item label="Java" value="java" />
                           <Picker.Item label="JavaScript" value="js" />
                           <Picker.Item label="css" value="css" />

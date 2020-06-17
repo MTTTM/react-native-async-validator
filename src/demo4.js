@@ -34,7 +34,7 @@ export default class Demo extends Component {
         return (
           <View style={{marginHorizontal:10}}>
                <View style={{paddingVertical:10,marginBottom:10,borderBottomColor:"#ccc",borderBottomWidth:1}}>
-                  <Text>动态表单(Array)1</Text>
+                  <Text>Dynamic form fields (Array)</Text>
                </View>
                 <Form.elForm 
                    model={dynamicValidateForm}
@@ -47,17 +47,17 @@ export default class Demo extends Component {
                             return (
                                 <Form.elFormItem 
                                 key={item.key}
-                                label={`姓名:${index}`}
+                                label={`name:${index}`}
                                  prop={`form.${index}.value`}
                                  rules={[
-                                    { required: true, message: `请输入姓名${index}` }
+                                    { required: true, message: `input name ${index}` }
                                   ]}
                                 >
                                      <View style={{flexDirection:"row",alignItems:"center"}}>
                                         <TextInput
                                             style={{marginRight:5, height: 40,width:150, borderColor: 'gray', borderWidth: 1 }}
                                             value={dynamicValidateForm.form[index].value}
-                                            placeholder={`请输入姓名${index}`}
+                                            placeholder={`input name ${index}`}
                                             onChangeText={text => this.changeText(index,text)}
                                         />
                                         <Text onPress={(()=>this.deleteFun(item.key))}>DELETE {`form.${index}.value`}</Text>
@@ -69,7 +69,7 @@ export default class Demo extends Component {
                     <View>
                     <TouchableOpacity onPress={((()=>this.addNew()))}>
                               <View style={styles.normalBtn}>
-                                      <Text style={styles.normalBtnTxt}>+ 新增</Text>
+                                      <Text style={styles.normalBtnTxt}>+ add</Text>
                               </View>
                           </TouchableOpacity>
                     </View>
@@ -78,13 +78,13 @@ export default class Demo extends Component {
                           this.state.canpush?(
                             <TouchableOpacity onPress={((()=>this.submit()))}>
                               <View style={styles.normalBtn}>
-                                      <Text style={styles.normalBtnTxt}>点击提交</Text>
+                                      <Text style={styles.normalBtnTxt}>submit</Text>
                               </View>
                           </TouchableOpacity>
                           ):(
                             <TouchableOpacity activeOpacity={1}>
                             <View style={{...styles.normalBtn,...styles.disabledBtn}}>
-                                    <Text style={{...styles.normalBtnTxt,...styles.disabledBtnTxt}}>还不能提交</Text>
+                                    <Text style={{...styles.normalBtnTxt,...styles.disabledBtnTxt}}>submit</Text>
                             </View>
                         </TouchableOpacity>
                           )
@@ -100,11 +100,12 @@ export default class Demo extends Component {
     let arr=[...this.state.dynamicValidateForm.form];
     arr[index]=item;
     //最后一步才修改，这样才能在form的componentDidUpdate拿到对比值
+    //Only modify the last step, so that you can get the comparison value in the componentDidUpdate of the form
     this.setState({dynamicValidateForm:{form:arr}})
 }
 deleteFun(key){
     if(this.state.dynamicValidateForm.form.length==1){
-        alert("至少保留一个")
+        alert("Keep at least one")
         return;
     }
     let form =this.state.dynamicValidateForm.form.filter(item=>{
@@ -123,9 +124,8 @@ addNew(){
 }
   submit(){
     this.refs['dynamicValidateForm'].validate(res=>{
-        console.log("校验",res)
         if(!res){
-          alert("提交成功")
+          alert("success")
         }
     })
   }

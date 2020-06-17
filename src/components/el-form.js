@@ -275,7 +275,7 @@ class elForm extends Component {
           this.validate((errors, fields) => {
             console.log("errors==", errors)
             try {
-              errors ? canPushChange(false) : canPushChange(true);
+              errors ? canPushChange(false,errors) : canPushChange(true,errors);
             } catch (e) {
               console.log("err",e)
             }

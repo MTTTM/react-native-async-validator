@@ -59,10 +59,16 @@ $clearValidate() {
   }
   render() {
     let props = this.props;
-    let style = props.style ? props.style : {};//普通样式覆盖
-    let errStyle = props.errStyle ? Object.assign({},this.endStyles.elInputError,props.errStyle) :  this.endStyles.elInputError;//成功样式覆盖
-    let succStyle = props.succStyle ? Object.assign({},this.endStyles.succStyle,props.succStyle,) :  this.endStyles.succStyle;//失败样式覆盖
-    //console.log("成功的样式",succStyle,this.props.props.value)
+    let fromStyle=this.context.elForm.props.styles;
+    //Form 的样式覆盖
+    let errStyle = fromStyle&&fromStyle.elInputError ? Object.assign({},this.endStyles.elInputError,fromStyle.elInputError) :  this.endStyles.elInputError;//失败样式覆盖 
+    let succStyle = fromStyle&&fromStyle.elInputPass ? Object.assign({},this.endStyles.elInputPass,fromStyle.elInputPass) :  this.endStyles.elInputPass;//成功样式覆盖
+    let defaultStyle= fromStyle&&fromStyle.elInput?fromStyle.elInput :this.endStyles.elInput;//默认样式
+    console.log("succStyle1",succStyle,fromStyle&&fromStyle.elInputPass,this.context.elForm.styles)
+    //自身样式覆盖
+    errStyle = props.errStyle ? Object.assign({},errStyle,props.errStyle) :  errStyle;//成功样式覆盖
+    succStyle = props.succStyle ? Object.assign({},succStyle,props.succStyle,) :  succStyle;//失败样式覆盖
+    defaultStyle= props.style?Object.assign({},defaultStyle,props.style):defaultStyle;
     let otherProps = {};
     for (let k in props) {
       //这三个特殊处理
@@ -71,13 +77,12 @@ $clearValidate() {
       }
     }
     //执行过校验的样式(不一定校验通过)
-    let elInputPass = this.state.afterValid ? this.endStyles.elInputPass : {};
     let statusStyle=this.state.afterValid?(this.state.pass?succStyle:errStyle):{};
-    // console.log("this.state.pass",this.state.pass)
+ 
     return (
         <TextInput
           {...otherProps}
-          style={{ ...this.endStyles.elInput, ...style, ...elInputPass, ...statusStyle }}
+          style={{...defaultStyle, ...statusStyle }}
           onChangeText={text => this.changeText(text)}
           onBlur={() => this.onBlurFunc()}
           value={this.props.value}

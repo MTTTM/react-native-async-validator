@@ -38,7 +38,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-        type:"demo8",
+        type:"demo6",
         list:[
            "demo1",
            "demo2",
