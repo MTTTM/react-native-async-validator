@@ -13,7 +13,7 @@ class elFormItem extends Component {
     this.state = {
       pass: false,//是否校验通过
       errTxt: "",//错误提示
-      field: null//子表单
+      field: null,//子表单
     };
     //属于需要校验的表单
     this.needCheck = this.props.prop && this.props.rules && this.props.rules[0];
@@ -122,14 +122,14 @@ class elFormItem extends Component {
     const childrenWithProps = React.Children.map(this.props.children, child =>
       React.cloneElement(child, { field: this.props.prop, formItem: this })
     );
-
+    let isRequired=this.props.rules&&this.props.rules.filter(item=>item.required==true)[0];
     return (
       <View style={this.endStyles.formItemWrap}>
         <View style={this.endStyles.formItemInnerWrap} {...this.props}>
           <View style={{ ...this.endStyles.formItemLeftWrap, ...lableWidthLeftStyle }}>
             
             <Text style={this.endStyles.formItemLeftTextWrap}>
-              <Text style={this.endStyles.formItemRequired}>*</Text>
+              {isRequired?<Text style={this.endStyles.formItemRequired}>*</Text>:null}
               <Text style={this.endStyles.formItemLeftText}>{label}</Text>
             </Text>
           </View>
