@@ -1,9 +1,10 @@
 {
   "name": "react-native-validator",
-  "version": "0.0.9",
+  "version": "0.0.11",
   "private": false,
   "main": "./src/index.js",
   "repository": "https://github.com/MTTTM/react-native-async-validator",
+  "description":"A react-native form verification tool",
   "author": "lucy2",
   "keywords": [
     "reactNative",
@@ -21,7 +22,6 @@
     "./README.md",
     "./babel.config.js",
     "./metro.config.js"
-
   ],
   "scripts": {
     "android": "react-native run-android",
@@ -33,7 +33,6 @@
   "dependencies": {
     "async-validator": "^3.2.3",
     "prop-types": "^15.7.2",
-    "pubsub-js": "^1.8.0",
     "react": "16.9.0",
     "react-native": "0.61.5"
   },

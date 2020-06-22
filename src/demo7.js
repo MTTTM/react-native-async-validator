@@ -29,81 +29,64 @@ export default class Demo extends Component {
         return (
             <View style={{marginHorizontal:10}}>
                <View style={{paddingVertical:10,marginBottom:10,borderBottomColor:"#ccc",borderBottomWidth:1}}>
-                  <Text>在标签里面配置样式</Text>
+                  <Text>inline style</Text>
                </View>
                 <Form.elForm 
                    model={dynamicValidateForm}
-                   scope={this}
                    styles={STYLES}
                    labelWidth={60}
                    ref="dynamicValidateForm">
                     <Form.elFormItem 
-                    label="姓名:"
+                    label="nickname:"
                      prop="name"
-                     value={dynamicValidateForm.name}
                      rules={[
-                        { required: true, message: '请输入姓名', trigger: 'change' }
+                        { required: true, message: 'input your name' }
                       ]}
                     >
                          <TextInput
                             style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                             value={dynamicValidateForm.name}
-                            placeholder="默认的labelWidth"
+                            placeholder="default labelWidth"
                             onChangeText={text => this.changeText('name',text)}
                           />
                     </Form.elFormItem>
                     <Form.elFormItem 
-                    label="手机号:"
+                    label="phone:"
                      prop="phone"
                      value={dynamicValidateForm.phone}
-                     customInput={true}
                      labelWidth={80}
                      rules={[
-                        { required: true, message: '请输入手机号' },
-                        { pattern: /^\d{6}$/, message: '请输入6位阿拉伯数字' }
+                        { required: true, message: 'input your phone' },
+                        { pattern: /^\d{6}$/, message: 'Please enter 6 Arabic numerals' }
                       ]}
                      >
                            <Form.elInput
                             value={dynamicValidateForm.phone}
-                            placeholder="标签自定义labelWidth"
+                            placeholder="set labelWidth"
                             onChangeText={text => this.changeText('phone',text)}
                           />
                     </Form.elFormItem>
 
                     <Form.elFormItem 
-                    label="昵称:"
+                    label="nickname:"
                      prop="nickname"
-                     value={dynamicValidateForm.nickname}
                      checkOnBlur={true}
-                     customInput={true}
                      rules={[
-                        { required: true, message: '请输入昵称' },
+                        { required: true, message: 'input nikname' },
                       ]}
                      >
                           <Form.elInput
                            errStyle={{borderColor:"yellow",color:"yellow"}}
                            succStyle={{borderColor:"#d603d6",color:"#d603d6"}}
                             value={dynamicValidateForm.nickname}
-                            placeholder="失去焦点时候校验，自定义输入框才有效"
+                            placeholder="inline status style work after blur"
                             onChangeText={text => this.changeText('nickname',text)}
                           />
                     </Form.elFormItem>
                     <View>
-                        <Text style={{fontWeight:"bold"}}>左侧label样式无法标签覆盖</Text>
-                    </View>
-                    <View>
-                        <Text style={{fontWeight:"bold"}}>错误提示文字无法标签样式覆盖</Text>
-                    </View>
-                    <View>
-                        <Text style={{fontWeight:"bold"}}>因为他们封装在组件内容了，不对外提供接口</Text>
-                    </View>
-                    <View>
-                        <Text style={{fontWeight:"bold"}} >请在Form的Styles里面对他们做针对该Form的样式覆盖</Text>
-                    </View>
-                    <View>
                         <TouchableOpacity onPress={((()=>this.submit()))}>
                             <View style={styles.normalBtn}>
-                                    <Text style={styles.normalBtnTxt}>点击提交</Text>
+                                    <Text style={styles.normalBtnTxt}>submit</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -112,15 +95,14 @@ export default class Demo extends Component {
         )
   }
   changeText(type,text){
-    let obj=this.state.dynamicValidateForm;
+    let obj={...this.state.dynamicValidateForm};
     obj[type]=text;
     this.setState({dynamicValidateForm:obj})
 }
   submit(){
     this.refs['dynamicValidateForm'].validate(res=>{
-        console.log("校验",res)
         if(!res){
-          alert("提交成功")
+          alert("succ")
         }
     })
   }

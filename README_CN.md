@@ -23,103 +23,114 @@
 ## 基本使用
 
 ```javascript
-      import Form from "react-native-validator"
-      class App extends Component {
-        constructor(props) {
-            super(props);
-            this.state = {
-                dynamicValidateForm:{
-                    name:'dfdfff',
-                    phone:"",
-                    picker:"",
-                    nickname:""
-                }
-            };
-        }
-        changeText(type,text){
-            let obj=this.state.dynamicValidateForm;
-            obj[type]=text;
-            this.setState({dynamicValidateForm:obj})
-        }
-        submit(){
-            this.refs['dynamicValidateForm'].validate(res=>{
-                if(!res){
-                alert("succs")
-                }
-            })
-        }
-        render(){
-            let {dynamicValidateForm} =this.state;
-            return (
-                    <Form.elForm 
-                        model={dynamicValidateForm}
-                        scope={this}
-                        ref="dynamicValidateForm">
-                            <Form.elFormItem 
-                            label="Phone:"
-                            prop="phone"
+   export default class Demo extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        dynamicValidateForm:{
+            name:'',
+            name2:"",
+            phone:"",
+            picker:"",
+            nickname:""
+        },
+    };
+  }
+  render() {
+        let {dynamicValidateForm} =this.state;
+        return (
+          <View style={{marginHorizontal:10}}>
+                <Form.elForm 
+                   model={dynamicValidateForm}
+                   ref="dynamicValidateForm">
+                    <Form.elFormItem 
+                    label="name:"
+                     prop="name"
+                     rules={[
+                        { required: true, message: 'name' }
+                      ]}
+                    >
+                         <TextInput
+                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                            value={dynamicValidateForm.name}
+                            placeholder="name"
+                            onChangeText={text => this.changeText('name',text)}
+                          />
+                    </Form.elFormItem>
+
+                    <Form.elFormItem 
+                    label="phonne:"
+                     prop="phone"
+                     rules={[
+                        { required: true, message: 'Please enter  numerals' },
+                        { pattern: /^\d{6}$/, message: 'Please enter 6 Arabic numerals' }
+                      ]}
+                     >
+                         <TextInput
+                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                             value={dynamicValidateForm.phone}
-                            rules={[
-                                { required: true, message: 'Please enter phone number' },
-                                { pattern: /^\d{6}$/, message: 'Please enter 6 digits' }
-                            ]}
-                            >
-                                <TextInput
-                                    style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                                    value={dynamicValidateForm.phone}
-                                    placeholder="Please enter phone number"
-                                    onChangeText={text => this.changeText('phone',text)}
-                                />
-                                <Text>{this.state.dynamicValidateForm.phone}</Text>
-                            </Form.elFormItem>
-
-                            <Form.elFormItem 
-                            label="nickname:"
-                            prop="nickname"
+                            placeholder="phone"
+                            onChangeText={text => this.changeText('phone',text)}
+                          />
+                    </Form.elFormItem>
+                    <Form.elFormItem 
+                     label="nickname:"
+                     prop="nickname"
+                     checkOnBlur={true}
+                     rules={[
+                        { required: true, message: 'nicknname' },
+                      ]}
+                     >
+                          <Form.elInput
                             value={dynamicValidateForm.nickname}
-                            checkOnBlur={true}
-                            customInput={true}
-                            rules={[
-                                { required: true, message: 'Please enter nickname' },
-                            ]}
-                            >
-                                <Form.elInput
-                                    value={dynamicValidateForm.nickname}
-                                    placeholder="Verify when losing focus, custom input box is only valid"
-                                    onChangeText={text => this.changeText('nickname',text)}
-                                />
-                            </Form.elFormItem>
-
-                            <Form.elFormItem 
-                                label="picker:"
-                                prop="picker"
-                                value={dynamicValidateForm.picker}
-                                rules={[
-                                    { required: true, message: 'Please picker' }
-                                ]}
-                            >
-                                <Picker
-                                selectedValue={this.state.dynamicValidateForm.picker}
-                                style={{height: 200, width: 100,borderColor: 'gray', borderWidth: 1 }}
-                                onValueChange={(itemValue, itemIndex) =>
-                                    this.changeText('picker',itemValue)
-                                }>
-                                    <Picker.Item label="please picker" value="" />
-                                    <Picker.Item label="Java" value="java" />
-                                    <Picker.Item label="JavaScript" value="js" />
-                                    <Picker.Item label="css" value="css" />
-                                </Picker>
-                            </Form.elFormItem> 
-                            <View>
-                                <TouchableOpacity onPress={((()=>this.submit()))}>
-                                    <View style={styles.normalBtn}>
-                                            <Text style={styles.normalBtnTxt}>Submit</Text>
-                                    </View>
-                                </TouchableOpacity>
+                            placeholder="check after blur"
+                            onChangeText={text => this.changeText('nickname',text)}
+                          />
+                    </Form.elFormItem>
+                    <Form.elFormItem 
+                    label="picker:"
+                     prop="picker"
+                     rules={[
+                        { required: true, message: 'picker' }
+                      ]}
+                    >
+                         <Picker
+                          selectedValue={this.state.dynamicValidateForm.picker}
+                          style={{height: 200, width: 100,borderColor: 'gray', borderWidth: 1 }}
+                          onValueChange={(itemValue, itemIndex) =>
+                            this.changeText('picker',itemValue)
+                          }>
+                          <Picker.Item label="picker" value="" />
+                          <Picker.Item label="Java" value="java" />
+                          <Picker.Item label="JavaScript" value="js" />
+                          <Picker.Item label="css" value="css" />
+                        </Picker>
+                    </Form.elFormItem>
+                    <View>
+                        <TouchableOpacity onPress={((()=>this.submit()))}>
+                            <View style={styles.normalBtn}>
+                                    <Text style={styles.normalBtnTxt}>submit</Text>
                             </View>
-                        </Form.elForm> )
+                        </TouchableOpacity>
+                    </View>
+                </Form.elForm>
+          </View>
+        )
+  }
+  changeText(type,text){
+    let obj={...this.state.dynamicValidateForm};
+    obj[type]=text;
+    this.setState({dynamicValidateForm:obj})
+}
+  submit(){
+    this.refs['dynamicValidateForm'].validate(res=>{
+        if(!res){
+          alert("submit succs")
         }
-};  
+
+    })
+  }
+}
 
 ```
 
@@ -137,8 +148,7 @@
 |  参数       | 说明                                   |  类型   |    可选值         |  默认值 | 是否必选|
 | --------   | -----                                | -----  | -----          | -----  | -----  |
 | model      | 表单数据对象                             |object  |   --             |   --   |是       |
-| scope      | 表单所在作用域                           |object  |   this           |   --   | 是      |
-| canPush      | state里面的key，用来判断表单是否可提交    |boolean  |   true或false   |   --   | 否      |
+| canPushChange      |  自动校验表单是否可提交    |Function  |   --   |   --   | 否     |
 | labelWidth    | elFormItem标签label的宽度    |Number  |   ---   |   --   | 否      |
 |styles        | 样式，覆盖所有样式 [内容参考](https://github.com/MTTTM/react-native-async-validator/blob/master/src/overWriteStyle.js)  |Object   |   ---   |   --   | 否      |
 
@@ -149,8 +159,6 @@
 | prop      | 表单域 model 字段，在使用 validate、resetFields 方法的情况下，该属性是必填的 |传入 Form 组件的 model 中的字段  |--|   --   |是|
 | label      | 标签文本                                |string  |   --             |   --   | 否      |
 | labelWidth    | elFormItem标签label的宽度    |Number  |   ---   |   --   | 否      |
-| value      | model字段   |var(model里面的变量)  |   --   |   --   | (输入框是原生时候)，否(自定义输入框)      |
-| customInput      | 是否使用自定义Input表单   |Boolean  |   --   |   --   | 否     |
 | checkOnBlur      | 是否在失去焦点时候才校验(customInput为true&&输入表单为自定义input”本组件提供的elFormItem“)   |Boolean  |   --   |   --   | 否     |
 | rules      | 表单验证规则   | Array  |   --   |   --   | 是      |
 
@@ -174,7 +182,7 @@
 
 ## 常见问题
 
-* 警告(warn) `model不存在key:${xxx}`
+* warn `model not contain key:${xxx}`
 
 ```javaScript
  //一般发生在如下场景

@@ -28,63 +28,53 @@ export default class Demo extends Component {
         return (
             <View style={{marginHorizontal:10}}>
                <View style={{paddingVertical:10,marginBottom:10,borderBottomColor:"#ccc",borderBottomWidth:1}}>
-                  <Text>只有失去焦点才校验 checkOnBlur和customInput属性配合</Text>
+                  <Text>attr checkOnBlur</Text>
                </View>
                 <Form.elForm 
                    model={dynamicValidateForm}
-                   scope={this}
                    labelWidth={60}
                    ref="dynamicValidateForm">
                     <Form.elFormItem 
-                    label="姓名:"
+                    label="name:"
                      prop="name"
-                     value={dynamicValidateForm.name}
                      rules={[
-                        { required: true, message: '请输入姓名', trigger: 'change' }
+                        { required: true, message: 'input name', trigger: 'change' }
                       ]}
                     >
                          <TextInput
                             style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                             value={dynamicValidateForm.name}
-                            placeholder="原生标签在改变时候校验且无法设置成功失败样式"
+                            placeholder="status style no work at TexInput"
                             onChangeText={text => this.changeText('name',text)}
                           />
                     </Form.elFormItem>
                     <Form.elFormItem 
-                    label="手机号:"
+                    label="phone:"
                      prop="phone"
-                     value={dynamicValidateForm.phone}
-                     customInput={true}
                      rules={[
-                        { required: true, message: '请输入手机号' },
-                        { pattern: /^\d{6}$/, message: '请输入6位阿拉伯数字' }
+                        { required: true, message: 'input your phone' },
+                        { pattern: /^\d{6}$/, message: 'Please enter 6 Arabic numerals' }
                       ]}
                      >
                            <Form.elInput
                             value={dynamicValidateForm.phone}
-                            placeholder="自定义标签一般都是改变就触发校验"
+                            placeholder="status style is working at From.elInput"
                             onChangeText={text => this.changeText('phone',text)}
                           />
                     </Form.elFormItem>
 
                     <Form.elFormItem 
-                    label="昵称:"
+                    label="nickname:"
                      prop="nickname"
                      value={dynamicValidateForm.nickname}
                      checkOnBlur={true}
-                     customInput={true}
                      rules={[
-                        { required: true, message: '请输入昵称' },
+                        { required: true, message: 'input your nickname' },
                       ]}
                      >
-                         {/* <TextInput
-                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                            value={dynamicValidateForm.phone}
-                            onChangeText={text => this.changeText('phone',text)}
-                          /> */}
                           <Form.elInput
                             value={dynamicValidateForm.nickname}
-                            placeholder="失去焦点时候校验，自定义输入框才有效"
+                            placeholder="chekc after blur"
                             onChangeText={text => this.changeText('nickname',text)}
                           />
                     </Form.elFormItem>
@@ -92,7 +82,7 @@ export default class Demo extends Component {
                     <View>
                         <TouchableOpacity onPress={((()=>this.submit()))}>
                             <View style={styles.normalBtn}>
-                                    <Text style={styles.normalBtnTxt}>点击提交</Text>
+                                    <Text style={styles.normalBtnTxt}>submit</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -101,15 +91,14 @@ export default class Demo extends Component {
         )
   }
   changeText(type,text){
-    let obj=this.state.dynamicValidateForm;
+    let obj={...this.state.dynamicValidateForm};
     obj[type]=text;
     this.setState({dynamicValidateForm:obj})
 }
   submit(){
     this.refs['dynamicValidateForm'].validate(res=>{
-        console.log("校验",res)
         if(!res){
-          alert("提交成功")
+          alert("success")
         }
     })
   }

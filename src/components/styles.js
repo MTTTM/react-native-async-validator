@@ -13,6 +13,13 @@ export default{
         alignItems:"center",
         
     },
+    formItemLeftTextWrap:{
+        textAlign:"right"
+    },
+    formItemRequired:{
+        color:"red",
+        paddingRight:5
+    },
     formItemErrWrap:{
         position:"absolute",
         left:0,
@@ -29,7 +36,7 @@ export default{
         paddingRight:labelPaddingRight
     },
     formItemLeftText:{
-        textAlign:"right"
+        
     },
     //封装的input标签样式
     elInput:{

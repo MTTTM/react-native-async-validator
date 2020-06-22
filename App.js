@@ -38,7 +38,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-        type:"demo8",
+        type:"demo6",
         list:[
            "demo1",
            "demo2",
@@ -93,11 +93,6 @@ class App extends Component {
             {this.state.type=="demo6"?<Demo6/>:null}
             {this.state.type=="demo7"?<Demo7/>:null}
             {this.state.type=="demo8"?<Demo8/>:null}
-            <Text style={{textAlign:"center",color:"green",paddingTop:20,paddingBottom:10}}>一个特别棒的RN表单校验工具</Text>
-            <Text style={{textAlign:"center",paddingBottom:10}}>react-native-async-validator</Text>
-            <Text style={{textAlign:"center",paddingBottom:20,color:"red"}}>今天是2020农历年初一，大家不要去串门了！！</Text>
-            <Text style={{textAlign:"center",paddingBottom:20,color:"red"}}>年初二也不要</Text>
-            <Text style={{textAlign:"center",paddingBottom:20,color:"red"}}>祝福大家过年安康</Text>
           </ScrollView>
         </SafeAreaView>
         </View>
